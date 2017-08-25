@@ -2,7 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 import { Router, Stack, Scene } from 'react-native-router-flux';
 
-import Login from "./src/components/routes/Login";
+import SignIn from "./src/components/routes/SignIn";
+import SignUp from "./src/components/routes/SignUp";
+
 import Home from "./src/components/routes/Home";
 
 import { Header, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
@@ -35,7 +37,8 @@ export default class App extends React.Component<Props, State> {
             <Router>
                 <Stack key="root">
                     <Scene key="home" component={Home} title="Home" hideNavBar={true} />
-                    <Scene key="login" component={Login} title="Login" hideNavBar={true} />
+                    <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
+                    <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
                 </Stack>
             </Router>
         )

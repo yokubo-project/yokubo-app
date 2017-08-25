@@ -9,7 +9,8 @@ interface Props {
 }
 
 interface State {
-    inputUsernameError: boolean,
+    inputNameError: boolean,
+    inputEmailError: boolean,
     inputPasswordError: boolean
 }
 
@@ -34,6 +35,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         backgroundColor: '#fff',
     } as ViewStyle,
+    fullNameText: {
+        textAlign: 'center',
+        color: primaryColor1,
+        marginBottom: 10,
+    } as TextStyle,
     signUpText: {
         textAlign: 'center',
         color: primaryColor1,
@@ -42,7 +48,7 @@ const styles = StyleSheet.create({
     forgotPwdText: {
         textAlign: 'center',
         color: primaryColor1,
-    },
+    } as TextStyle,
     inputStyle: {
         color: 'black',
         fontSize: 20
@@ -53,26 +59,47 @@ export default class Component extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            inputUsernameError: false,
+            inputNameError: false,
+            inputEmailError: false,
             inputPasswordError: false
         };
     }
 
 
-    checkUsername(value: any) {
+    checkName(value: any) {
         if (value.length < 10) {
             this.setState({
-                inputUsernameError: false
+                inputNameError: false
             });
         } else {
             this.setState({
-                inputUsernameError: true
+                inputNameError: true
             });
         }
     }
 
-    showUsernameError() {
-        if (this.state.inputUsernameError) {
+    showNameError() {
+        if (this.state.inputNameError) {
+            return <FormValidationMessage>Invalid Name</FormValidationMessage>;
+        }
+        return null;
+    }
+
+
+    checkEmail(value: any) {
+        if (value.length < 10) {
+            this.setState({
+                inputEmailError: false
+            });
+        } else {
+            this.setState({
+                inputEmailError: true
+            });
+        }
+    }
+
+    showEmailError() {
+        if (this.state.inputEmailError) {
             return <FormValidationMessage>Invalid Email</FormValidationMessage>;
         }
         return null;
@@ -111,7 +138,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: 'transparent',
                             onPress: () => { Actions.pop() }
                         }}
-                        centerComponent={{ text: 'Sign in to Bode', style: { color: '#fff', fontSize: 20 } }}
+                        centerComponent={{ text: 'Sign up to Bode', style: { color: '#fff', fontSize: 20 } }}
                         statusBarProps={{ barStyle: 'dark-content', translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
@@ -122,13 +149,24 @@ export default class Component extends React.Component<Props, State> {
                     {/* <FormLabel labelStyle={styles.labelStyle}>Name</FormLabel> */}
                     <FormInput
                         inputStyle={styles.inputStyle}
-                        placeholder="Email"
-                        onChangeText={(e) => this.checkUsername(e)}
+                        placeholder="Enter your name"
+                        onChangeText={(e) => this.checkName(e)}
                         underlineColorAndroid={primaryColor1}
                         selectionColor="black" // cursor color
                     // placeholderTextColor="blue"
                     />
-                    {this.showUsernameError()}
+                    {this.showNameError()}
+
+                    {/* <FormLabel labelStyle={styles.labelStyle}>Name</FormLabel> */}
+                    <FormInput
+                        inputStyle={styles.inputStyle}
+                        placeholder="Email"
+                        onChangeText={(e) => this.checkEmail(e)}
+                        underlineColorAndroid={primaryColor1}
+                        selectionColor="black" // cursor color
+                    // placeholderTextColor="blue"
+                    />
+                    {this.showEmailError()}
 
                     {/* <FormLabel labelStyle={styles.labelStyle}>Name</FormLabel> */}
                     <FormInput
@@ -145,17 +183,14 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
                         textStyle={{ textAlign: 'center', fontSize: 18 }}
-                        title={"SIGN IN"}
-                        onPress={() => { console.log("SignIn was clicked..") }}
+                        title={"SIGN UP"}
+                        onPress={() => { console.log("SignUp was clicked..") }}
                     />
 
-                    <Text style={styles.signUpText} onPress={() => { console.log("Sign UP! was clicked..") }}>
-                        {"SIGN UP FOR BODE"}
+                    <Text style={styles.signUpText} onPress={() => { Actions.signIn() }}>
+                        {"SIGN IN"}
                     </Text>
 
-                    <Text style={styles.forgotPwdText} onPress={() => { console.log("Forgot your pwd was clicked..") }}>
-                        {"FORGOT YOUR PASSWORD?"}
-                    </Text>
                 </View>
 
                 <View style={styles.spaceContainer}>
