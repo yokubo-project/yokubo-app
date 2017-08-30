@@ -1,9 +1,10 @@
 {
-    "compilerOptions": {
-      "target": "es2015",
-      "module": "es2015",
-      "jsx": "react-native",
-      "moduleResolution": "node",
-      "allowSyntheticDefaultImports": true
-    }
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2015",
+    "jsx": "react-native",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */
   }
+}

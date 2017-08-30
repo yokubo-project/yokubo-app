@@ -2,6 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 import { Header, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
+import firebase from 'firebase';
+
+import auth from "../../state/auth";
+import { AuthError } from "../../state/auth";
 
 const primaryColor1 = "green";
 
@@ -9,9 +13,13 @@ interface Props {
 }
 
 interface State {
-    inputNameError: boolean,
-    inputEmailError: boolean,
-    inputPasswordError: boolean
+    inputName: string,
+    inputEmail: string,
+    inputPassword: string,
+    inputNameError: string,
+    inputEmailError: string,
+    inputPasswordError: string,
+    inputGeneralError: string
 }
 
 const styles = StyleSheet.create({
@@ -59,69 +67,149 @@ export default class Component extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            inputNameError: false,
-            inputEmailError: false,
-            inputPasswordError: false
+            inputName: "",
+            inputEmail: "",
+            inputPassword: "",
+            inputNameError: null,
+            inputEmailError: null,
+            inputPasswordError: null,
+            inputGeneralError: null
         };
     }
 
 
-    checkName(value: any) {
-        if (value.length < 10) {
-            this.setState({
-                inputNameError: false
-            });
-        } else {
-            this.setState({
-                inputNameError: true
-            });
-        }
+    parseName(value: any) {
+        this.setState({
+            inputName: value
+        });
     }
 
     showNameError() {
         if (this.state.inputNameError) {
-            return <FormValidationMessage>Invalid Name</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
         return null;
     }
 
 
-    checkEmail(value: any) {
-        if (value.length < 10) {
-            this.setState({
-                inputEmailError: false
-            });
-        } else {
-            this.setState({
-                inputEmailError: true
-            });
-        }
+    parseEmail(value: any) {
+        this.setState({
+            inputEmail: value
+        });
     }
 
     showEmailError() {
         if (this.state.inputEmailError) {
-            return <FormValidationMessage>Invalid Email</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputEmailError}</FormValidationMessage>;
         }
         return null;
     }
 
-    checkPassword(value: any) {
-        if (value.length < 10) {
-            this.setState({
-                inputPasswordError: false
-            });
-        } else {
-            this.setState({
-                inputPasswordError: true
-            });
-        }
+    parsePassword(value: any) {
+        this.setState({
+            inputPassword: value
+        });
     }
 
     showPasswordError() {
         if (this.state.inputPasswordError) {
-            return <FormValidationMessage>Invalid Password</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputPasswordError}</FormValidationMessage>;
         }
         return null;
+    }
+
+    showGeneralError() {
+        if (this.state.inputGeneralError) {
+            return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    async processSignUp() {
+        const signUpData = {
+            name: this.state.inputName,
+            email: this.state.inputEmail,
+            password: this.state.inputPassword
+        }
+
+        if (signUpData.name.length < 3) {
+            this.setState({
+                inputNameError: "Name must have at least 3 characters",
+                inputEmailError: null,
+                inputPasswordError: null,
+                inputGeneralError: null                
+            })
+            return;
+        } else if (signUpData.email.length < 5) {
+            this.setState({
+                inputNameError: null,
+                inputEmailError: "Email must have at least 5 characters",
+                inputPasswordError: null,
+                inputGeneralError: null                
+            })
+            return;
+        } else if (signUpData.password.length < 6) {
+            this.setState({
+                inputNameError: null,
+                inputEmailError: null,
+                inputPasswordError: "Password must have at least 6 characters",
+                inputGeneralError: null                
+            })
+            return;
+        } 
+
+        const signUpResponse = await auth.signUp(signUpData);
+        if (auth.error !== null) {
+            switch (auth.error) {
+                case "PasswordWrong":
+                    this.setState({
+                        inputNameError: null,
+                        inputEmailError: null,
+                        inputPasswordError: "Wrong Password.",
+                        inputGeneralError: null
+                    });
+                    break;
+                case "EmailAlreadyExists":
+                    this.setState({
+                        inputNameError: null,
+                        inputEmailError: "Email already exists.",
+                        inputPasswordError: null,
+                        inputGeneralError: null
+                    });
+                    break;
+                case "InvalidEmail":
+                    this.setState({
+                        inputNameError: null,
+                        inputEmailError: "Email is invalid.",
+                        inputPasswordError: null,
+                        inputGeneralError: null
+                    });
+                    break;
+                case "WeakPassword":
+                    this.setState({
+                        inputNameError: null,
+                        inputEmailError: null,
+                        inputPasswordError: "Thats a weak password.",
+                        inputGeneralError: null
+                    });
+                    break;
+                default:
+                    this.setState({
+                        inputNameError: null,
+                        inputEmailError: null,
+                        inputPasswordError: null,
+                        inputGeneralError: "An unexpected error happened."
+                    });
+            }
+        } else {
+            this.setState({
+                inputNameError: null,
+                inputEmailError: null,
+                inputPasswordError: null,
+                inputGeneralError: null
+            });
+            Actions.home();
+        }
     }
 
     render() {
@@ -150,7 +238,7 @@ export default class Component extends React.Component<Props, State> {
                     <FormInput
                         inputStyle={styles.inputStyle}
                         placeholder="Enter your name"
-                        onChangeText={(e) => this.checkName(e)}
+                        onChangeText={(e) => this.parseName(e)}
                         underlineColorAndroid={primaryColor1}
                         selectionColor="black" // cursor color
                     // placeholderTextColor="blue"
@@ -161,7 +249,7 @@ export default class Component extends React.Component<Props, State> {
                     <FormInput
                         inputStyle={styles.inputStyle}
                         placeholder="Email"
-                        onChangeText={(e) => this.checkEmail(e)}
+                        onChangeText={(e) => this.parseEmail(e)}
                         underlineColorAndroid={primaryColor1}
                         selectionColor="black" // cursor color
                     // placeholderTextColor="blue"
@@ -172,19 +260,21 @@ export default class Component extends React.Component<Props, State> {
                     <FormInput
                         inputStyle={styles.inputStyle}
                         placeholder="Password"
-                        onChangeText={(e) => this.checkPassword(e)}
+                        onChangeText={(e) => this.parsePassword(e)}
                         underlineColorAndroid={primaryColor1}
                         selectionColor="black" // cursor color
                     // placeholderTextColor="blue"
                     />
                     {this.showPasswordError()}
 
+                    {this.showGeneralError()}
+
                     <Button
                         raised
                         buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
                         textStyle={{ textAlign: 'center', fontSize: 18 }}
                         title={"SIGN UP"}
-                        onPress={() => { console.log("SignUp was clicked..") }}
+                        onPress={() => { this.processSignUp() }}
                     />
 
                     <Text style={styles.signUpText} onPress={() => { Actions.signIn() }}>
