@@ -9,6 +9,7 @@ import auth from "./src/state/auth";
 import SignIn from "./src/components/routes/SignIn";
 import SignUp from "./src/components/routes/SignUp";
 import Home from "./src/components/routes/Home";
+import Activities from "./src/components/routes/Activities";
 
 import { Header, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
@@ -53,6 +54,7 @@ export default class App extends React.Component<Props, State> {
             <MobxProvider auth={auth}>
                 <Router>
                     <Stack key="root">
+                        <Scene key="activities" component={Activities} title="Activities" hideNavBar={true} />
                         <Scene key="home" component={Home} title="Home" hideNavBar={true} />
                         <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
                         <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />

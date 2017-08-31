@@ -1,12 +1,12 @@
 import { observable, action, autorun } from "mobx";
 import firebase from 'firebase';
 
-export type AuthError = "PasswordWrong" | "EmailAlreadyExists" | "InvalidEmail" | "WeakPassword" | "Unknown";
+export type AuthError = "PasswordWrong" | "EmailAlreadyExists" | "InvalidEmail" | "WeakPassword" | "UserDisabled" | "UserNotFound" | "Unknown";
 
 class Auth {
 
-    @observable credentials: any = null;
     @observable username: string = "";
+    @observable user: any = null;
     @observable error: AuthError = null;
     @observable isAuthenticated: boolean = false;
     @observable isLoading: boolean = false;
@@ -24,17 +24,27 @@ class Auth {
         this.isLoading = true;
 
         try {
-            const user = await firebase.auth().signInWithEmailAndPassword(email, password); this.error = null;
-            this.username = "username"; // TODO: Proces username
+            this.user = await firebase.auth().signInWithEmailAndPassword(email, password);
+            this.error = null;
+            this.username = this.user.displayName;
             this.isAuthenticated = true;
             this.isLoading = false;
-            this.credentials = user;
         } catch (e) {
-            this.wipe("Unknown");
+            if (e.code === "auth/user-disabled") {
+                this.wipe("UserDisabled");
+            } else if (e.code === "auth/invalid-email") {
+                this.wipe("InvalidEmail");
+            } else if (e.code === "auth/user-not-found") {
+                this.wipe("UserNotFound");
+            } else if (e.code === "auth/wrong-password") {
+                this.wipe("PasswordWrong");
+            } else {
+                this.wipe("Unknown");
+            }
         }
     }
 
-    @action signUp = async (signUpData) => { // Declare interface for parameter
+    @action signUp = async (signUpData) => {
 
         const { name, email, password } = signUpData;
 
@@ -46,12 +56,42 @@ class Auth {
         this.isLoading = true;
 
         try {
-            const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            this.user = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            await this.user.updateProfile({
+                displayName: name
+            });
             this.error = null;
             this.username = name;
             this.isAuthenticated = true;
             this.isLoading = false;
-            this.credentials = user;
+        } catch (e) {
+            if (e.code === "auth/email-already-in-use") {
+                this.wipe("EmailAlreadyExists");
+            } else if (e.code === "auth/invalid-email") {
+                this.wipe("InvalidEmail");
+            } else if (e.code === "auth/weak-password") {
+                this.wipe("WeakPassword");
+            } else if (e.code === "auth/operation-not-allowed") {
+                this.wipe("Unknown");
+            } else {
+                this.wipe("Unknown");
+            }
+        }
+
+    }
+
+    @action signOut = async () => {
+
+        if (this.isLoading) {
+            // bailout, noop
+            return;
+        }
+
+        this.isLoading = true;
+
+        try {
+            await this.user.signOut();
+            this.wipe(null);
         } catch (e) {
             if (e.code === "auth/email-already-in-use") {
                 this.wipe("EmailAlreadyExists");
@@ -72,12 +112,9 @@ class Auth {
         this.error = null;
     }
 
-    @action logout() {
-        this.wipe(null);
-    }
-
     @action private wipe(error: AuthError) {
-        this.credentials = null;
+        this.user = null;
+        this.username = null;
         this.error = error;
         this.isAuthenticated = false;
         this.isLoading = false;

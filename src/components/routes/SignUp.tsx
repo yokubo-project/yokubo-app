@@ -137,7 +137,7 @@ export default class Component extends React.Component<Props, State> {
                 inputNameError: "Name must have at least 3 characters",
                 inputEmailError: null,
                 inputPasswordError: null,
-                inputGeneralError: null                
+                inputGeneralError: null
             })
             return;
         } else if (signUpData.email.length < 5) {
@@ -145,7 +145,7 @@ export default class Component extends React.Component<Props, State> {
                 inputNameError: null,
                 inputEmailError: "Email must have at least 5 characters",
                 inputPasswordError: null,
-                inputGeneralError: null                
+                inputGeneralError: null
             })
             return;
         } else if (signUpData.password.length < 6) {
@@ -153,10 +153,10 @@ export default class Component extends React.Component<Props, State> {
                 inputNameError: null,
                 inputEmailError: null,
                 inputPasswordError: "Password must have at least 6 characters",
-                inputGeneralError: null                
+                inputGeneralError: null
             })
             return;
-        } 
+        }
 
         const signUpResponse = await auth.signUp(signUpData);
         if (auth.error !== null) {
@@ -208,7 +208,7 @@ export default class Component extends React.Component<Props, State> {
                 inputPasswordError: null,
                 inputGeneralError: null
             });
-            Actions.home();
+            Actions.activities();
         }
     }
 
@@ -234,36 +234,30 @@ export default class Component extends React.Component<Props, State> {
 
                 <View style={styles.formContainer}>
 
-                    {/* <FormLabel labelStyle={styles.labelStyle}>Name</FormLabel> */}
                     <FormInput
                         inputStyle={styles.inputStyle}
                         placeholder="Enter your name"
                         onChangeText={(e) => this.parseName(e)}
                         underlineColorAndroid={primaryColor1}
                         selectionColor="black" // cursor color
-                    // placeholderTextColor="blue"
                     />
                     {this.showNameError()}
 
-                    {/* <FormLabel labelStyle={styles.labelStyle}>Name</FormLabel> */}
                     <FormInput
                         inputStyle={styles.inputStyle}
                         placeholder="Email"
                         onChangeText={(e) => this.parseEmail(e)}
                         underlineColorAndroid={primaryColor1}
                         selectionColor="black" // cursor color
-                    // placeholderTextColor="blue"
                     />
                     {this.showEmailError()}
 
-                    {/* <FormLabel labelStyle={styles.labelStyle}>Name</FormLabel> */}
                     <FormInput
                         inputStyle={styles.inputStyle}
                         placeholder="Password"
                         onChangeText={(e) => this.parsePassword(e)}
                         underlineColorAndroid={primaryColor1}
                         selectionColor="black" // cursor color
-                    // placeholderTextColor="blue"
                     />
                     {this.showPasswordError()}
 
