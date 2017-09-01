@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle } from 'react-native';
+import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle, TouchableOpacity } from 'react-native';
 import { Header, Button, Icon, List, ListItem } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 
 import auth from "../../state/auth";
+import CustomIcon from "../elements/CustomIcon";
 
 const primaryColor1 = "green";
 
@@ -35,9 +36,8 @@ const styles = StyleSheet.create({
     } as TextStyle,
     button: {
         position: 'absolute',
-        bottom: 0,
-        left: 0,
-        backgroundColor: 'green'
+        bottom: 50,
+        right: 50,
     }
 })
 
@@ -198,12 +198,8 @@ export default class Component extends React.Component<null, null> {
                         }
                     </List>
                 </ScrollView>
-                <Icon style={styles.button}
-                    raised
-                    name='add'
-                    color='orange'
-                    backgroundColor="green"
-                    onPress={() => console.log('hello')} />
+
+                <CustomIcon />
 
             </View>
         )
