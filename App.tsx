@@ -10,6 +10,7 @@ import SignIn from "./src/components/routes/SignIn";
 import SignUp from "./src/components/routes/SignUp";
 import Home from "./src/components/routes/Home";
 import Activities from "./src/components/routes/Activities";
+import CreateActivity from "./src/components/routes/CreateActivity";
 
 import { Header, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 
@@ -58,6 +59,7 @@ export default class App extends React.Component<Props, State> {
                         <Scene key="home" component={Home} title="Home" hideNavBar={true} />
                         <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
                         <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
+                        <Scene key="createActivity" component={CreateActivity} title="New Activity" hideNavBar={true} />
                     </Stack>
                 </Router>
             </MobxProvider>

@@ -8,6 +8,10 @@ import CustomIcon from "../elements/CustomIcon";
 
 const primaryColor1 = "green";
 
+interface State {
+    buttonWasClicked: string
+}
+
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
@@ -41,7 +45,14 @@ const styles = StyleSheet.create({
     }
 })
 
-export default class Component extends React.Component<null, null> {
+export default class Component extends React.Component<null, State> {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            buttonWasClicked: "",
+        };
+    }
 
     list = [
         {
@@ -151,6 +162,14 @@ export default class Component extends React.Component<null, null> {
         Actions.home();
     }
 
+    handleOnIconClick() {
+        console.log("IN HERE");
+        this.setState({
+            buttonWasClicked: "yeap"
+        });
+        Actions.createActivity();
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -199,7 +218,9 @@ export default class Component extends React.Component<null, null> {
                     </List>
                 </ScrollView>
 
-                <CustomIcon />
+                <CustomIcon
+                    onPress={() => this.handleOnIconClick()}
+                />
 
             </View>
         )

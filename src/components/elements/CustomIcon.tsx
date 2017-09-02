@@ -4,7 +4,11 @@ import { Header, Button, Icon, List, ListItem } from 'react-native-elements';
 
 const primaryColor1 = "green";
 
-export default class Component extends React.Component<null, null> {
+interface Props {
+    onPress: () => void;
+}
+
+export default class Component extends React.Component<Props, null> {
 
     render() {
         return (
@@ -22,7 +26,7 @@ export default class Component extends React.Component<null, null> {
                     bottom: 30,
                     right: 30,
                 }}
-                onPress={() => console.log('hello from opac')}
+                onPress={() => this.props.onPress()}
             >
                 <Icon
                     name={"add"}
