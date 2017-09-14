@@ -1,11 +1,15 @@
 import React from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
-import { Header, Button } from "react-native-elements";
+import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
+
+import activities from "../../state/activities";
 
 const primaryColor1 = "green";
 
 interface State {
+    inputName: string;
+    inputNameError: string;
 }
 
 const styles = StyleSheet.create({
@@ -24,6 +28,10 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
+    inputStyle: {
+        color: "black",
+        fontSize: 20
+    }
 });
 
 export default class Component extends React.Component<null, State> {
@@ -31,12 +39,27 @@ export default class Component extends React.Component<null, State> {
     constructor(props) {
         super(props);
         this.state = {
+            inputName: "",
+            inputNameError: null
         };
     }
 
-    createActivity() {
-        console.log("Creating Activity");
+    async createActivity() {
+        await activities.createActivity({ name: this.state.inputName });
         Actions.pop();
+    }
+
+    parseName(value: any) {
+        this.setState({
+            inputName: value
+        });
+    }
+
+    showNameError() {
+        if (this.state.inputNameError) {
+            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
+        }
+        return null;
     }
 
     render() {
@@ -58,6 +81,15 @@ export default class Component extends React.Component<null, State> {
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
                 </View>
+
+                <FormInput
+                    inputStyle={styles.inputStyle}
+                    placeholder="Enter activity name"
+                    onChangeText={(e) => this.parseName(e)}
+                    underlineColorAndroid={primaryColor1}
+                    selectionColor="black" // cursor color
+                />
+                {this.showNameError()}
 
                 <View style={styles.formContainer}>
                     <Button

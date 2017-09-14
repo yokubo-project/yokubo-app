@@ -1,10 +1,13 @@
 import React from "react";
+import { observer } from "mobx-react";
 import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle } from "react-native";
 import { Header, Button, List, ListItem } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
 import auth from "../../state/auth";
 import AddIcon from "../elements/AddIcon";
+
+import activities from "../../state/activities";
 
 const primaryColor1 = "green";
 
@@ -44,113 +47,15 @@ const styles = StyleSheet.create({
     }
 });
 
+@observer
 export default class Component extends React.Component<null, State> {
-
-    list = [
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-        {
-            name: "Amy Farha",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            subtitle: "Vice President"
-        },
-        {
-            name: "Chris Jackson",
-            avatar_url: "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-            subtitle: "Vice Chairman"
-        },
-    ];
 
     constructor(props) {
         super(props);
+    }
+
+    componentWillMount() {
+        activities.fetchActivities();
     }
 
     async processSignOut() {
@@ -198,7 +103,7 @@ export default class Component extends React.Component<null, State> {
                 <ScrollView style={styles.listContainer}>
                     <List containerStyle={{ marginBottom: 20 }}>
                         {
-                            this.list.map((l, i) => (
+                            activities.list.map((l, i) => (
                                 <ListItem
                                     roundAvatar
                                     avatar={{ uri: l.avatar_url }}
