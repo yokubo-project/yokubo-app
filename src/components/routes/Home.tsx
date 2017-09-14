@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
-import { Header, Button, FormLabel, FormInput, FormValidationMessage } from "react-native-elements";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import { Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
 const primaryColor1 = "green";

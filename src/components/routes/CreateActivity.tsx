@@ -1,9 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle, TouchableOpacity } from "react-native";
-import { Header, Button, Icon, List, ListItem } from "react-native-elements";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import { Header, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
-
-import auth from "../../state/auth";
 
 const primaryColor1 = "green";
 

@@ -1,10 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
-import { Header, Button, FormLabel, FormInput, FormValidationMessage } from "react-native-elements";
+import { Header, Button, FormInput, FormValidationMessage } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
 import auth from "../../state/auth";
-import { AuthError } from "../../state/auth";
 
 const primaryColor1 = "green";
 
@@ -123,7 +122,7 @@ export default class Component extends React.Component<Props, State> {
             return;
         }
 
-        const signUpResponse = await auth.signInWithPassword(signInData);
+        await auth.signInWithPassword(signInData);
         if (auth.error !== null) {
             switch (auth.error) {
                 case "UserDisabled":

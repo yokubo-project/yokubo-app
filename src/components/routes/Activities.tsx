@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle, TouchableOpacity } from "react-native";
-import { Header, Button, Icon, List, ListItem } from "react-native-elements";
+import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle } from "react-native";
+import { Header, Button, List, ListItem } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
 import auth from "../../state/auth";
@@ -154,7 +154,7 @@ export default class Component extends React.Component<null, State> {
     }
 
     async processSignOut() {
-        const signOutResponse = await auth.signOut();
+        auth.signOut();
         Actions.home();
     }
 

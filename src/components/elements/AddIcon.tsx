@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle, TouchableOpacity } from "react-native";
-import { Header, Button, Icon, List, ListItem } from "react-native-elements";
+import { TouchableOpacity } from "react-native";
+import { Icon } from "react-native-elements";
 
 const primaryColor1 = "green";
 
