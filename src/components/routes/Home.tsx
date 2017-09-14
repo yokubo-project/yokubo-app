@@ -1,17 +1,17 @@
-import React from 'react'
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
-import { Header, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
-import { Actions } from 'react-native-router-flux';
+import React from "react";
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Header, Button, FormLabel, FormInput, FormValidationMessage } from "react-native-elements";
+import { Actions } from "react-native-router-flux";
 
 const primaryColor1 = "green";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        justifyContent: 'space-around',
-        backgroundColor: '#fff',
+        justifyContent: "space-around",
+        backgroundColor: "#fff",
     } as ViewStyle,
-})
+});
 
 export default class Component extends React.Component<null, null> {
 
@@ -21,19 +21,19 @@ export default class Component extends React.Component<null, null> {
                 <Button
                     raised
                     buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
-                    textStyle={{ textAlign: 'center', fontSize: 18 }}
+                    textStyle={{ textAlign: "center", fontSize: 18 }}
                     title={"SIGN IN"}
-                    onPress={() => { Actions.signIn() }}
+                    onPress={() => { Actions.signIn(); }}
                 />
                 <Button
                     raised
                     buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
-                    textStyle={{ textAlign: 'center', fontSize: 18 }}
+                    textStyle={{ textAlign: "center", fontSize: 18 }}
                     title={"SIGN UP"}
-                    onPress={() => { Actions.signUp() }}
+                    onPress={() => { Actions.signUp(); }}
                 />
             </View>
-        )
+        );
     }
 
 }

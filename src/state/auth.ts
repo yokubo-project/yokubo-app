@@ -1,5 +1,5 @@
 import { observable, action, autorun } from "mobx";
-import firebase from 'firebase';
+import firebase from "firebase";
 
 export type AuthError = "PasswordWrong" | "EmailAlreadyExists" | "InvalidEmail" | "WeakPassword" | "UserDisabled" | "UserNotFound" | "Unknown";
 

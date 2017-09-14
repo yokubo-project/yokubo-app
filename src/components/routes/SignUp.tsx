@@ -1,8 +1,8 @@
-import React from 'react';
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
-import { Header, Button, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
-import { Actions } from 'react-native-router-flux';
-import firebase from 'firebase';
+import React from "react";
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Header, Button, FormLabel, FormInput, FormValidationMessage } from "react-native-elements";
+import { Actions } from "react-native-router-flux";
+import firebase from "firebase";
 
 import auth from "../../state/auth";
 import { AuthError } from "../../state/auth";
@@ -13,52 +13,52 @@ interface Props {
 }
 
 interface State {
-    inputName: string,
-    inputEmail: string,
-    inputPassword: string,
-    inputNameError: string,
-    inputEmailError: string,
-    inputPasswordError: string,
-    inputGeneralError: string
+    inputName: string;
+    inputEmail: string;
+    inputPassword: string;
+    inputNameError: string;
+    inputEmailError: string;
+    inputPasswordError: string;
+    inputGeneralError: string;
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        justifyContent: 'space-around',
-        backgroundColor: '#fff',
+        justifyContent: "space-around",
+        backgroundColor: "#fff",
     } as ViewStyle,
     headerContainer: {
         flex: 1,
-        justifyContent: 'space-around',
-        backgroundColor: '#fff',
+        justifyContent: "space-around",
+        backgroundColor: "#fff",
     } as ViewStyle,
     formContainer: {
         flex: 3,
-        justifyContent: 'space-around',
-        backgroundColor: '#fff',
+        justifyContent: "space-around",
+        backgroundColor: "#fff",
     } as ViewStyle,
     spaceContainer: {
         flex: 3,
-        justifyContent: 'space-around',
-        backgroundColor: '#fff',
+        justifyContent: "space-around",
+        backgroundColor: "#fff",
     } as ViewStyle,
     fullNameText: {
-        textAlign: 'center',
+        textAlign: "center",
         color: primaryColor1,
         marginBottom: 10,
     } as TextStyle,
     signUpText: {
-        textAlign: 'center',
+        textAlign: "center",
         color: primaryColor1,
         marginBottom: 10,
     } as TextStyle,
     forgotPwdText: {
-        textAlign: 'center',
+        textAlign: "center",
         color: primaryColor1,
     } as TextStyle,
     inputStyle: {
-        color: 'black',
+        color: "black",
         fontSize: 20
     }
 });
@@ -130,7 +130,7 @@ export default class Component extends React.Component<Props, State> {
             name: this.state.inputName,
             email: this.state.inputEmail,
             password: this.state.inputPassword
-        }
+        };
 
         if (signUpData.name.length < 3) {
             this.setState({
@@ -138,7 +138,7 @@ export default class Component extends React.Component<Props, State> {
                 inputEmailError: null,
                 inputPasswordError: null,
                 inputGeneralError: null
-            })
+            });
             return;
         } else if (signUpData.email.length < 5) {
             this.setState({
@@ -146,7 +146,7 @@ export default class Component extends React.Component<Props, State> {
                 inputEmailError: "Email must have at least 5 characters",
                 inputPasswordError: null,
                 inputGeneralError: null
-            })
+            });
             return;
         } else if (signUpData.password.length < 6) {
             this.setState({
@@ -154,7 +154,7 @@ export default class Component extends React.Component<Props, State> {
                 inputEmailError: null,
                 inputPasswordError: "Password must have at least 6 characters",
                 inputGeneralError: null
-            })
+            });
             return;
         }
 
@@ -218,16 +218,16 @@ export default class Component extends React.Component<Props, State> {
 
                 <View style={styles.headerContainer}>
                     <Header
-                        innerContainerStyles={{ flexDirection: 'row' }}
+                        innerContainerStyles={{ flexDirection: "row" }}
                         backgroundColor={primaryColor1}
                         leftComponent={{
-                            icon: 'arrow-back',
-                            color: '#fff',
-                            underlayColor: 'transparent',
-                            onPress: () => { Actions.pop() }
+                            icon: "arrow-back",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: 'Sign up to Bode', style: { color: '#fff', fontSize: 20 } }}
-                        statusBarProps={{ barStyle: 'dark-content', translucent: true }}
+                        centerComponent={{ text: "Sign up to Bode", style: { color: "#fff", fontSize: 20 } }}
+                        statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
                 </View>
@@ -266,12 +266,12 @@ export default class Component extends React.Component<Props, State> {
                     <Button
                         raised
                         buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
-                        textStyle={{ textAlign: 'center', fontSize: 18 }}
+                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"SIGN UP"}
-                        onPress={() => { this.processSignUp() }}
+                        onPress={() => { this.processSignUp(); }}
                     />
 
-                    <Text style={styles.signUpText} onPress={() => { Actions.signIn() }}>
+                    <Text style={styles.signUpText} onPress={() => { Actions.signIn(); }}>
                         {"SIGN IN"}
                     </Text>
 
@@ -283,6 +283,5 @@ export default class Component extends React.Component<Props, State> {
             </View>
         );
     }
-
 
 }

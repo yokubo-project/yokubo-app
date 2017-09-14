@@ -11,6 +11,7 @@
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
+    "lint": "tslint --type-check --project tsconfig.json -c tslint.json",
     "start": "react-native-scripts start",
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
@@ -32,6 +33,7 @@
     "react": "16.0.0-alpha.12",
     "react-native": "^0.46.1",
     "react-native-elements": "^0.16.0",
-    "react-native-router-flux": "^4.0.0-beta.19"
+    "react-native-router-flux": "^4.0.0-beta.19",
+    "tslint": "^5.7.0"
   }
 }
