@@ -10,6 +10,8 @@ import SignUp from "./src/components/routes/SignUp";
 import Home from "./src/components/routes/Home";
 import Activities from "./src/components/routes/Activities";
 import CreateActivity from "./src/components/routes/CreateActivity";
+import Entries from "./src/components/routes/Entries";
+import CreateEntry from "./src/components/routes/CreateEntry";
 
 interface Props {
 }
@@ -42,6 +44,8 @@ export default class App extends React.Component<Props, State> {
                         <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
                         <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
                         <Scene key="createActivity" component={CreateActivity} title="New Activity" hideNavBar={true} />
+                        <Scene key="entries" component={Entries} title="Entries" hideNavBar={true} />
+                        <Scene key="createEntry" component={CreateEntry} title="New Entry" hideNavBar={true} />                        
                     </Stack>
                 </Router>
             </MobxProvider>

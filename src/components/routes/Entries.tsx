@@ -1,17 +1,18 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle } from "react-native";
+import { StyleSheet, Text, View, ViewStyle, ScrollView } from "react-native";
 import { Header, Button, List, ListItem } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
-
-import auth from "../../state/auth";
-import AddIcon from "../elements/AddIcon";
 
 import activities from "../../state/activities";
 
 const primaryColor1 = "green";
 
 interface State {
+}
+
+interface Props {
+    uid: string;
 }
 
 const styles = StyleSheet.create({
@@ -35,11 +36,6 @@ const styles = StyleSheet.create({
         // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
-    signOutText: {
-        textAlign: "center",
-        color: primaryColor1,
-        marginBottom: 10,
-    } as TextStyle,
     button: {
         position: "absolute",
         bottom: 50,
@@ -48,23 +44,18 @@ const styles = StyleSheet.create({
 });
 
 @observer
-export default class Component extends React.Component<null, State> {
+export default class Component extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
     }
 
     componentWillMount() {
-        activities.fetchActivities();
-    }
-
-    async processSignOut() {
-        auth.signOut();
-        Actions.home();
+        activities.fetchEntries(this.props.uid);
     }
 
     handleOnIconClick() {
-        Actions.createActivity();
+        Actions.createEntry({ uid: this.props.uid });
     }
 
     render() {
@@ -81,42 +72,37 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "Activities", style: { color: "#fff", fontSize: 20 } }}
+                        centerComponent={{ text: "Entries", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
                 </View>
 
                 <View style={styles.formContainer}>
-                    <Text style={styles.signOutText}>
-                        {`Hi, ${auth.username ? auth.username : "TESTER"}`}
+                    <Text>
+                        {`Hello, ${this.props.uid}`}
                     </Text>
                     <Button
                         raised
                         buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"SIGN OUT"}
-                        onPress={() => { this.processSignOut(); }}
+                        title={"CREATE ENTRY"}
+                        onPress={() => { this.handleOnIconClick(); }}
                     />
                 </View>
 
                 <ScrollView style={styles.listContainer}>
                     <List containerStyle={{ marginBottom: 20 }}>
                         {
-                            activities.activities.map((activity) => (
+                            activities.entries.map((entry) => (
                                 <ListItem
-                                    key={activity.uid}
-                                    title={activity.name}
-                                    onPressRightIcon={() => { Actions.entries({uid: activity.uid}); }}
+                                    key={entry.uid}
+                                    title={entry.name}
                                 />
                             ))
                         }
                     </List>
                 </ScrollView>
-
-                <AddIcon
-                    onPress={() => this.handleOnIconClick()}
-                />
 
             </View>
         );
