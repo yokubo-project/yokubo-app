@@ -45,7 +45,7 @@ export default class Component extends React.Component<null, State> {
     }
 
     async createActivity() {
-        await activities.createActivity({ name: this.state.inputName });
+        activities.createActivity({ name: this.state.inputName });
         Actions.pop();
     }
 
