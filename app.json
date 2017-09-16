@@ -1,8 +1,23 @@
 {
   "expo": {
+    "name": "Bode",
+    "icon": "./assets/app-icon-512.png",
+    "version": "1.0.0",
+    "slug": "bode",
     "sdkVersion": "19.0.0",
+    "loading": {
+      "icon": "./assets/app-icon-512.png",
+      "backgroundColor": "#009900",
+      "hideExponentText": true
+    },
     "packagerOpts": {
       "config": "rn-cli.config.js"
-    }    
+    },
+    "ios": {
+      "bundleIdentifier": "at.hoeselm.bode"
+    },
+    "android": {
+      "package": "at.hoeselm.bode"
+    }
   }
 }
