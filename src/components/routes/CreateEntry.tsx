@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, ViewStyle, Text } from "react-native";
 import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
+import DatePicker from "react-native-datepicker";
 
 import activities from "../../state/activities";
 
@@ -10,6 +11,7 @@ const primaryColor1 = "green";
 interface State {
     inputName: string;
     inputNameError: string;
+    inputDate: string;
 }
 
 interface Props {
@@ -44,7 +46,8 @@ export default class Component extends React.Component<Props, State> {
         super(props);
         this.state = {
             inputName: "",
-            inputNameError: null
+            inputNameError: null,
+            inputDate: null
         };
     }
 
@@ -52,7 +55,8 @@ export default class Component extends React.Component<Props, State> {
         console.log("Creating entry for: ", this.props.uid, this.state.inputName);
         activities.createEntry({
             uid: this.props.uid,
-            name: this.state.inputName
+            name: this.state.inputName,
+            datum: this.state.inputDate
         });
         console.log("CREATED ENTRY");
         Actions.pop();
@@ -61,6 +65,12 @@ export default class Component extends React.Component<Props, State> {
     parseName(value: any) {
         this.setState({
             inputName: value
+        });
+    }
+
+    parseDate(value: any) {
+        this.setState({
+            inputDate: value
         });
     }
 
@@ -95,6 +105,7 @@ export default class Component extends React.Component<Props, State> {
                     {`Creating entry for, ${this.props.uid}`}
                 </Text>
 
+                {/* Form input for name */}
                 <FormInput
                     inputStyle={styles.inputStyle}
                     placeholder="Enter entry name"
@@ -103,6 +114,48 @@ export default class Component extends React.Component<Props, State> {
                     selectionColor="black" // cursor color
                 />
                 {this.showNameError()}
+
+                {/* Form input for date */}
+                <DatePicker
+                    style={{ width: 300 }}
+                    date={this.state.inputDate}
+                    mode="datetime"
+                    placeholder="Select date and time"
+                    format="YYYY-MM-DD HH:mm"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    showIcon={false}
+                    onDateChange={(date) => {
+                        this.parseDate(date);
+                    }}
+                    customStyles={{
+                        dateInput: {
+                            borderWidth: 0,
+                            marginLeft: 16,
+                        },
+                        dateText: {
+                            fontSize: 20,
+                            position: "absolute",
+                            left: 0,
+                            marginLeft: 0
+                        },
+                        placeholderText: {
+                            fontSize: 20,
+                            position: "absolute",
+                            left: 0,
+                            marginLeft: 0
+                        }
+                    }}
+                />
+                {/* Line: Because datepicker line is not customizable we draw a line manually */}
+                <View
+                    style={{
+                        borderBottomColor: primaryColor1,
+                        marginLeft: 20,
+                        marginRight: 20,
+                        borderBottomWidth: 1,
+                    }}
+                />
 
                 <View style={styles.formContainer}>
                     <Button

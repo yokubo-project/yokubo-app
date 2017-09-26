@@ -107,7 +107,7 @@ export default class Component extends React.Component<null, State> {
                                 <ListItem
                                     key={activity.uid}
                                     title={activity.name}
-                                    onPressRightIcon={() => { Actions.entries({uid: activity.uid}); }}
+                                    onPressRightIcon={() => { Actions.entries({ uid: activity.uid }); }}
                                 />
                             ))
                         }

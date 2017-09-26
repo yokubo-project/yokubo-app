@@ -1,6 +1,7 @@
 import { observable, action } from "mobx";
 import firebase from "firebase";
 import * as _ from "lodash";
+import moment from "moment";
 
 import auth from "./auth";
 
@@ -21,12 +22,22 @@ class Activities {
 
         this.isLoading = true;
 
+        console.log("USER UID IS : ", auth.user.uid);
+
         try {
-            firebase.database().ref(`/users/${auth.user.uid}/activities`).push({ name });
+            firebase.database().ref(`/users/${auth.user.uid}/activities`).push({
+                name,
+                createdAt: moment().toDate()
+            });
             this.isLoading = false;
         } catch (e) {
             // TODO: Proper error handling
-            console.log("ERROR", JSON.stringify(e));
+            console.log("Error createActivity: ", JSON.stringify(e));
+            // Create first activity
+            firebase.database().ref(`/users/${auth.user.uid}/activities`).set({
+                name,
+                createdAt: moment().toDate()
+            });
         }
 
     }
@@ -40,20 +51,23 @@ class Activities {
                     _.each(snapshot.val(), (object, key) => {
                         this.activities.push({
                             name: object.name,
+                            createdAt: object.createdAt,
                             uid: key
                         });
                     });
                 });
         } catch (e) {
             // TODO: Proper error handling
-            console.log("ERROR", JSON.stringify(e));
+            console.log("Error fetchActivities: ", JSON.stringify(e));
+            // One case of error is when user has not yet created an activity
+            this.activities = [];
         }
 
     }
 
     @action createEntry = async (entryData: any) => {
 
-        const { uid, name } = entryData;
+        const { uid, name, datum } = entryData;
 
         if (this.isLoading) {
             // bailout, noop
@@ -63,13 +77,16 @@ class Activities {
         this.isLoading = true;
 
         try {
-            firebase.database()
-                .ref(`/users/${auth.user.uid}/activities/${uid}/entries`)
-                .push({ name });
+            firebase.database().ref(`/users/${auth.user.uid}/activities/${uid}/entries`)
+                .push({
+                    name,
+                    datum,
+                    createdAt: moment().toDate()
+                });
             this.isLoading = false;
         } catch (e) {
             // TODO: Proper error handling
-            console.log("ERROR", JSON.stringify(e));
+            console.log("Error createEntry: ", JSON.stringify(e));
         }
 
     }
@@ -83,13 +100,17 @@ class Activities {
                     _.each(snapshot.val(), (object, key) => {
                         this.entries.push({
                             name: object.name,
+                            datum: object.datum,
+                            createdAt: object.createdAt,
                             uid: key
                         });
                     });
                 });
         } catch (e) {
             // TODO: Proper error handling
-            console.log("ERROR", JSON.stringify(e));
+            console.log("Error fetchEntries: ", JSON.stringify(e));
+            // One case of error is when user has not yet created an entry
+            this.entries = [];
         }
 
     }

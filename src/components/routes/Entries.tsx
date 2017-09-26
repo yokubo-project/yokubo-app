@@ -80,7 +80,7 @@ export default class Component extends React.Component<Props, State> {
 
                 <View style={styles.formContainer}>
                     <Text>
-                        {`Hello, ${this.props.uid}`}
+                        {`Hello, you have in total ${activities.entries.length} items in here!`}
                     </Text>
                     <Button
                         raised
@@ -98,6 +98,7 @@ export default class Component extends React.Component<Props, State> {
                                 <ListItem
                                     key={entry.uid}
                                     title={entry.name}
+                                    subtitle={entry.datum}
                                 />
                             ))
                         }
