@@ -52,7 +52,7 @@ export default class App extends React.Component<Props, State> {
                         <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
                         <Scene key="createActivity" component={CreateActivity} title="New Activity" hideNavBar={true} />
                         <Scene key="entries" component={Entries} title="Entries" hideNavBar={true} />
-                        <Scene key="createEntry" component={CreateEntry} title="New Entry" hideNavBar={true} />                        
+                        <Scene key="createEntry" component={CreateEntry} title="New Entry" hideNavBar={true} />
                     </Stack>
                 </Router>
             </MobxProvider>

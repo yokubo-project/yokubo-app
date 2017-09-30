@@ -1,7 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { StyleSheet, Text, TextStyle, View, ScrollView, ViewStyle } from "react-native";
-import { Header, Button, List, ListItem } from "react-native-elements";
+import * as _ from "lodash";
+import { StyleSheet, Text, TextStyle, Image, View, ScrollView, ViewStyle, TouchableHighlight } from "react-native";
+import { Header } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
 import auth from "../../state/auth";
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
     } as ViewStyle,
     formContainer: {
         flex: 2,
+        flexDirection: "row",
         justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
@@ -35,15 +37,36 @@ const styles = StyleSheet.create({
         // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
-    signOutText: {
-        textAlign: "center",
-        color: primaryColor1,
-        marginBottom: 10,
-    } as TextStyle,
-    button: {
+    formContainerTextElement: {
         position: "absolute",
-        bottom: 50,
-        right: 50,
+        fontSize: 20,
+        textAlign: "center",
+        color: "white",
+        bottom: 10,
+    } as TextStyle,
+    formContainerTouchableElement: {
+        margin: 10,
+        flex: 1,
+    } as TextStyle,
+    formContainerImageElement: {
+        height: 200,
+        // Center child
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    } as TextStyle,
+    formContainerEmpty: {
+        flex: 1,
+        margin: 10,
+        height: 200,
+    },
+    borderStyle: {
+        borderColor: "black",
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderRadius: 25,
+        flex: 1,
+        overflow: "hidden"
     }
 });
 
@@ -67,7 +90,91 @@ export default class Component extends React.Component<null, State> {
         Actions.createActivity();
     }
 
+    renderActivities(activities) {
+
+        let activityIndex = 0;
+        const columnCount = 2;
+        const rowCount = _.ceil(activities.length / columnCount);
+
+        const rows = [];
+        _.range(rowCount).forEach((rowIndex) => {
+
+            const columns = [];
+            _.range(columnCount).forEach((columnIndex) => {
+
+                if (activityIndex < activities.length) {
+
+                    const activity = activities[activityIndex];
+                    columns.push(
+                        <TouchableHighlight
+                            key={`column${columnIndex}`}
+                            onPress={() => { Actions.entries({ uid: activity.uid }); }}
+                            style={styles.formContainerTouchableElement}
+                            activeOpacity={0.8}
+                        >
+                            <Image
+                                key={`column${columnIndex}`}
+                                source={{ uri: activity.imageUrl }}
+                                style={styles.formContainerImageElement}
+                            >
+                                <Text
+                                    key={`column${columnIndex}`}
+                                    style={styles.formContainerTextElement}
+                                >
+                                    {activity.name}
+                                </Text>
+                            </Image>
+                        </TouchableHighlight>
+                    );
+
+                } else {
+
+                    columns.push(
+                        <Text
+                            key={`column${columnIndex}`}
+                            style={styles.formContainerEmpty}
+                        >
+                        </Text>
+                    );
+                }
+                ++activityIndex;
+
+            });
+            rows.push(
+                <View key={`row${rowIndex}`} style={styles.formContainer}>
+                    {columns}
+                </View>
+            );
+
+        });
+
+        // rows.push(
+        //     <View key={`row${0}`} style={styles.formContainer}>
+        //         <View style={styles.borderStyle}>
+        //         <Image
+        //             style={styles.formContainerImageElement}
+        //             source={{ uri: "https://www.runnersworld.com/sites/runnersworld.com/files/styles/listicle_main_custom_user_phone_1x/public/GettyImages_MorningRun.jpg?itok=cGdqYC81&timestamp=1494275820" }}
+        //         >
+        //             <Text
+        //                 key={`column1`}
+        //                 style={styles.formContainerTextElement}
+        //             >
+        //                 {`column1`}
+        //             </Text>
+        //         </Image>
+        //         </View>
+
+        //     </View>
+        // );
+
+        return rows;
+
+    }
+
     render() {
+
+        const myActivities = this.renderActivities(activities.activities);
+
         return (
             <View style={styles.mainContainer}>
 
@@ -81,37 +188,20 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
+                        rightComponent={{
+                            icon: "arrow-back",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { this.processSignOut(); }
+                        }}
                         centerComponent={{ text: "Activities", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
                 </View>
 
-                <View style={styles.formContainer}>
-                    <Text style={styles.signOutText}>
-                        {`Hi, ${auth.username ? auth.username : "TESTER"}`}
-                    </Text>
-                    <Button
-                        raised
-                        buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"SIGN OUT"}
-                        onPress={() => { this.processSignOut(); }}
-                    />
-                </View>
-
                 <ScrollView style={styles.listContainer}>
-                    <List containerStyle={{ marginBottom: 20 }}>
-                        {
-                            activities.activities.map((activity) => (
-                                <ListItem
-                                    key={activity.uid}
-                                    title={activity.name}
-                                    onPressRightIcon={() => { Actions.entries({ uid: activity.uid }); }}
-                                />
-                            ))
-                        }
-                    </List>
+                    {myActivities}
                 </ScrollView>
 
                 <AddIcon

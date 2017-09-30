@@ -50,9 +50,10 @@ class Activities {
                     this.activities = []; // TODO: Improve flow                    
                     _.each(snapshot.val(), (object, key) => {
                         this.activities.push({
+                            uid: key,                  
                             name: object.name,
+                            imageUrl: object.imageUrl,
                             createdAt: object.createdAt,
-                            uid: key
                         });
                     });
                 });
