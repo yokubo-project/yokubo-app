@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import * as _ from "lodash";
-import { StyleSheet, Text, TextStyle, Image, View, ScrollView, ViewStyle, TouchableHighlight } from "react-native";
+import { StyleSheet, Text, TextStyle, Image, View, ScrollView, ViewStyle, TouchableOpacity } from "react-native";
 import { Header } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
@@ -106,7 +106,7 @@ export default class Component extends React.Component<null, State> {
 
                     const activity = activities[activityIndex];
                     columns.push(
-                        <TouchableHighlight
+                        <TouchableOpacity
                             key={`column${columnIndex}`}
                             onPress={() => { Actions.entries({ uid: activity.uid }); }}
                             style={styles.formContainerTouchableElement}
@@ -124,7 +124,7 @@ export default class Component extends React.Component<null, State> {
                                     {activity.name}
                                 </Text>
                             </Image>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     );
 
                 } else {
@@ -147,25 +147,6 @@ export default class Component extends React.Component<null, State> {
             );
 
         });
-
-        // rows.push(
-        //     <View key={`row${0}`} style={styles.formContainer}>
-        //         <View style={styles.borderStyle}>
-        //         <Image
-        //             style={styles.formContainerImageElement}
-        //             source={{ uri: "https://www.runnersworld.com/sites/runnersworld.com/files/styles/listicle_main_custom_user_phone_1x/public/GettyImages_MorningRun.jpg?itok=cGdqYC81&timestamp=1494275820" }}
-        //         >
-        //             <Text
-        //                 key={`column1`}
-        //                 style={styles.formContainerTextElement}
-        //             >
-        //                 {`column1`}
-        //             </Text>
-        //         </Image>
-        //         </View>
-
-        //     </View>
-        // );
 
         return rows;
 

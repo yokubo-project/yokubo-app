@@ -9,7 +9,9 @@ const primaryColor1 = "green";
 
 interface State {
     inputName: string;
+    inputImageUrl: string;
     inputNameError: string;
+    inputImageUrlError: string;
 }
 
 const styles = StyleSheet.create({
@@ -40,12 +42,17 @@ export default class Component extends React.Component<null, State> {
         super(props);
         this.state = {
             inputName: "",
-            inputNameError: null
+            inputImageUrl: "",
+            inputNameError: null,
+            inputImageUrlError: null
         };
     }
 
     async createActivity() {
-        activities.createActivity({ name: this.state.inputName });
+        activities.createActivity({ 
+            name: this.state.inputName,
+            imageUrl: this.state.inputImageUrl
+         });
         Actions.pop();
     }
 
@@ -55,9 +62,22 @@ export default class Component extends React.Component<null, State> {
         });
     }
 
+    parseImageUrl(value: any) {
+        this.setState({
+            inputImageUrl: value
+        });
+    }
+
     showNameError() {
         if (this.state.inputNameError) {
             return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showImageUrlError() {
+        if (this.state.inputImageUrlError) {
+            return <FormValidationMessage>{this.state.inputImageUrlError}</FormValidationMessage>;
         }
         return null;
     }
@@ -90,6 +110,15 @@ export default class Component extends React.Component<null, State> {
                     selectionColor="black" // cursor color
                 />
                 {this.showNameError()}
+
+                <FormInput
+                    inputStyle={styles.inputStyle}
+                    placeholder="Enter activity image url"
+                    onChangeText={(e) => this.parseImageUrl(e)}
+                    underlineColorAndroid={primaryColor1}
+                    selectionColor="black" // cursor color
+                />
+                {this.showImageUrlError()}
 
                 <View style={styles.formContainer}>
                     <Button

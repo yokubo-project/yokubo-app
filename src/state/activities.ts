@@ -13,7 +13,7 @@ class Activities {
 
     @action createActivity = async (activityData: any) => {
 
-        const { name } = activityData;
+        const { name, imageUrl } = activityData;
 
         if (this.isLoading) {
             // bailout, noop
@@ -22,11 +22,10 @@ class Activities {
 
         this.isLoading = true;
 
-        console.log("USER UID IS : ", auth.user.uid);
-
         try {
             firebase.database().ref(`/users/${auth.user.uid}/activities`).push({
                 name,
+                imageUrl,
                 createdAt: moment().toDate()
             });
             this.isLoading = false;
@@ -50,7 +49,7 @@ class Activities {
                     this.activities = []; // TODO: Improve flow                    
                     _.each(snapshot.val(), (object, key) => {
                         this.activities.push({
-                            uid: key,                  
+                            uid: key,
                             name: object.name,
                             imageUrl: object.imageUrl,
                             createdAt: object.createdAt,
