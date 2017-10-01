@@ -115,6 +115,10 @@ class Activities {
 
     }
 
+    @action sortEntries = async (sortKey: string, sortDirection: string) => {
+        this.entries = _.orderBy(this.entries, sortKey, sortDirection);
+    }
+
 }
 
 let activities: Activities;

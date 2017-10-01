@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         flex: 1,
         overflow: "hidden"
-    }
+    },
 });
 
 @observer
@@ -163,12 +163,6 @@ export default class Component extends React.Component<null, State> {
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
                         backgroundColor={primaryColor1}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        }}
                         rightComponent={{
                             icon: "arrow-back",
                             color: "#fff",

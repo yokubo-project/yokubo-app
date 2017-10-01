@@ -1,9 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { StyleSheet, Text, View, ViewStyle, ScrollView } from "react-native";
-import { Header, Button, List, ListItem } from "react-native-elements";
+import { Header, List, ListItem } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
+import AddIcon from "../elements/AddIcon";
 import activities from "../../state/activities";
 
 const primaryColor1 = "green";
@@ -27,12 +28,12 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     } as ViewStyle,
     formContainer: {
-        flex: 2,
+        flex: 1,
         justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
     listContainer: {
-        flexGrow: 5,
+        flexGrow: 6,
         // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
@@ -40,6 +41,22 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 50,
         right: 50,
+    },
+    tagContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+    },
+    tagElement: {
+        backgroundColor: "gray",
+        marginLeft: 10,
+        marginTop: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderRadius: 3
     }
 });
 
@@ -56,6 +73,10 @@ export default class Component extends React.Component<Props, State> {
 
     handleOnIconClick() {
         Actions.createEntry({ uid: this.props.uid });
+    }
+
+    sortEntries(sortKey, sortDirection) {
+        activities.sortEntries(sortKey, sortDirection);
     }
 
     render() {
@@ -79,16 +100,32 @@ export default class Component extends React.Component<Props, State> {
                 </View>
 
                 <View style={styles.formContainer}>
-                    <Text>
-                        {`Hello, you have in total ${activities.entries.length} items in here!`}
-                    </Text>
-                    <Button
-                        raised
-                        buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"CREATE ENTRY"}
-                        onPress={() => { this.handleOnIconClick(); }}
-                    />
+                    <View style={styles.tagContainer}>
+                        <Text
+                            style={styles.tagElement}
+                            onPress={() => { this.sortEntries("name", "asc"); }}
+                        >
+                            {"name asc"}
+                        </Text>
+                        <Text
+                            style={styles.tagElement}
+                            onPress={() => { this.sortEntries("name", "desc"); }}
+                        >
+                            {"name desc"}
+                        </Text>
+                        <Text
+                            style={styles.tagElement}
+                            onPress={() => { this.sortEntries("datum", "asc"); }}
+                        >
+                            {"datum asc"}
+                        </Text>
+                        <Text
+                            style={styles.tagElement}
+                            onPress={() => { this.sortEntries("datum", "desc"); }}
+                        >
+                            {"datum desc"}
+                        </Text>
+                    </View>
                 </View>
 
                 <ScrollView style={styles.listContainer}>
@@ -104,6 +141,10 @@ export default class Component extends React.Component<Props, State> {
                         }
                     </List>
                 </ScrollView>
+
+                <AddIcon
+                    onPress={() => this.handleOnIconClick()}
+                />
 
             </View>
         );

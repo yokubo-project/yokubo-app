@@ -46,10 +46,10 @@ export default class App extends React.Component<Props, State> {
             <MobxProvider auth={auth}>
                 <Router>
                     <Stack key="root">
-                        <Scene key="activities" component={Activities} title="Activities" hideNavBar={true} />
                         <Scene key="home" component={Home} title="Home" hideNavBar={true} />
                         <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
                         <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
+                        <Scene key="activities" component={Activities} title="Activities" hideNavBar={true} />                        
                         <Scene key="createActivity" component={CreateActivity} title="New Activity" hideNavBar={true} />
                         <Scene key="entries" component={Entries} title="Entries" hideNavBar={true} />
                         <Scene key="createEntry" component={CreateEntry} title="New Entry" hideNavBar={true} />
