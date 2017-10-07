@@ -52,13 +52,11 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async createEntry() {
-        console.log("Creating entry for: ", this.props.uid, this.state.inputName);
         activities.createEntry({
             uid: this.props.uid,
             name: this.state.inputName,
             datum: this.state.inputDate
         });
-        console.log("CREATED ENTRY");
         Actions.pop();
     }
 

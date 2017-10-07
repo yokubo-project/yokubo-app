@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle, Text } from "react-native";
 import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
+import Modal from "react-native-modal";
 
 import activities from "../../state/activities";
 
@@ -12,6 +13,12 @@ interface State {
     inputImageUrl: string;
     inputNameError: string;
     inputImageUrlError: string;
+    inputMetrics: Array<{
+        metricName: string;
+        metricUnity: string;
+        metricDefaultValue: number;
+    }>;
+    isInputFieldsModalVisible: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -31,12 +38,32 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     } as ViewStyle,
     inputStyle: {
+        marginRight: 100,
         color: "black",
         fontSize: 20
+    },
+    modalInputStyle: {
+        color: "black",
+        fontSize: 20
+    },
+    modalContent: {
+        flex: 1,
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "stretch",
+        borderRadius: 4,
+        borderColor: "rgba(0, 0, 0, 0.1)",
+    },
+    modalButtonStyle: {
+        // flex: 1
     }
 });
 
 export default class Component extends React.Component<null, State> {
+
+    tempMetricName: string = "";
+    tempMetricUnity: string = "";
+    tempMetricDefaultValue: string = "";
 
     constructor(props) {
         super(props);
@@ -44,15 +71,18 @@ export default class Component extends React.Component<null, State> {
             inputName: "",
             inputImageUrl: "",
             inputNameError: null,
-            inputImageUrlError: null
+            inputImageUrlError: null,
+            inputMetrics: [],
+            isInputFieldsModalVisible: false
         };
     }
 
     async createActivity() {
-        activities.createActivity({ 
+        activities.createActivity({
             name: this.state.inputName,
-            imageUrl: this.state.inputImageUrl
-         });
+            imageUrl: this.state.inputImageUrl,
+            inputMetrics: this.state.inputMetrics
+        });
         Actions.pop();
     }
 
@@ -80,6 +110,34 @@ export default class Component extends React.Component<null, State> {
             return <FormValidationMessage>{this.state.inputImageUrlError}</FormValidationMessage>;
         }
         return null;
+    }
+
+    _showInputFieldsModal = () => this.setState({ isInputFieldsModalVisible: true });
+
+    _hideInputFieldsModal = () => this.setState({ isInputFieldsModalVisible: false });
+
+
+    parseNewMetricName(value: any) {
+        this.tempMetricName = value;
+    }
+
+    parseNewMetricUnity(value: any) {
+        this.tempMetricUnity = value;
+    }
+
+    parseNewMetricDefaultValue(value: any) {
+        this.tempMetricDefaultValue = value;
+    }
+
+    addMetric() {
+        this.setState({
+            inputMetrics: this.state.inputMetrics.concat({
+                metricName: this.tempMetricName,
+                metricUnity: this.tempMetricUnity,
+                metricDefaultValue: parseInt(this.tempMetricDefaultValue, 10),
+            })
+        });
+        this._hideInputFieldsModal();
     }
 
     render() {
@@ -119,6 +177,56 @@ export default class Component extends React.Component<null, State> {
                     selectionColor="black" // cursor color
                 />
                 {this.showImageUrlError()}
+
+                <Text>Metrices: {this.state.inputMetrics.map(field => `name: ${field.metricName} - unity: ${field.metricUnity} - defaultValue: ${field.metricDefaultValue} ; `)}</Text>
+
+                <Button
+                    raised
+                    buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
+                    textStyle={{ textAlign: "center", fontSize: 18 }}
+                    title={"Add Metric"}
+                    onPress={this._showInputFieldsModal}
+                />
+
+                <Modal
+                    isVisible={this.state.isInputFieldsModalVisible}
+                    onBackdropPress={this._hideInputFieldsModal}
+                    onBackButtonPress={this._hideInputFieldsModal}
+                >
+                    <View style={styles.modalContent}>
+                        <Text>Hello, please enter your new metric</Text>
+                        <FormInput
+                            inputStyle={styles.modalInputStyle}
+                            placeholder="Name"
+                            onChangeText={(value) => this.parseNewMetricName(value)}
+                            underlineColorAndroid={primaryColor1}
+                            selectionColor="black" // cursor color
+                        />
+                        <FormInput
+                            inputStyle={styles.modalInputStyle}
+                            placeholder="Unity"
+                            onChangeText={(value) => this.parseNewMetricUnity(value)}
+                            underlineColorAndroid={primaryColor1}
+                            selectionColor="black" // cursor color
+                        />
+                        <FormInput
+                            inputStyle={styles.modalInputStyle}
+                            keyboardType="numeric"
+                            placeholder="Default Value"
+                            onChangeText={(value) => this.parseNewMetricDefaultValue(value)}
+                            underlineColorAndroid={primaryColor1}
+                            selectionColor="black" // cursor color
+                        />
+                        <Button
+                            inputStyle={styles.modalButtonStyle}
+                            raised
+                            buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
+                            textStyle={{ textAlign: "center", fontSize: 18 }}
+                            title={"Add metric"}
+                            onPress={() => { this.addMetric(); }}
+                        />
+                    </View>
+                </Modal>
 
                 <View style={styles.formContainer}>
                     <Button

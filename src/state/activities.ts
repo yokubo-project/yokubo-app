@@ -13,7 +13,7 @@ class Activities {
 
     @action createActivity = async (activityData: any) => {
 
-        const { name, imageUrl } = activityData;
+        const { name, imageUrl, inputMetrics } = activityData;
 
         if (this.isLoading) {
             // bailout, noop
@@ -22,11 +22,14 @@ class Activities {
 
         this.isLoading = true;
 
+        const datum = moment().toISOString();
+
         try {
             firebase.database().ref(`/users/${auth.user.uid}/activities`).push({
                 name,
                 imageUrl,
-                createdAt: moment().toDate()
+                inputMetrics,
+                datum
             });
             this.isLoading = false;
         } catch (e) {
@@ -35,7 +38,9 @@ class Activities {
             // Create first activity
             firebase.database().ref(`/users/${auth.user.uid}/activities`).set({
                 name,
-                createdAt: moment().toDate()
+                imageUrl,
+                inputMetrics,
+                datum
             });
         }
 
