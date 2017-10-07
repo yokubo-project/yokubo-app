@@ -12,10 +12,12 @@ interface State {
     inputName: string;
     inputNameError: string;
     inputDate: string;
+    inputMetricsEntry: any;
 }
 
 interface Props {
     uid: string;
+    inputMetrics: any;
 }
 
 const styles = StyleSheet.create({
@@ -47,7 +49,15 @@ export default class Component extends React.Component<Props, State> {
         this.state = {
             inputName: "",
             inputNameError: null,
-            inputDate: null
+            inputDate: null,
+            inputMetricsEntry: this.props.inputMetrics.map(metric => {
+                return {
+                    metricName: metric.metricName,
+                    metricUnity: metric.metricUnity,
+                    metricDefaultValue: metric.metricDefaultValue,
+                    metricValue: 0
+                };
+            })
         };
     }
 
@@ -55,7 +65,8 @@ export default class Component extends React.Component<Props, State> {
         activities.createEntry({
             uid: this.props.uid,
             name: this.state.inputName,
-            datum: this.state.inputDate
+            datum: this.state.inputDate,
+            inputMetricsEntry: this.state.inputMetricsEntry
         });
         Actions.pop();
     }
@@ -77,6 +88,41 @@ export default class Component extends React.Component<Props, State> {
             return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
         return null;
+    }
+
+    passMetricToState(metricName, value) {
+        // TODO: Use key instead of name
+        const inputMetricEntries = this.state.inputMetricsEntry;
+        const metricRes = inputMetricEntries.filter(metric => metric.metricName === metricName)[0];
+        metricRes.metricValue = value;
+
+        this.setState({
+            inputMetricsEntry: inputMetricEntries
+        });
+    }
+
+    renderMetrices(metrices: any) {
+        return (
+            <View>
+                {metrices.map(metric => {
+                    return (
+                        <View key={metric.metricName}>
+                            <Text>Metric is {metric.metricName}</Text>
+                            <Text>Unity is {metric.metricUnity}</Text>
+                            <FormInput
+                                inputStyle={styles.inputStyle}
+                                placeholder="Value is"
+                                keyboardType="numeric"
+                                defaultValue={metric.metricDefaultValue.toString()}
+                                onChangeText={(e) => this.passMetricToState(metric.metricName, e)}
+                                underlineColorAndroid={primaryColor1}
+                                selectionColor="black" // cursor color
+                            />
+                        </View>
+                    );
+                })}
+            </View>
+        );
     }
 
     render() {
@@ -154,6 +200,8 @@ export default class Component extends React.Component<Props, State> {
                         borderBottomWidth: 1,
                     }}
                 />
+
+                {this.renderMetrices(this.props.inputMetrics)}
 
                 <View style={styles.formContainer}>
                     <Button

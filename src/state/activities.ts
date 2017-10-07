@@ -57,7 +57,8 @@ class Activities {
                             uid: key,
                             name: object.name,
                             imageUrl: object.imageUrl,
-                            createdAt: object.createdAt,
+                            datum: object.datum,
+                            inputMetrics: object.inputMetrics
                         });
                     });
                 });
@@ -72,7 +73,7 @@ class Activities {
 
     @action createEntry = async (entryData: any) => {
 
-        const { uid, name, datum } = entryData;
+        const { uid, name, datum, inputMetricsEntry } = entryData;
 
         if (this.isLoading) {
             // bailout, noop
@@ -80,13 +81,15 @@ class Activities {
         }
 
         this.isLoading = true;
+        const createdAt = moment().toISOString();
 
         try {
             firebase.database().ref(`/users/${auth.user.uid}/activities/${uid}/entries`)
                 .push({
                     name,
                     datum,
-                    createdAt: moment().toDate()
+                    inputMetricsEntry,
+                    createdAt
                 });
             this.isLoading = false;
         } catch (e) {

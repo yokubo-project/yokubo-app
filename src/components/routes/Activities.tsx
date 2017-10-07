@@ -108,7 +108,12 @@ export default class Component extends React.Component<null, State> {
                     columns.push(
                         <TouchableOpacity
                             key={`column${columnIndex}`}
-                            onPress={() => { Actions.entries({ uid: activity.uid }); }}
+                            onPress={() => {
+                                Actions.entries({
+                                    uid: activity.uid,
+                                    inputMetrics: activity.inputMetrics
+                                });
+                            }}
                             style={styles.formContainerTouchableElement}
                             activeOpacity={0.8}
                         >

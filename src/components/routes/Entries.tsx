@@ -14,6 +14,7 @@ interface State {
 
 interface Props {
     uid: string;
+    inputMetrics: any;
 }
 
 const styles = StyleSheet.create({
@@ -72,7 +73,10 @@ export default class Component extends React.Component<Props, State> {
     }
 
     handleOnIconClick() {
-        Actions.createEntry({ uid: this.props.uid });
+        Actions.createEntry({
+            uid: this.props.uid,
+            inputMetrics: this.props.inputMetrics
+        });
     }
 
     sortEntries(sortKey, sortDirection) {
