@@ -106,7 +106,21 @@ class Activities {
                 .on("value", snapshot => {
                     this.entries = []; // TODO: Improve flow
                     _.each(snapshot.val(), (object, key) => {
+
+                        const metrices = [];
+                        if (object.inputMetricsEntry) {
+                            Object.keys(object.inputMetricsEntry).map((key) => {
+                                metrices.push({
+                                    metricName: object.inputMetricsEntry[key].metricName,
+                                    metricUnity: object.inputMetricsEntry[key].metricUnity,
+                                    metricValue: object.inputMetricsEntry[key].metricValue,
+                                    key
+                                });
+                            });
+                        }
+
                         this.entries.push({
+                            metrices,                            
                             name: object.name,
                             datum: object.datum,
                             createdAt: object.createdAt,
