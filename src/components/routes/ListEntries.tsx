@@ -9,7 +9,6 @@ import AddIcon from "../elements/AddIcon";
 import activities from "../../state/activities";
 
 interface State {
-    selectedTab: string;
 }
 
 interface Props {
@@ -61,15 +60,8 @@ export default class Component extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
-        this.state = {
-            selectedTab: "profile",
-        };
     }
 
-    changeTab(selectedTab) {
-        this.setState({ selectedTab });
-    }
-    
     componentWillMount() {
         activities.fetchEntries(this.props.uid);
     }

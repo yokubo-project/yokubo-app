@@ -6,6 +6,8 @@ import { Actions } from "react-native-router-flux";
 import TabNavigator from "react-native-tab-navigator";
 
 import ListEntries from "./ListEntries";
+import EntriesStatistics from "./EntriesStatistics";
+
 const primaryColor1 = "green";
 
 interface State {
@@ -92,7 +94,7 @@ export default class Component extends React.Component<Props, State> {
                             renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
                             renderSelectedIcon={() => <Icon color={primaryColor1} name="equalizer" size={30} />}
                             onPress={() => this.changeTab("entryStats")}>
-                            <ListEntries
+                            <EntriesStatistics
                                 uid={this.props.uid}
                                 inputMetrics={this.props.inputMetrics}
                             />
