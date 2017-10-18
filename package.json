@@ -38,6 +38,7 @@
     "react-native-modal": "^4.0.0",
     "react-native-router-flux": "^4.0.0-beta.19",
     "react-native-tab-navigator": "^0.3.4",
-    "tslint": "^5.7.0"
+    "tslint": "^5.7.0",
+    "victory-native": "^0.15.0"
   }
 }

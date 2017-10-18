@@ -2,6 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Actions } from "react-native-router-flux";
+import { VictoryBar, VictoryScatter } from "victory-native";
 
 import AddIcon from "../elements/AddIcon";
 import activities from "../../state/activities";
@@ -80,7 +81,7 @@ export default class Component extends React.Component<Props, State> {
             </View>
         ));
 
-        renderedMetrices.push(<View><Text>Metricname: Einheiten</Text><Text>Total: {entries.length}</Text></View>);
+        renderedMetrices.push(<View key={"count"}><Text>Metricname: Einheiten</Text><Text>Total: {entries.length}</Text></View>);
 
         return renderedMetrices;
     }
@@ -93,6 +94,16 @@ export default class Component extends React.Component<Props, State> {
                     {this.renderEntryStatictics(activities.entries)}
                 </View>
 
+                <VictoryBar />
+                <VictoryScatter
+                    size={7}
+                    data={[
+                        { x: 1, y: 1, label: "first", symbol: "star", opacity: 0.5, fill: "blue" },
+                        { x: 2, y: 2, label: "second", symbol: "circle", opacity: 0.8, fill: "red" },
+                        { x: 3, y: 3, label: "third", symbol: "square", fill: "white", stroke: "black", strokeWidth: 2 },
+                        { x: 4, y: 4, label: "fourth", symbol: "diamond", fill: "green" }
+                    ]}
+                />
                 <AddIcon
                     onPress={() => this.handleOnIconClick()}
                 />
