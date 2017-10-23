@@ -4423,6 +4423,13 @@ react-native-svg@5.3.0:
     color "^0.11.1"
     lodash "^4.16.6"
 
+react-native-svg@^5.4.2:
+  version "5.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-5.4.2.tgz#a01b4d88cda4b8ef4b2bc1adf05e11ec93a77b79"
+  dependencies:
+    color "^0.11.1"
+    lodash "^4.16.6"
+
 react-native-tab-navigator@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/react-native-tab-navigator/-/react-native-tab-navigator-0.3.3.tgz#b222bad21fbe773c8d28f9a0de30ce62b08724d3"

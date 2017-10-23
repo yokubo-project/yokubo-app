@@ -6,7 +6,8 @@ import { Actions } from "react-native-router-flux";
 import TabNavigator from "react-native-tab-navigator";
 
 import ListEntries from "./ListEntries";
-import EntriesStatistics from "./EntriesStatistics";
+import StatEntries from "./StatEntries";
+import ChartEntries from "./ChartEntries";
 
 const primaryColor1 = "green";
 
@@ -94,11 +95,24 @@ export default class Component extends React.Component<Props, State> {
                             renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
                             renderSelectedIcon={() => <Icon color={primaryColor1} name="equalizer" size={30} />}
                             onPress={() => this.changeTab("entryStats")}>
-                            <EntriesStatistics
+                            <StatEntries
                                 uid={this.props.uid}
                                 inputMetrics={this.props.inputMetrics}
                             />
                         </TabNavigator.Item>
+                        <TabNavigator.Item
+                            titleStyle={{ fontWeight: "bold", fontSize: 10 }}
+                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: primaryColor1 }}
+                            selected={this.state.selectedTab === "entryCharts"}
+                            title={this.state.selectedTab === "entryCharts" ? "Charts" : null}
+                            renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="dashboard" size={33} />}
+                            renderSelectedIcon={() => <Icon color={primaryColor1} name="dashboard" size={30} />}
+                            onPress={() => this.changeTab("entryCharts")}>
+                            <ChartEntries
+                                uid={this.props.uid}
+                                inputMetrics={this.props.inputMetrics}
+                            />
+                        </TabNavigator.Item>                        
                     </TabNavigator>
                 </View>
 
