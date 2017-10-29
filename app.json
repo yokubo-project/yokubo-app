@@ -2,9 +2,9 @@
   "expo": {
     "name": "Bode",
     "icon": "./assets/app-icon-512.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "slug": "bode",
-    "sdkVersion": "19.0.0",
+    "sdkVersion": "21.0.0",
     "loading": {
       "icon": "./assets/app-icon-512.png",
       "backgroundColor": "#009900",

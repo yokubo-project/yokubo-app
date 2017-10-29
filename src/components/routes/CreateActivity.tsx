@@ -1,8 +1,10 @@
 import React from "react";
-import { StyleSheet, View, ViewStyle, Text } from "react-native";
+// const Buffer = require("buffer/").Buffer;
+import { StyleSheet, View, ViewStyle, Text, Image } from "react-native";
 import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
+import { ImagePicker } from "expo";
 
 import activities from "../../state/activities";
 
@@ -19,6 +21,7 @@ interface State {
         metricDefaultValue: number;
     }>;
     isInputFieldsModalVisible: boolean;
+    image: any;
 }
 
 const styles = StyleSheet.create({
@@ -73,7 +76,8 @@ export default class Component extends React.Component<null, State> {
             inputNameError: null,
             inputImageUrlError: null,
             inputMetrics: [],
-            isInputFieldsModalVisible: false
+            isInputFieldsModalVisible: false,
+            image: null
         };
     }
 
@@ -140,6 +144,59 @@ export default class Component extends React.Component<null, State> {
         this._hideInputFieldsModal();
     }
 
+    _pickImage = async () => {
+
+        let uploadResponse, uploadResult;
+
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: false,
+        });
+
+        console.log(pickerResult);
+
+        try {
+            this.setState({ image: pickerResult.uri });
+
+            if (!pickerResult.cancelled) {
+                uploadResponse = await this.uploadImageAsync(pickerResult.uri);
+                uploadResult = await uploadResponse.json();
+                this.parseImageUrl(uploadResult[0].file);
+            }
+        } catch (e) {
+            console.log({ uploadResponse });
+            console.log({ uploadResult });
+            console.log({ e });
+        }
+
+        return uploadResult;
+
+    }
+
+    uploadImageAsync = async (uri) => {
+        let apiUrl = "http://139.59.134.125:8080/api/v1/images";
+
+        let uriParts = uri.split(".");
+        let fileType = uriParts[uriParts.length - 1];
+
+        let formData = new FormData();
+        formData.append("photo", {
+            uri,
+            name: `photo.${fileType}`,
+            type: `image/${fileType}`,
+        } as any);
+
+        let options = {
+            method: "POST",
+            body: formData,
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "multipart/form-data",
+            },
+        };
+
+        return fetch(apiUrl, options);
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -169,14 +226,15 @@ export default class Component extends React.Component<null, State> {
                 />
                 {this.showNameError()}
 
-                <FormInput
-                    inputStyle={styles.inputStyle}
-                    placeholder="Enter activity image url"
-                    onChangeText={(e) => this.parseImageUrl(e)}
-                    underlineColorAndroid={primaryColor1}
-                    selectionColor="black" // cursor color
+                <Button
+                    raised
+                    buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
+                    textStyle={{ textAlign: "center", fontSize: 18 }}
+                    title={"Pick Image"}
+                    onPress={this._pickImage}
                 />
-                {this.showImageUrlError()}
+                {this.state.image &&
+                    <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
 
                 <Text>Metrices: {this.state.inputMetrics.map(field => `name: ${field.metricName} - unity: ${field.metricUnity} - defaultValue: ${field.metricDefaultValue} ; `)}</Text>
 
