@@ -159,7 +159,7 @@ export default class Component extends React.Component<null, State> {
 
     render() {
 
-        const myActivities = this.renderActivities(activities.activities);
+        const myActivities = this.renderActivities(activities.tasks);
 
         return (
             <View style={styles.mainContainer}>

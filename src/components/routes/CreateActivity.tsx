@@ -11,14 +11,13 @@ import activities from "../../state/activities";
 const primaryColor1 = "green";
 
 interface State {
-    inputName: string;
-    inputImageUrl: string;
-    inputNameError: string;
-    inputImageUrlError: string;
-    inputMetrics: Array<{
-        metricName: string;
-        metricUnity: string;
-        metricDefaultValue: number;
+    name: string;
+    imageUrl: string;
+    nameError: string;
+    imageUrlError: string;
+    metrics: Array<{
+        name: string;
+        unit: string;
     }>;
     isInputFieldsModalVisible: boolean;
     image: any;
@@ -65,53 +64,52 @@ const styles = StyleSheet.create({
 export default class Component extends React.Component<null, State> {
 
     tempMetricName: string = "";
-    tempMetricUnity: string = "";
-    tempMetricDefaultValue: string = "";
+    tempMetricUnit: string = "";
 
     constructor(props) {
         super(props);
         this.state = {
-            inputName: "",
-            inputImageUrl: "",
-            inputNameError: null,
-            inputImageUrlError: null,
-            inputMetrics: [],
+            name: "",
+            imageUrl: "",
+            metrics: [],
+            nameError: null,
+            imageUrlError: null,
             isInputFieldsModalVisible: false,
             image: null
         };
     }
 
-    async createActivity() {
-        activities.createActivity({
-            name: this.state.inputName,
-            imageUrl: this.state.inputImageUrl,
-            inputMetrics: this.state.inputMetrics
+    async createTask() {
+        activities.createTask({
+            name: this.state.name,
+            imageUrl: this.state.imageUrl,
+            metrics: this.state.metrics
         });
         Actions.pop();
     }
 
     parseName(value: any) {
         this.setState({
-            inputName: value
+            name: value
         });
     }
 
     parseImageUrl(value: any) {
         this.setState({
-            inputImageUrl: value
+            imageUrl: value
         });
     }
 
     showNameError() {
-        if (this.state.inputNameError) {
-            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
+        if (this.state.nameError) {
+            return <FormValidationMessage>{this.state.nameError}</FormValidationMessage>;
         }
         return null;
     }
 
     showImageUrlError() {
-        if (this.state.inputImageUrlError) {
-            return <FormValidationMessage>{this.state.inputImageUrlError}</FormValidationMessage>;
+        if (this.state.imageUrlError) {
+            return <FormValidationMessage>{this.state.imageUrlError}</FormValidationMessage>;
         }
         return null;
     }
@@ -125,20 +123,15 @@ export default class Component extends React.Component<null, State> {
         this.tempMetricName = value;
     }
 
-    parseNewMetricUnity(value: any) {
-        this.tempMetricUnity = value;
-    }
-
-    parseNewMetricDefaultValue(value: any) {
-        this.tempMetricDefaultValue = value;
+    parseNewMetricUnit(value: any) {
+        this.tempMetricUnit = value;
     }
 
     addMetric() {
         this.setState({
-            inputMetrics: this.state.inputMetrics.concat({
-                metricName: this.tempMetricName,
-                metricUnity: this.tempMetricUnity,
-                metricDefaultValue: parseInt(this.tempMetricDefaultValue, 10),
+            metrics: this.state.metrics.concat({
+                name: this.tempMetricName,
+                unit: this.tempMetricUnit,
             })
         });
         this._hideInputFieldsModal();
@@ -211,7 +204,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "New Activity", style: { color: "#fff", fontSize: 20 } }}
+                        centerComponent={{ text: "New Task", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
@@ -219,7 +212,7 @@ export default class Component extends React.Component<null, State> {
 
                 <FormInput
                     inputStyle={styles.inputStyle}
-                    placeholder="Enter activity name"
+                    placeholder="Enter name of task"
                     onChangeText={(e) => this.parseName(e)}
                     underlineColorAndroid={primaryColor1}
                     selectionColor="black" // cursor color
@@ -236,7 +229,7 @@ export default class Component extends React.Component<null, State> {
                 {this.state.image &&
                     <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
 
-                <Text>Metrices: {this.state.inputMetrics.map(field => `name: ${field.metricName} - unity: ${field.metricUnity} - defaultValue: ${field.metricDefaultValue} ; `)}</Text>
+                <Text>Metrices: {this.state.metrics.map(field => `name: ${field.name} - unit: ${field.unit}; `)}</Text>
 
                 <Button
                     raised
@@ -262,16 +255,8 @@ export default class Component extends React.Component<null, State> {
                         />
                         <FormInput
                             inputStyle={styles.modalInputStyle}
-                            placeholder="Unity"
-                            onChangeText={(value) => this.parseNewMetricUnity(value)}
-                            underlineColorAndroid={primaryColor1}
-                            selectionColor="black" // cursor color
-                        />
-                        <FormInput
-                            inputStyle={styles.modalInputStyle}
-                            keyboardType="numeric"
-                            placeholder="Default Value"
-                            onChangeText={(value) => this.parseNewMetricDefaultValue(value)}
+                            placeholder="Unit"
+                            onChangeText={(value) => this.parseNewMetricUnit(value)}
                             underlineColorAndroid={primaryColor1}
                             selectionColor="black" // cursor color
                         />
@@ -292,7 +277,7 @@ export default class Component extends React.Component<null, State> {
                         buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"CREATE"}
-                        onPress={() => { this.createActivity(); }}
+                        onPress={() => { this.createTask(); }}
                     />
                 </View>
 

@@ -1,19 +1,94 @@
 import { observable, action } from "mobx";
-import firebase from "firebase";
+import { create, persist } from "mobx-persist";
 import * as _ from "lodash";
-import moment from "moment";
 
-import auth from "./auth";
+import { TaskAPI } from "../network/TaskAPI";
+import APIClient from "../network/APIClient";
+import { APIClientStatusCodeError } from "network-stapler";
+
+import * as config from "../config";
+import auth from "../state/auth";
+
+
+export interface IPostTask {
+    name: string;
+    imageUrl: string;
+    metrics: Array<IPostMetric>;
+}
+
+export interface IPatchTask {
+    name?: string;
+    imageUrl?: string;
+}
+
+export interface ITask {
+    uid: string;
+    name: string;
+    imageUrl: string;
+    createdAt: string;
+}
+
+export interface IFullTask {
+    uid: string;
+    name: string;
+    imageUrl: string;
+    createdAt: string;
+    metrics: Array<IMetric>;
+    items: Array<IItem>;
+}
+
+export interface IPostMetric {
+    name: string;
+    unit: string;
+}
+
+export interface IPatchMetric {
+    name?: string;
+    unit?: string;
+}
+
+export interface IMetric {
+    uid: string;
+    name: string;
+    unit: string;
+    createdAt: string;
+}
+
+export interface IPostItem {
+    name: string;
+    desc: string;
+    period: Range;
+    metric: string;
+}
+
+export interface IPatchItem {
+    name?: string;
+    desc?: string;
+    period?: Range;
+    metric?: string;
+}
+
+export interface IItem {
+    uid: string;
+    name: string;
+    desc: string;
+    period: Range;
+    metric: string;
+    createdAt: string;
+}
+
+export type TaskError = "Unknown";
 
 class Activities {
 
-    @observable activities: any = [];
-    @observable entries: any = [];
+    @persist("object") @observable tasks: any = [];
+    // @observable entries: any = [];
+    @observable error: TaskError = null;
+    @observable isAuthenticated: boolean = false;
     @observable isLoading: boolean = false;
+    @observable isRehydrated: boolean = false;
 
-    @action createActivity = async (activityData: any) => {
-
-        const { name, imageUrl, inputMetrics } = activityData;
+    @action createTask = async (task: IPostTask) => {
 
         if (this.isLoading) {
             // bailout, noop
@@ -21,124 +96,127 @@ class Activities {
         }
 
         this.isLoading = true;
+        const target = TaskAPI.postTask(auth.credentials.accessToken, task);
 
-        const datum = moment().toISOString();
-
-        try {
-            firebase.database().ref(`/users/${auth.user.uid}/activities`).push({
-                name,
-                imageUrl,
-                inputMetrics,
-                datum
+        return APIClient.requestType(target)
+            .then(task => {
+                // Attach new task to tasks
+                this.tasks.push(task);
+                this.error = null;
+                this.isAuthenticated = true;
+                this.isLoading = false;
+            }).catch(error => {
+                this.wipe("Unknown");
             });
-            this.isLoading = false;
-        } catch (e) {
-            // TODO: Proper error handling
-            console.log("Error createActivity: ", JSON.stringify(e));
-            // Create first activity
-            firebase.database().ref(`/users/${auth.user.uid}/activities`).set({
-                name,
-                imageUrl,
-                inputMetrics,
-                datum
-            });
-        }
 
     }
 
     @action fetchActivities = async () => {
 
-        try {
-            firebase.database().ref(`/users/${auth.user.uid}/activities`)
-                .on("value", snapshot => {
-                    this.activities = []; // TODO: Improve flow                    
-                    _.each(snapshot.val(), (object, key) => {
-                        this.activities.push({
-                            uid: key,
-                            name: object.name,
-                            imageUrl: object.imageUrl,
-                            datum: object.datum,
-                            inputMetrics: object.inputMetrics
-                        });
-                    });
-                });
-        } catch (e) {
-            // TODO: Proper error handling
-            console.log("Error fetchActivities: ", JSON.stringify(e));
-            // One case of error is when user has not yet created an activity
-            this.activities = [];
-        }
-
-    }
-
-    @action createEntry = async (entryData: any) => {
-
-        const { uid, name, datum, inputMetricsEntry } = entryData;
-
         if (this.isLoading) {
             // bailout, noop
             return;
         }
 
         this.isLoading = true;
-        const createdAt = moment().toISOString();
+        const target = TaskAPI.getTasks(auth.credentials.accessToken);
 
-        try {
-            firebase.database().ref(`/users/${auth.user.uid}/activities/${uid}/entries`)
-                .push({
-                    name,
-                    datum,
-                    inputMetricsEntry,
-                    createdAt
-                });
-            this.isLoading = false;
-        } catch (e) {
-            // TODO: Proper error handling
-            console.log("Error createEntry: ", JSON.stringify(e));
-        }
+        return APIClient.requestType(target)
+            .then(tasks => {
+                console.log("TASKS: ", JSON.stringify(tasks));
+                this.tasks = tasks;
+                this.error = null;
+                this.isAuthenticated = true;
+                this.isLoading = false;
+            }).catch(error => {
+                this.wipe("Unknown");
+            });
+
 
     }
 
-    @action fetchEntries = async (entryUid: string) => {
+    // @action createEntry = async (entryData: any) => {
 
-        try {
-            firebase.database().ref(`/users/${auth.user.uid}/activities/${entryUid}/entries`)
-                .on("value", snapshot => {
-                    this.entries = []; // TODO: Improve flow
-                    _.each(snapshot.val(), (object, key) => {
+    //     const { uid, name, datum, inputMetricsEntry } = entryData;
 
-                        const metrices = [];
-                        if (object.inputMetricsEntry) {
-                            Object.keys(object.inputMetricsEntry).map((key) => {
-                                metrices.push({
-                                    metricName: object.inputMetricsEntry[key].metricName,
-                                    metricUnity: object.inputMetricsEntry[key].metricUnity,
-                                    metricValue: object.inputMetricsEntry[key].metricValue,
-                                    key
-                                });
-                            });
-                        }
+    //     if (this.isLoading) {
+    //         // bailout, noop
+    //         return;
+    //     }
 
-                        this.entries.push({
-                            metrices,                            
-                            name: object.name,
-                            datum: object.datum,
-                            createdAt: object.createdAt,
-                            uid: key
-                        });
-                    });
-                });
-        } catch (e) {
-            // TODO: Proper error handling
-            console.log("Error fetchEntries: ", JSON.stringify(e));
-            // One case of error is when user has not yet created an entry
-            this.entries = [];
-        }
+    //     this.isLoading = true;
+    //     const createdAt = moment().toISOString();
 
+    //     try {
+    //         firebase.database().ref(`/users/${auth.user.uid}/activities/${uid}/entries`)
+    //             .push({
+    //                 name,
+    //                 datum,
+    //                 inputMetricsEntry,
+    //                 createdAt
+    //             });
+    //         this.isLoading = false;
+    //     } catch (e) {
+    //         // TODO: Proper error handling
+    //         console.log("Error createEntry: ", JSON.stringify(e));
+    //     }
+
+    // }
+
+    // @action fetchEntries = async (entryUid: string) => {
+
+    //     try {
+    //         firebase.database().ref(`/users/${auth.user.uid}/activities/${entryUid}/entries`)
+    //             .on("value", snapshot => {
+    //                 this.entries = []; // TODO: Improve flow
+    //                 _.each(snapshot.val(), (object, key) => {
+
+    //                     const metrices = [];
+    //                     if (object.inputMetricsEntry) {
+    //                         Object.keys(object.inputMetricsEntry).map((key) => {
+    //                             metrices.push({
+    //                                 metricName: object.inputMetricsEntry[key].metricName,
+    //                                 metricUnity: object.inputMetricsEntry[key].metricUnity,
+    //                                 metricValue: object.inputMetricsEntry[key].metricValue,
+    //                                 key
+    //                             });
+    //                         });
+    //                     }
+
+    //                     this.entries.push({
+    //                         metrices,
+    //                         name: object.name,
+    //                         datum: object.datum,
+    //                         createdAt: object.createdAt,
+    //                         uid: key
+    //                     });
+    //                 });
+    //             });
+    //     } catch (e) {
+    //         // TODO: Proper error handling
+    //         console.log("Error fetchEntries: ", JSON.stringify(e));
+    //         // One case of error is when user has not yet created an entry
+    //         this.entries = [];
+    //     }
+
+    // }
+
+    // @action sortEntries = async (sortKey: string, sortDirection: string) => {
+    //     this.entries = _.orderBy(this.entries, sortKey, sortDirection);
+    // }
+
+    @action dismissError() {
+        this.error = null;
     }
 
-    @action sortEntries = async (sortKey: string, sortDirection: string) => {
-        this.entries = _.orderBy(this.entries, sortKey, sortDirection);
+    @action signOut() {
+        this.wipe(null);
+    }
+
+    @action private wipe(error: TaskError) {
+        this.error = error;
+        this.isAuthenticated = false;
+        this.isLoading = false;
     }
 
 }
