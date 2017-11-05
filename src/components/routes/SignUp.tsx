@@ -124,13 +124,11 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async processSignUp() {
-        const signUpData = {
-            name: this.state.inputName,
-            email: this.state.inputEmail,
-            password: this.state.inputPassword
-        };
+        const email = this.state.inputEmail;
+        const password = this.state.inputPassword;
+        const name = this.state.inputName;
 
-        if (signUpData.name.length < 3) {
+        if (name.length < 3) {
             this.setState({
                 inputNameError: "Name must have at least 3 characters",
                 inputEmailError: null,
@@ -138,7 +136,7 @@ export default class Component extends React.Component<Props, State> {
                 inputGeneralError: null
             });
             return;
-        } else if (signUpData.email.length < 5) {
+        } else if (email.length < 5) {
             this.setState({
                 inputNameError: null,
                 inputEmailError: "Email must have at least 5 characters",
@@ -146,7 +144,7 @@ export default class Component extends React.Component<Props, State> {
                 inputGeneralError: null
             });
             return;
-        } else if (signUpData.password.length < 6) {
+        } else if (password.length < 6) {
             this.setState({
                 inputNameError: null,
                 inputEmailError: null,
@@ -156,7 +154,7 @@ export default class Component extends React.Component<Props, State> {
             return;
         }
 
-        await auth.signUp(signUpData);
+        await auth.signUp(email, password, name);
         if (auth.error !== null) {
             switch (auth.error) {
                 case "PasswordWrong":
@@ -167,7 +165,7 @@ export default class Component extends React.Component<Props, State> {
                         inputGeneralError: null
                     });
                     break;
-                case "EmailAlreadyExists":
+                case "UserAlreadyExists":
                     this.setState({
                         inputNameError: null,
                         inputEmailError: "Email already exists.",
@@ -183,7 +181,7 @@ export default class Component extends React.Component<Props, State> {
                         inputGeneralError: null
                     });
                     break;
-                case "WeakPassword":
+                case "PasswordWeak":
                     this.setState({
                         inputNameError: null,
                         inputEmailError: null,

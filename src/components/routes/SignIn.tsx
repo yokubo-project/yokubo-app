@@ -101,19 +101,18 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async processSignIn() {
-        const signInData = {
-            email: this.state.inputEmail,
-            password: this.state.inputPassword
-        };
 
-        if (signInData.email.length < 5) {
+        const email = this.state.inputEmail;
+        const password = this.state.inputPassword;
+
+        if (email.length < 5) {
             this.setState({
                 inputEmailError: "Email must have at least 5 characters",
                 inputPasswordError: null,
                 inputGeneralError: null
             });
             return;
-        } else if (signInData.password.length < 6) {
+        } else if (password.length < 6) {
             this.setState({
                 inputEmailError: null,
                 inputPasswordError: "Password must have at least 6 characters",
@@ -122,7 +121,9 @@ export default class Component extends React.Component<Props, State> {
             return;
         }
 
-        await auth.signInWithPassword(signInData);
+        await auth.signInWithPassword(email, password);
+
+        // TODO: Refactore error handling
         if (auth.error !== null) {
             switch (auth.error) {
                 case "UserDisabled":
@@ -132,7 +133,7 @@ export default class Component extends React.Component<Props, State> {
                         inputGeneralError: "This user is disabled."
                     });
                     break;
-                case "InvalidEmail":
+                case "InvalidUsername":
                     this.setState({
                         inputEmailError: "Email is invalid.",
                         inputPasswordError: null,
