@@ -23,7 +23,7 @@ export default class Component extends React.Component<Props, null> {
                     backgroundColor: primaryColor1,
                     borderRadius: 100,
                     position: "absolute",
-                    bottom: 30,
+                    bottom: 60,
                     right: 30,
                 }}
                 onPress={() => this.props.onPress()}

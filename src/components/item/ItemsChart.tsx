@@ -3,8 +3,7 @@ import { observer } from "mobx-react";
 import { Text, StyleSheet, View, ViewStyle } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { VictoryChart, VictoryTheme, VictoryBar } from "victory-native";
-import AddIcon from "../elements/AddIcon";
-import activities from "../../state/activities";
+import task from "../../state/task";
 
 const primaryColor1 = "green";
 
@@ -13,7 +12,6 @@ interface State {
 
 interface Props {
     uid: string;
-    inputMetrics: any;
 }
 
 const styles = StyleSheet.create({
@@ -27,11 +25,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
-    button: {
-        position: "absolute",
-        bottom: 50,
-        right: 50,
-    },
 });
 
 @observer
@@ -42,13 +35,13 @@ export default class Component extends React.Component<Props, State> {
     }
 
     componentWillMount() {
-        activities.fetchEntries(this.props.uid);
+        // task.fetchEntries(this.props.uid);
     }
 
     handleOnIconClick() {
         Actions.createEntry({
             uid: this.props.uid,
-            inputMetrics: this.props.inputMetrics
+            // metrics: this.props.metrics
         });
     }
 
@@ -71,7 +64,7 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <Text>Showing Bar for {activities.entries[0].metrices[0].metricName ? activities.entries[0].metrices[0].metricName : "unknown"} in {activities.entries[0].metrices[0].metricName ? activities.entries[0].metrices[0].metricUnity : "unknown"}</Text>
+                {/* <Text>Showing Bar for {task.entries[0].metrices[0].metricName ? task.entries[0].metrices[0].metricName : "unknown"} in {tasks.entries[0].metrices[0].metricName ? tasks.entries[0].metrices[0].metricUnity : "unknown"}</Text>
                 <VictoryChart
                     theme={VictoryTheme.material}
                     domainPadding={10}
@@ -80,14 +73,11 @@ export default class Component extends React.Component<Props, State> {
                         style={{
                             data: { fill: primaryColor1 }
                         }}
-                        data={this.renderEntryStatictics(activities.entries)}
+                        data={this.renderEntryStatictics(task.entries)}
                         x="entity"
                         y="value"
                     />
-                </VictoryChart>
-                <AddIcon
-                    onPress={() => this.handleOnIconClick()}
-                />
+                </VictoryChart> */}
 
             </View>
         );

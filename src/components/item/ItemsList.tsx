@@ -5,15 +5,13 @@ import { List, ListItem } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import * as _ from "lodash";
 
-import AddIcon from "../elements/AddIcon";
-import activities from "../../state/activities";
+import task from "../../state/task";
 
 interface State {
 }
 
 interface Props {
     uid: string;
-    inputMetrics: any;
 }
 
 const styles = StyleSheet.create({
@@ -32,11 +30,6 @@ const styles = StyleSheet.create({
         // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
-    button: {
-        position: "absolute",
-        bottom: 50,
-        right: 50,
-    },
     tagContainer: {
         flexDirection: "row",
         flexWrap: "wrap",
@@ -62,19 +55,12 @@ export default class Component extends React.Component<Props, State> {
         super(props);
     }
 
-    componentWillMount() {
-        activities.fetchEntries(this.props.uid);
-    }
-
-    handleOnIconClick() {
-        Actions.createEntry({
-            uid: this.props.uid,
-            inputMetrics: this.props.inputMetrics
-        });
-    }
+    // componentWillMount() {
+    //     task.fetchEntries(this.props.uid);
+    // }
 
     sortEntries(sortKey, sortDirection) {
-        activities.sortEntries(sortKey, sortDirection);
+        // task.sortEntries(sortKey, sortDirection);
     }
 
     renderMetrices(entry) {
@@ -167,27 +153,23 @@ export default class Component extends React.Component<Props, State> {
                         >
                             {"datum desc"}
                         </Text>
-                        {this.renderMetricTags(activities.entries)}
+                        {/* {this.renderMetricTags(task.activeTask.items)} */}
                     </View>
                 </View>
 
                 <ScrollView style={styles.listContainer}>
                     <List containerStyle={{ marginBottom: 20 }}>
-                        {
-                            activities.entries.map((entry) => (
+                        {/* {
+                            task.activeTask.items.map((entry) => (
                                 <ListItem
                                     key={entry.uid}
                                     title={entry.name}
                                     subtitle={this.renderMetrices(entry)}
                                 />
                             ))
-                        }
+                        } */}
                     </List>
                 </ScrollView>
-
-                <AddIcon
-                    onPress={() => this.handleOnIconClick()}
-                />
 
             </View>
         );

@@ -5,9 +5,12 @@ import { Header, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import TabNavigator from "react-native-tab-navigator";
 
-import ListEntries from "./ListEntries";
-import StatEntries from "./StatEntries";
-import ChartEntries from "./ChartEntries";
+import ItemsList from "./ItemsList";
+import ItemsStats from "./ItemsStats";
+import ItemsChart from "./ItemsChart";
+import AddIcon from "../elements/AddIcon";
+
+import task from "../../state/task";
 
 const primaryColor1 = "green";
 
@@ -17,7 +20,6 @@ interface State {
 
 interface Props {
     uid: string;
-    inputMetrics: any;
 }
 
 const styles = StyleSheet.create({
@@ -44,12 +46,18 @@ export default class Component extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            selectedTab: "entryList",
+            selectedTab: "itemList",
         };
+        task.setTaskItems(this.props.uid);
+        task.setTaskMetrics(this.props.uid);
     }
 
     changeTab(selectedTab) {
         this.setState({ selectedTab });
+    }
+
+    handleOnAddIconClick() {
+        Actions.createItem(this.props.uid);
     }
 
     render() {
@@ -66,7 +74,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "Entries", style: { color: "#fff", fontSize: 20 } }}
+                        centerComponent={{ text: "Items", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
@@ -77,44 +85,45 @@ export default class Component extends React.Component<Props, State> {
                         <TabNavigator.Item
                             titleStyle={{ fontWeight: "bold", fontSize: 10 }}
                             selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: primaryColor1 }}
-                            selected={this.state.selectedTab === "entryList"}
-                            title={this.state.selectedTab === "entryList" ? "List" : null}
+                            selected={this.state.selectedTab === "itemList"}
+                            title={this.state.selectedTab === "itemList" ? "List" : null}
                             renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="list" size={33} />}
                             renderSelectedIcon={() => <Icon color={primaryColor1} name="list" size={30} />}
-                            onPress={() => this.changeTab("entryList")}>
-                            <ListEntries
+                            onPress={() => this.changeTab("itemList")}>
+                            <ItemsList
                                 uid={this.props.uid}
-                                inputMetrics={this.props.inputMetrics}
                             />
                         </TabNavigator.Item>
                         <TabNavigator.Item
                             titleStyle={{ fontWeight: "bold", fontSize: 10 }}
                             selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: primaryColor1 }}
-                            selected={this.state.selectedTab === "entryStats"}
-                            title={this.state.selectedTab === "entryStats" ? "Statistics" : null}
+                            selected={this.state.selectedTab === "itemStats"}
+                            title={this.state.selectedTab === "itemStats" ? "Statistics" : null}
                             renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
                             renderSelectedIcon={() => <Icon color={primaryColor1} name="equalizer" size={30} />}
-                            onPress={() => this.changeTab("entryStats")}>
-                            <StatEntries
+                            onPress={() => this.changeTab("itemStats")}>
+                            <ItemsStats
                                 uid={this.props.uid}
-                                inputMetrics={this.props.inputMetrics}
                             />
                         </TabNavigator.Item>
                         <TabNavigator.Item
                             titleStyle={{ fontWeight: "bold", fontSize: 10 }}
                             selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: primaryColor1 }}
-                            selected={this.state.selectedTab === "entryCharts"}
-                            title={this.state.selectedTab === "entryCharts" ? "Charts" : null}
+                            selected={this.state.selectedTab === "itemCharts"}
+                            title={this.state.selectedTab === "itemCharts" ? "Charts" : null}
                             renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="dashboard" size={33} />}
                             renderSelectedIcon={() => <Icon color={primaryColor1} name="dashboard" size={30} />}
-                            onPress={() => this.changeTab("entryCharts")}>
-                            <ChartEntries
+                            onPress={() => this.changeTab("itemCharts")}>
+                            <ItemsChart
                                 uid={this.props.uid}
-                                inputMetrics={this.props.inputMetrics}
                             />
-                        </TabNavigator.Item>                        
+                        </TabNavigator.Item>
                     </TabNavigator>
                 </View>
+
+                <AddIcon
+                    onPress={() => this.handleOnAddIconClick()}
+                />
 
             </View>
         );

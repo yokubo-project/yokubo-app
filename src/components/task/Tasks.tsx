@@ -8,7 +8,7 @@ import { Actions } from "react-native-router-flux";
 import auth from "../../state/auth";
 import AddIcon from "../elements/AddIcon";
 
-import activities from "../../state/activities";
+import task from "../../state/task";
 
 const primaryColor1 = "green";
 
@@ -78,7 +78,7 @@ export default class Component extends React.Component<null, State> {
     }
 
     componentWillMount() {
-        activities.fetchActivities();
+        task.fetchTasks();
     }
 
     async processSignOut() {
@@ -87,14 +87,14 @@ export default class Component extends React.Component<null, State> {
     }
 
     handleOnIconClick() {
-        Actions.createActivity();
+        Actions.createTask();
     }
 
-    renderActivities(activities) {
+    renderTasks(tasks) {
 
-        let activityIndex = 0;
+        let taskIndex = 0;
         const columnCount = 2;
-        const rowCount = _.ceil(activities.length / columnCount);
+        const rowCount = _.ceil(tasks.length / columnCount);
 
         const rows = [];
         _.range(rowCount).forEach((rowIndex) => {
@@ -102,16 +102,15 @@ export default class Component extends React.Component<null, State> {
             const columns = [];
             _.range(columnCount).forEach((columnIndex) => {
 
-                if (activityIndex < activities.length) {
+                if (taskIndex < tasks.length) {
 
-                    const activity = activities[activityIndex];
+                    const task = tasks[taskIndex];
                     columns.push(
                         <TouchableOpacity
                             key={`column${columnIndex}`}
                             onPress={() => {
-                                Actions.entries({
-                                    uid: activity.uid,
-                                    inputMetrics: activity.inputMetrics
+                                Actions.items({
+                                    uid: task.uid,
                                 });
                             }}
                             style={styles.formContainerTouchableElement}
@@ -119,14 +118,14 @@ export default class Component extends React.Component<null, State> {
                         >
                             <Image
                                 key={`column${columnIndex}`}
-                                source={{ uri: activity.imageUrl }}
+                                source={{ uri: task.imageUrl }}
                                 style={styles.formContainerImageElement}
                             >
                                 <Text
                                     key={`column${columnIndex}`}
                                     style={styles.formContainerTextElement}
                                 >
-                                    {activity.name}
+                                    {task.name}
                                 </Text>
                             </Image>
                         </TouchableOpacity>
@@ -142,7 +141,7 @@ export default class Component extends React.Component<null, State> {
                         </Text>
                     );
                 }
-                ++activityIndex;
+                ++taskIndex;
 
             });
             rows.push(
@@ -159,7 +158,7 @@ export default class Component extends React.Component<null, State> {
 
     render() {
 
-        const myActivities = this.renderActivities(activities.tasks);
+        const tasks = this.renderTasks(task.tasks);
 
         return (
             <View style={styles.mainContainer}>
@@ -174,14 +173,14 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { this.processSignOut(); }
                         }}
-                        centerComponent={{ text: "Activities", style: { color: "#fff", fontSize: 20 } }}
+                        centerComponent={{ text: "Tasks", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
                 </View>
 
                 <ScrollView style={styles.listContainer}>
-                    {myActivities}
+                    {tasks}
                 </ScrollView>
 
                 <AddIcon

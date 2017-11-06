@@ -14,10 +14,10 @@ import {
     IItem,
     IPatchItem,
     IPostItem
-} from "../state/activities";
+} from "../state/task";
 
 export const TaskAPI = {
-    getTasks(accessToken: string): ITypedAPITarget<Array<ITask>> {
+    getTasks(accessToken: string): ITypedAPITarget<Array<IFullTask>> {
         return {
             url: "api/v1/tasks",
             method: "GET",
@@ -25,7 +25,7 @@ export const TaskAPI = {
                 "Authorization": "Bearer " + auth.credentials.accessToken,
             },
             parse: (json) => {
-                return json as Array<ITask>;
+                return json as Array<IFullTask>;
             }
         };
     },
@@ -44,7 +44,7 @@ export const TaskAPI = {
             }
         };
     },
-    deleteTask(accessToken: string, taskUid: string) {
+    deleteTask(accessToken: string, taskUid: string): ITypedAPITarget<ITask> {
         return {
             url: `api/v1/tasks/${taskUid}`,
             method: "DELETE",
@@ -56,7 +56,7 @@ export const TaskAPI = {
             }
         };
     },
-    getTask(accessToken: string, taskUid: string) {
+    getTask(accessToken: string, taskUid: string): ITypedAPITarget<IFullTask> {
         return {
             url: `api/v1/tasks/${taskUid}`,
             method: "GET",
@@ -68,7 +68,11 @@ export const TaskAPI = {
             }
         };
     },
-    patchTask(accessToken: string, taskUid: string, task: IPatchTask) {
+    patchTask(
+        accessToken: string,
+        taskUid: string,
+        task: IPatchTask
+    ): ITypedAPITarget<IFullTask> {
         return {
             url: `api/v1/tasks/${taskUid}`,
             method: "PATCH",
@@ -83,7 +87,7 @@ export const TaskAPI = {
             }
         };
     },
-    postItem(accessToken: string, taskUid: string, item: IPostItem) {
+    postItem(accessToken: string, taskUid: string, item: IPostItem): ITypedAPITarget<IItem> {
         return {
             url: `api/v1/tasks/${taskUid}/items`,
             method: "POST",
@@ -98,7 +102,7 @@ export const TaskAPI = {
             }
         };
     },
-    deleteItem(accessToken: string, taskUid: string, itemUid: string) {
+    deleteItem(accessToken: string, taskUid: string, itemUid: string): ITypedAPITarget<ITask> {
         return {
             url: `api/v1/tasks/${taskUid}/items/${itemUid}`,
             method: "DELETE",
@@ -110,7 +114,13 @@ export const TaskAPI = {
             }
         };
     },
-    patchItem(accessToken: string, taskUid: string, itemUid: string, item: IPatchItem) {
+    patchItem(
+        accessToken: string,
+        taskUid: string,
+        itemUid: string,
+        item: IPatchItem
+    ): ITypedAPITarget<IFullTask> {
+
         return {
             url: `api/v1/tasks/${taskUid}/items/${itemUid}`,
             method: "PATCH",
@@ -125,7 +135,12 @@ export const TaskAPI = {
             }
         };
     },
-    postMetric(accessToken: string, taskUid: string, metric: IPostMetric) {
+    postMetric(
+        accessToken: string,
+        taskUid: string,
+        metric: IPostMetric
+    ): ITypedAPITarget<IMetric> {
+
         return {
             url: `api/v1/tasks/${taskUid}/items`,
             method: "POST",
@@ -140,7 +155,7 @@ export const TaskAPI = {
             }
         };
     },
-    deleteMetric(accessToken: string, taskUid: string, metricUid: string) {
+    deleteMetric(accessToken: string, taskUid: string, metricUid: string): ITypedAPITarget<IMetric> {
         return {
             url: `api/v1/tasks/${taskUid}/metrics/${metricUid}`,
             method: "DELETE",
@@ -152,7 +167,13 @@ export const TaskAPI = {
             }
         };
     },
-    patchMetric(accessToken: string, taskUid: string, metricUid: string, metric: IPatchMetric) {
+    patchMetric(
+        accessToken: string,
+        taskUid: string,
+        metricUid: string,
+        metric: IPatchMetric
+    ): ITypedAPITarget<IFullTask> {
+
         return {
             url: `api/v1/tasks/${taskUid}/metrics/${metricUid}`,
             method: "PATCH",

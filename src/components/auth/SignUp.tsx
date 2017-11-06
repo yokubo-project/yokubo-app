@@ -173,7 +173,7 @@ export default class Component extends React.Component<Props, State> {
                         inputGeneralError: null
                     });
                     break;
-                case "InvalidEmail":
+                case "InvalidUsername":
                     this.setState({
                         inputNameError: null,
                         inputEmailError: "Email is invalid.",
@@ -204,7 +204,7 @@ export default class Component extends React.Component<Props, State> {
                 inputPasswordError: null,
                 inputGeneralError: null
             });
-            Actions.activities();
+            Actions.tasks();
         }
     }
 

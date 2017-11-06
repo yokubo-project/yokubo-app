@@ -3,15 +3,13 @@ import { observer } from "mobx-react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Actions } from "react-native-router-flux";
 
-import AddIcon from "../elements/AddIcon";
-import activities from "../../state/activities";
+import task from "../../state/task";
 
 interface State {
 }
 
 interface Props {
     uid: string;
-    inputMetrics: any;
 }
 
 const styles = StyleSheet.create({
@@ -25,11 +23,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
-    button: {
-        position: "absolute",
-        bottom: 50,
-        right: 50,
-    },
 });
 
 @observer
@@ -40,13 +33,13 @@ export default class Component extends React.Component<Props, State> {
     }
 
     componentWillMount() {
-        activities.fetchEntries(this.props.uid);
+        // task.fetchEntries(this.props.uid);
     }
 
     handleOnIconClick() {
         Actions.createEntry({
             uid: this.props.uid,
-            inputMetrics: this.props.inputMetrics
+            // metrics: this.props.metrics
         });
     }
 
@@ -89,12 +82,8 @@ export default class Component extends React.Component<Props, State> {
             <View style={styles.mainContainer}>
 
                 <View style={styles.formContainer}>
-                    {this.renderEntryStatictics(activities.entries)}
+                    {/* {this.renderEntryStatictics(task.entries)} */}
                 </View>
-
-                <AddIcon
-                    onPress={() => this.handleOnIconClick()}
-                />
 
             </View>
         );

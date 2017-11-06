@@ -4,22 +4,21 @@ import { Header, FormInput, FormValidationMessage, Button } from "react-native-e
 import { Actions } from "react-native-router-flux";
 import DatePicker from "react-native-datepicker";
 
-import activities from "../../state/activities";
+import task from "../../state/task";
 
 const primaryColor1 = "green";
 
 interface State {
-    inputName: string;
-    inputNameError: string;
-    inputDate: string;
-    inputMetricsEntry: any;
+    name: string;
+    nameError: string;
+    fromDate: string;
+    toDate: string;
+    metrics: any;
 }
 
 interface Props {
     uid: string;
-    inputMetrics: any;
 }
-
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
@@ -47,57 +46,52 @@ export default class Component extends React.Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            inputName: "",
-            inputNameError: null,
-            inputDate: null,
-            inputMetricsEntry: this.props.inputMetrics.map(metric => {
-                return {
-                    metricName: metric.metricName,
-                    metricUnity: metric.metricUnity,
-                    metricDefaultValue: metric.metricDefaultValue,
-                    metricValue: 0
-                };
-            })
+            name: "",
+            nameError: null,
+            fromDate: null,
+            toDate: null,
+            metrics: task.taskMetrics
         };
     }
 
-    async createEntry() {
-        activities.createEntry({
-            uid: this.props.uid,
-            name: this.state.inputName,
-            datum: this.state.inputDate,
-            inputMetricsEntry: this.state.inputMetricsEntry
+    async createItem() {
+        task.createItem(this.props.uid, {
+            name: this.state.name,
+            desc: "Desc",
+            period: [this.state.fromDate, this.state.toDate],
+            metric: this.state.metrics
         });
         Actions.pop();
     }
 
     parseName(value: any) {
         this.setState({
-            inputName: value
+            name: value
         });
     }
 
+    // TODO: Seperate date pickers for from and to
     parseDate(value: any) {
         this.setState({
-            inputDate: value
+            fromDate: value,
+            toDate: value
         });
     }
 
     showNameError() {
-        if (this.state.inputNameError) {
-            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
+        if (this.state.nameError) {
+            return <FormValidationMessage>{this.state.nameError}</FormValidationMessage>;
         }
         return null;
     }
 
-    passMetricToState(metricName, value) {
-        // TODO: Use key instead of name
-        const inputMetricEntries = this.state.inputMetricsEntry;
-        const metricRes = inputMetricEntries.filter(metric => metric.metricName === metricName)[0];
-        metricRes.metricValue = value;
+    passMetricToState(metricUid, value) {
+        const inputMetricEntries = this.state.metrics;
+        const metricRes = inputMetricEntries.filter(metric => metric.uid === metricUid)[0];
+        metricRes.value = value;
 
         this.setState({
-            inputMetricsEntry: inputMetricEntries
+            metrics: inputMetricEntries
         });
     }
 
@@ -106,15 +100,14 @@ export default class Component extends React.Component<Props, State> {
             <View>
                 {metrices.map(metric => {
                     return (
-                        <View key={metric.metricName}>
-                            <Text>Metric is {metric.metricName}</Text>
-                            <Text>Unity is {metric.metricUnity}</Text>
+                        <View key={metric.uid}>
+                            <Text>Metric is {metric.name}</Text>
+                            <Text>Unit is {metric.unit}</Text>
                             <FormInput
                                 inputStyle={styles.inputStyle}
                                 placeholder="Value is"
                                 keyboardType="numeric"
-                                defaultValue={metric.metricDefaultValue.toString()}
-                                onChangeText={(e) => this.passMetricToState(metric.metricName, e)}
+                                onChangeText={(e) => this.passMetricToState(metric.uid, e)}
                                 underlineColorAndroid={primaryColor1}
                                 selectionColor="black" // cursor color
                             />
@@ -146,13 +139,13 @@ export default class Component extends React.Component<Props, State> {
                 </View>
 
                 <Text>
-                    {`Creating entry for, ${this.props.uid}`}
+                    {`Creating item for, ${this.props.uid}`}
                 </Text>
 
                 {/* Form input for name */}
                 <FormInput
                     inputStyle={styles.inputStyle}
-                    placeholder="Enter entry name"
+                    placeholder="Enter item name"
                     onChangeText={(e) => this.parseName(e)}
                     underlineColorAndroid={primaryColor1}
                     selectionColor="black" // cursor color
@@ -162,7 +155,7 @@ export default class Component extends React.Component<Props, State> {
                 {/* Form input for date */}
                 <DatePicker
                     style={{ width: 300 }}
-                    date={this.state.inputDate}
+                    date={this.state.fromDate}
                     mode="datetime"
                     placeholder="Select date and time"
                     format="YYYY-MM-DD HH:mm"
@@ -201,7 +194,7 @@ export default class Component extends React.Component<Props, State> {
                     }}
                 />
 
-                {this.renderMetrices(this.props.inputMetrics)}
+                {this.renderMetrices(task.taskMetrics)}
 
                 <View style={styles.formContainer}>
                     <Button
@@ -209,7 +202,7 @@ export default class Component extends React.Component<Props, State> {
                         buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"CREATE"}
-                        onPress={() => { this.createEntry(); }}
+                        onPress={() => { this.createItem(); }}
                     />
                 </View>
 

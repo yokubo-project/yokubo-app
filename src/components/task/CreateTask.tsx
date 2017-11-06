@@ -6,7 +6,7 @@ import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 import { ImagePicker } from "expo";
 
-import activities from "../../state/activities";
+import task from "../../state/task";
 
 const primaryColor1 = "green";
 
@@ -80,7 +80,7 @@ export default class Component extends React.Component<null, State> {
     }
 
     async createTask() {
-        activities.createTask({
+        task.createTask({
             name: this.state.name,
             imageUrl: this.state.imageUrl,
             metrics: this.state.metrics

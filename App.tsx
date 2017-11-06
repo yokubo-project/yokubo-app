@@ -5,13 +5,15 @@ import { Provider as MobxProvider } from "mobx-react";
 
 import auth from "./src/state/auth";
 
-import SignIn from "./src/components/routes/SignIn";
-import SignUp from "./src/components/routes/SignUp";
-import Home from "./src/components/routes/Home";
-import Activities from "./src/components/routes/Activities";
-import CreateActivity from "./src/components/routes/CreateActivity";
-import Entries from "./src/components/routes/Entries";
-import CreateEntry from "./src/components/routes/CreateEntry";
+import SignIn from "./src/components/auth/SignIn";
+import SignUp from "./src/components/auth/SignUp";
+import Home from "./src/components/auth/Home";
+
+import Tasks from "./src/components/task/Tasks";
+import CreateTask from "./src/components/task/CreateTask";
+
+import Items from "./src/components/item/Items";
+import CreateItem from "./src/components/item/CreateItem";
 
 interface Props {
 }
@@ -29,16 +31,6 @@ export default class App extends React.Component<Props, State> {
             "Setting a timer"
         ];
 
-        const config = {
-            apiKey: "AIzaSyBT13XjrTxJHNl3-t-NbaiSVwQpQsrCz0M",
-            authDomain: "bode-f2482.firebaseapp.com",
-            databaseURL: "https://bode-f2482.firebaseio.com",
-            projectId: "bode-f2482",
-            storageBucket: "bode-f2482.appspot.com",
-            messagingSenderId: "1014650752579"
-        };
-
-        firebase.initializeApp(config);
     }
 
     render() {
@@ -49,10 +41,10 @@ export default class App extends React.Component<Props, State> {
                         <Scene key="home" component={Home} title="Home" hideNavBar={true} />
                         <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
                         <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
-                        <Scene key="activities" component={Activities} title="Activities" hideNavBar={true} />
-                        <Scene key="createActivity" component={CreateActivity} title="New Activity" hideNavBar={true} />
-                        <Scene key="entries" component={Entries} title="Entries" hideNavBar={true} />
-                        <Scene key="createEntry" component={CreateEntry} title="New Entry" hideNavBar={true} />
+                        <Scene key="tasks" component={Tasks} title="Tasks" hideNavBar={true} />
+                        <Scene key="createTask" component={CreateTask} title="New Task" hideNavBar={true} />
+                        <Scene key="items" component={Items} title="Items" hideNavBar={true} />
+                        <Scene key="createItem" component={CreateItem} title="New Item" hideNavBar={true} />
                     </Stack>
                 </Router>
             </MobxProvider>
