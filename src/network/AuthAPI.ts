@@ -44,7 +44,7 @@ export const AuthAPI = {
             body: {
                 username,
                 password,
-                // name // TODO: Refactore profile endpoint on backend
+                name
             },
             parse: (json) => {
                 return json as ICredentials;
@@ -76,13 +76,24 @@ export const AuthAPI = {
             }
         };
     },
-    patchProfile(givenName: string, familyName: string, accessToken: string): ITypedAPITarget<IProfile> {
+    getProfile(accessToken: string): ITypedAPITarget<IProfile> {
+        return {
+            url: "app/v1/user/profile",
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + accessToken,
+            },
+            parse: (json) => {
+                return json as IProfile;
+            }
+        };
+    },    
+    patchProfile(name: string, accessToken: string): ITypedAPITarget<IProfile> {
         return {
             url: "app/v1/user/profile",
             method: "PATCH",
             body: {
-                givenName,
-                familyName
+                name
             },
             headers: {
                 "Authorization": "Bearer " + accessToken,

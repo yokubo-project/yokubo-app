@@ -12,27 +12,31 @@ import auth from "../state/auth";
 
 export interface IPostTask {
     name: string;
-    imageUrl: string;
+    imageUid: string;
     metrics: Array<IPostMetric>;
 }
 
 export interface IPatchTask {
     name?: string;
-    imageUrl?: string;
+    imageUid?: string;
 }
 
 export interface ITask {
     uid: string;
     name: string;
-    imageUrl: string;
     createdAt: string;
+}
+
+export interface IImage {
+    uid: string;
+    file: string;
 }
 
 export interface IFullTask {
     uid: string;
     name: string;
-    imageUrl: string;
     createdAt: string;
+    image: IImage;
     metrics: Array<IMetric>;
     items: Array<IItem>;
 }
@@ -58,14 +62,14 @@ export interface IPostItem {
     name: string;
     desc: string;
     period: any; // TODO Range;
-    metric: string;
+    metrics: string;
 }
 
 export interface IPatchItem {
     name?: string;
     desc?: string;
     period?: any; // TODO Range;
-    metric?: string;
+    metrics?: string;
 }
 
 export interface IItem {
@@ -73,7 +77,7 @@ export interface IItem {
     name: string;
     desc: string;
     period: any; // TODO Range;
-    metric: string;
+    metrics: string;
     createdAt: string;
 }
 
@@ -137,8 +141,6 @@ class Tasks {
 
     @action createItem = async (taskUid: string, item: IPostItem) => {
 
-        console.log("ITEM IS: ", JSON.stringify(item));
-
         if (this.isLoading) {
             // bailout, noop
             return;
@@ -151,6 +153,7 @@ class Tasks {
             .then(item => {
                 // Attach new item to items
                 // this.tasks.push(item); // TODO
+                this.taskItems.push(item);
                 this.error = null;
                 this.isAuthenticated = true;
                 this.isLoading = false;
@@ -163,6 +166,7 @@ class Tasks {
     @action setTaskItems = async (taskUid: string) => {
         const [filteredTask] = this.tasks.filter(task => task.uid === taskUid);
         this.taskItems = filteredTask.items;
+        console.log("TASK ITEM SARE: ", JSON.stringify(this.taskItems));
         console.log("SET UP  TASK ITEMS: ", JSON.stringify(this.taskItems));
     }
 

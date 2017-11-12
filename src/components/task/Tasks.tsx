@@ -6,10 +6,9 @@ import { Header } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
 import auth from "../../state/auth";
-import AddIcon from "../elements/AddIcon";
-
 import task from "../../state/task";
 
+import AddIcon from "../elements/AddIcon";
 const primaryColor1 = "green";
 
 interface State {
@@ -105,6 +104,7 @@ export default class Component extends React.Component<null, State> {
                 if (taskIndex < tasks.length) {
 
                     const task = tasks[taskIndex];
+                    
                     columns.push(
                         <TouchableOpacity
                             key={`column${columnIndex}`}
@@ -118,7 +118,7 @@ export default class Component extends React.Component<null, State> {
                         >
                             <Image
                                 key={`column${columnIndex}`}
-                                source={{ uri: task.imageUrl }}
+                                source={{ uri: task.image.file }}
                                 style={styles.formContainerImageElement}
                             >
                                 <Text
@@ -159,6 +159,8 @@ export default class Component extends React.Component<null, State> {
     render() {
 
         const tasks = this.renderTasks(task.tasks);
+
+        console.log("TASKS ARE: ", JSON.stringify(task.tasks));
 
         return (
             <View style={styles.mainContainer}>

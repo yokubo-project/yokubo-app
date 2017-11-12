@@ -36,28 +36,21 @@ export default class Component extends React.Component<Props, State> {
         // task.fetchEntries(this.props.uid);
     }
 
-    handleOnIconClick() {
-        Actions.createEntry({
-            uid: this.props.uid,
-            // metrics: this.props.metrics
-        });
-    }
-
     renderEntryStatictics(entries) {
 
         const metrices = [];
         entries.forEach(entry => {
-            if (entry.metrices.length > 0) {
-                entry.metrices.forEach(metric => {
-                    const metricObject = metrices.filter(metricOb => metricOb.metricName === metric.metricName);
+            if (entry.metricQuantities.length > 0) {
+                entry.metricQuantities.forEach(metric => {
+                    const metricObject = metrices.filter(metricOb => metricOb.metricName === metric.metric.name);
                     if (metricObject.length > 0) {
-                        metricObject[0].totalValue += parseFloat(metric.metricValue);
+                        metricObject[0].totalValue += parseFloat(metric.quantity);
                     } else {
                         metrices.push({
-                            metricKey: metric.key,
-                            metricName: metric.metricName,
-                            totalValue: parseFloat(metric.metricValue),
-                            metricUnity: metric.metricUnity
+                            metricKey: metric.uid,
+                            metricName: metric.metric.name,
+                            totalValue: parseFloat(metric.quantity),
+                            metricUnity: metric.unit
                         });
                     }
                 });
@@ -82,7 +75,7 @@ export default class Component extends React.Component<Props, State> {
             <View style={styles.mainContainer}>
 
                 <View style={styles.formContainer}>
-                    {/* {this.renderEntryStatictics(task.entries)} */}
+                    {this.renderEntryStatictics(task.taskItems)}
                 </View>
 
             </View>

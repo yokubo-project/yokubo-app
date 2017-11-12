@@ -64,15 +64,15 @@ export default class Component extends React.Component<Props, State> {
     }
 
     renderMetrices(entry) {
-        const metrices = entry.metrices.map(metric => {
+        const metrices = entry.metricQuantities.map(metric => {
             return (
-                <Text key={metric.key}>{metric.metricName}: {metric.metricValue} {metric.metricUnity}</Text>
+                <Text key={metric.uid}>{metric.metric.name}: {metric.quantity} {metric.metric.unit}</Text>
             );
         });
 
         return (
             <View>
-                <Text>Datum: {entry.datum}</Text>
+                <Text>Datum: {entry.createdAt}</Text>
                 {metrices}
             </View>
         );
@@ -159,15 +159,15 @@ export default class Component extends React.Component<Props, State> {
 
                 <ScrollView style={styles.listContainer}>
                     <List containerStyle={{ marginBottom: 20 }}>
-                        {/* {
-                            task.activeTask.items.map((entry) => (
+                        {
+                            task.taskItems.map((entry) => (
                                 <ListItem
                                     key={entry.uid}
                                     title={entry.name}
                                     subtitle={this.renderMetrices(entry)}
                                 />
                             ))
-                        } */}
+                        }
                     </List>
                 </ScrollView>
 

@@ -26,21 +26,16 @@ interface IPasswordResetToken {
     validUntil: Date;
 }
 
-export interface IUser {
-    username: string;
-    givenName: string;
-    familyName: string;
-    birthday: string;
+export interface IImage {
+    uid: string;
+    file: string;
 }
 
 export interface IProfile {
     uid: string;
     scope: string[];
-    username: string;
-    givenName: string;
-    familyName: string;
-    pictureUrl: string;
-    hasPassword: boolean;
+    name: string;
+    image: IImage | null;
 }
 
 export type AuthError = "PasswordWrong" | "UserAlreadyExists" | "InvalidUsername" | "PasswordWeak" | "UserDisabled" | "UserNotFound" | "Unknown";
@@ -49,7 +44,7 @@ class Auth {
 
     @persist("object") @observable credentials: ICredentials = null;
     @persist @observable username: string = "";
-    @persist("object") @observable userProfile: IUser = null;
+    @persist("object") @observable userProfile: IProfile = null;
     @persist("object") @observable passwordResetToken: IPasswordResetToken = null;
     @observable error: AuthError = null;
     @observable isAuthenticated: boolean = false;
@@ -176,7 +171,7 @@ class Auth {
 
     }
 
-    @action patchProfile = async (givenName: string, familyName: string) => {
+    @action patchProfile = async (name: string) => {
 
         if (this.isLoading) {
             // bailout, noop
@@ -185,20 +180,40 @@ class Auth {
 
         this.isLoading = true;
 
-        const target = AuthAPI.patchProfile(givenName, familyName, this.credentials.accessToken);
+        const target = AuthAPI.patchProfile(name, this.credentials.accessToken);
 
         return APIClient.requestType(target)
-            .then(credentials => {
+            .then(profile => {
                 this.error = null;
                 this.isLoading = false;
-                this.userProfile.givenName = givenName;
-                this.userProfile.familyName = familyName;
+                this.userProfile = profile;
             }).catch(error => {
                 this.wipe("Unknown");
             });
 
     }
 
+    @action getProfile = async () => {
+
+        if (this.isLoading) {
+            // bailout, noop
+            return;
+        }
+
+        this.isLoading = true;
+
+        const target = AuthAPI.getProfile(this.credentials.accessToken);
+
+        return APIClient.requestType(target)
+            .then(profile => {
+                this.error = null;
+                this.isLoading = false;
+                this.userProfile = profile;
+            }).catch(error => {
+                this.wipe("Unknown");
+            });
+
+    }
 
     @action dismissError() {
         this.error = null;

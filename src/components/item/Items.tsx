@@ -57,7 +57,9 @@ export default class Component extends React.Component<Props, State> {
     }
 
     handleOnAddIconClick() {
-        Actions.createItem(this.props.uid);
+        Actions.createItem({
+            uid: this.props.uid,
+        });
     }
 
     render() {

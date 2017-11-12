@@ -38,22 +38,15 @@ export default class Component extends React.Component<Props, State> {
         // task.fetchEntries(this.props.uid);
     }
 
-    handleOnIconClick() {
-        Actions.createEntry({
-            uid: this.props.uid,
-            // metrics: this.props.metrics
-        });
-    }
-
     renderEntryStatictics(entries) {
 
         const metrices = [];
         let counter = 0;
         entries.forEach(entry => {
-            if (entry.metrices.length > 0) {
+            if (entry.metricQuantities.length > 0) {
                 metrices.push({
                     entity: ++counter,
-                    value: parseFloat(entry.metrices[0].metricValue)
+                    value: parseFloat(entry.metricQuantities[0].quantity)
                 });
             }
         });
@@ -64,7 +57,7 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                {/* <Text>Showing Bar for {task.entries[0].metrices[0].metricName ? task.entries[0].metrices[0].metricName : "unknown"} in {tasks.entries[0].metrices[0].metricName ? tasks.entries[0].metrices[0].metricUnity : "unknown"}</Text>
+                <Text>Showing Bar for {task.taskItems[0].metricQuantities[0].metric ? task.taskItems[0].metricQuantities[0].metric.name : "unknown"}</Text>
                 <VictoryChart
                     theme={VictoryTheme.material}
                     domainPadding={10}
@@ -73,11 +66,11 @@ export default class Component extends React.Component<Props, State> {
                         style={{
                             data: { fill: primaryColor1 }
                         }}
-                        data={this.renderEntryStatictics(task.entries)}
+                        data={this.renderEntryStatictics(task.taskItems)}
                         x="entity"
                         y="value"
                     />
-                </VictoryChart> */}
+                </VictoryChart>
 
             </View>
         );

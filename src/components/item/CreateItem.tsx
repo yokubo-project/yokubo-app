@@ -1,4 +1,5 @@
 import React from "react";
+import { observer } from "mobx-react";
 import { StyleSheet, View, ViewStyle, Text } from "react-native";
 import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
@@ -41,10 +42,12 @@ const styles = StyleSheet.create({
     }
 });
 
+@observer
 export default class Component extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
+
         this.state = {
             name: "",
             nameError: null,
@@ -55,11 +58,21 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async createItem() {
+
+        const mymetrics = this.state.metrics.map(metric => {
+            return {
+                TaskMetricUid: metric.uid,
+                quantity: metric.quantity
+            };
+        });
+
+        console.log("METRICS ARE: ", JSON.stringify(mymetrics, null, 2));
+
         task.createItem(this.props.uid, {
             name: this.state.name,
             desc: "Desc",
             period: [this.state.fromDate, this.state.toDate],
-            metric: this.state.metrics
+            metrics: mymetrics
         });
         Actions.pop();
     }
@@ -71,9 +84,13 @@ export default class Component extends React.Component<Props, State> {
     }
 
     // TODO: Seperate date pickers for from and to
-    parseDate(value: any) {
+    parseFromDate(value: any) {
         this.setState({
             fromDate: value,
+        });
+    }
+    parseToDate(value: any) {
+        this.setState({
             toDate: value
         });
     }
@@ -88,7 +105,7 @@ export default class Component extends React.Component<Props, State> {
     passMetricToState(metricUid, value) {
         const inputMetricEntries = this.state.metrics;
         const metricRes = inputMetricEntries.filter(metric => metric.uid === metricUid)[0];
-        metricRes.value = value;
+        metricRes.quantity = value;
 
         this.setState({
             metrics: inputMetricEntries
@@ -163,7 +180,49 @@ export default class Component extends React.Component<Props, State> {
                     cancelBtnText="Cancel"
                     showIcon={false}
                     onDateChange={(date) => {
-                        this.parseDate(date);
+                        this.parseFromDate(date);
+                    }}
+                    customStyles={{
+                        dateInput: {
+                            borderWidth: 0,
+                            marginLeft: 16,
+                        },
+                        dateText: {
+                            fontSize: 20,
+                            position: "absolute",
+                            left: 0,
+                            marginLeft: 0
+                        },
+                        placeholderText: {
+                            fontSize: 20,
+                            position: "absolute",
+                            left: 0,
+                            marginLeft: 0
+                        }
+                    }}
+                />
+                {/* Line: Because datepicker line is not customizable we draw a line manually */}
+                <View
+                    style={{
+                        borderBottomColor: primaryColor1,
+                        marginLeft: 20,
+                        marginRight: 20,
+                        borderBottomWidth: 1,
+                    }}
+                />
+
+                {/* Form input for date */}
+                <DatePicker
+                    style={{ width: 300 }}
+                    date={this.state.toDate}
+                    mode="datetime"
+                    placeholder="Select date and time"
+                    format="YYYY-MM-DD HH:mm"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    showIcon={false}
+                    onDateChange={(date) => {
+                        this.parseToDate(date);
                     }}
                     customStyles={{
                         dateInput: {

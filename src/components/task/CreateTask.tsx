@@ -6,15 +6,16 @@ import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 import { ImagePicker } from "expo";
 
+import auth from "../../state/auth";
 import task from "../../state/task";
 
 const primaryColor1 = "green";
 
 interface State {
     name: string;
-    imageUrl: string;
+    imageUid: string;
     nameError: string;
-    imageUrlError: string;
+    imageUidError: string;
     metrics: Array<{
         name: string;
         unit: string;
@@ -70,10 +71,10 @@ export default class Component extends React.Component<null, State> {
         super(props);
         this.state = {
             name: "",
-            imageUrl: "",
+            imageUid: "",
             metrics: [],
             nameError: null,
-            imageUrlError: null,
+            imageUidError: null,
             isInputFieldsModalVisible: false,
             image: null
         };
@@ -82,7 +83,7 @@ export default class Component extends React.Component<null, State> {
     async createTask() {
         task.createTask({
             name: this.state.name,
-            imageUrl: this.state.imageUrl,
+            imageUid: this.state.imageUid,
             metrics: this.state.metrics
         });
         Actions.pop();
@@ -94,9 +95,9 @@ export default class Component extends React.Component<null, State> {
         });
     }
 
-    parseImageUrl(value: any) {
+    parseImageUid(value: any) {
         this.setState({
-            imageUrl: value
+            imageUid: value
         });
     }
 
@@ -107,9 +108,9 @@ export default class Component extends React.Component<null, State> {
         return null;
     }
 
-    showImageUrlError() {
-        if (this.state.imageUrlError) {
-            return <FormValidationMessage>{this.state.imageUrlError}</FormValidationMessage>;
+    showimageUidError() {
+        if (this.state.imageUidError) {
+            return <FormValidationMessage>{this.state.imageUidError}</FormValidationMessage>;
         }
         return null;
     }
@@ -153,7 +154,7 @@ export default class Component extends React.Component<null, State> {
             if (!pickerResult.cancelled) {
                 uploadResponse = await this.uploadImageAsync(pickerResult.uri);
                 uploadResult = await uploadResponse.json();
-                this.parseImageUrl(uploadResult[0].file);
+                this.parseImageUid(uploadResult[0].uid);
             }
         } catch (e) {
             console.log({ uploadResponse });
@@ -184,6 +185,7 @@ export default class Component extends React.Component<null, State> {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "multipart/form-data",
+                "Authorization": "Bearer " + auth.credentials.accessToken,
             },
         };
 
