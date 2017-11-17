@@ -1,7 +1,8 @@
 import React from "react";
-import { Router, Stack, Scene } from "react-native-router-flux";
+import { Router, Stack, Scene, Actions } from "react-native-router-flux";
 import firebase from "firebase";
-import { Provider as MobxProvider } from "mobx-react";
+import { Provider as MobxProvider, observer } from "mobx-react";
+import { Text, View } from "react-native";
 
 import auth from "./src/state/auth";
 
@@ -15,13 +16,18 @@ import CreateTask from "./src/components/task/CreateTask";
 import Items from "./src/components/item/Items";
 import CreateItem from "./src/components/item/CreateItem";
 
+import PrivateScene from "./src/PrivateScene";
+
 interface Props {
 }
 
 interface State {
 }
 
-export default class App extends React.Component<Props, State> {
+const NotFound = () => <Text>404 ... Page not found!</Text>;
+const Spinner = () => <View />;
+
+class App extends React.Component<Props, State> {
 
     componentWillMount() {
 
@@ -36,19 +42,55 @@ export default class App extends React.Component<Props, State> {
     render() {
         return (
             <MobxProvider auth={auth}>
-                <Router>
-                    <Stack key="root">
-                        <Scene key="home" component={Home} title="Home" hideNavBar={true} />
-                        <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
-                        <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
-                        <Scene key="tasks" component={Tasks} title="Tasks" hideNavBar={true} />
-                        <Scene key="createTask" component={CreateTask} title="New Task" hideNavBar={true} />
-                        <Scene key="items" component={Items} title="Items" hideNavBar={true} />
-                        <Scene key="createItem" component={CreateItem} title="New Item" hideNavBar={true} />
-                    </Stack>
-                </Router>
+                <Routes />
             </MobxProvider>
         );
     }
 
 }
+
+
+@observer
+class Routes extends React.Component<null, null> {
+
+    isSignedIn() {
+        if (!auth.isAuthenticated) {
+            console.log("IS NOT SIGNED IN");
+            // Actions.signIn();
+            return false;
+        } else {
+            console.log("IS SIGNED IN");
+            return true;
+        }
+    }
+
+    toLoginPage() {
+        Actions.signIn();
+    }
+
+    render() {
+
+        if (auth.isRehydrated === false) {
+            return (
+                <Spinner />
+            );
+        }
+
+        return (
+            <Router>
+                <Stack key="root">
+                    <Scene key="isAuth" component={Home} title="isAuth" hideNavBar={true} onEnter={this.isSignedIn} success={() => { Actions.tasks(); }} failure={() => { Actions.signIn(); }} />
+                    <Scene key="home" component={Home} title="Home" hideNavBar={true} />
+                    <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
+                    <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
+                    <Scene key="tasks" component={Tasks} title="Tasks" hideNavBar={true} />
+                    <Scene key="createTask" component={CreateTask} title="New Task" hideNavBar={true} />
+                    <Scene key="items" component={Items} title="Items" hideNavBar={true} />
+                    <Scene key="createItem" component={CreateItem} title="New Item" hideNavBar={true} />
+                </Stack>
+            </Router>
+        );
+    }
+}
+
+export default App;

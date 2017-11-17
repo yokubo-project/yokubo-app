@@ -296,11 +296,11 @@ hydrate("auth", auth).then(() => {
             auth.isRehydrated = true;
         }).catch(() => {
             console.log("hydrate.auth: failed to receive new token!");
-            auth.isRehydrated = false;
+            auth.isRehydrated = true;
         });
     } else {
-        auth.isRehydrated = false;
         console.log("rehydrated, no credentials are available.");
+        auth.isRehydrated = true;        
     }
 });
 

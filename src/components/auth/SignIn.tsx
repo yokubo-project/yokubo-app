@@ -167,6 +167,7 @@ export default class Component extends React.Component<Props, State> {
                 inputPasswordError: null,
                 inputGeneralError: null
             });
+            console.log("Navigaing to Tasks");
             Actions.tasks();
         }
     }
