@@ -85,7 +85,7 @@ export default class Component extends React.Component<null, State> {
         Actions.home();
     }
 
-    handleOnIconClick() {
+    handleOnCreateTaskClick() {
         Actions.createTask();
     }
 
@@ -160,8 +160,6 @@ export default class Component extends React.Component<null, State> {
 
         const tasks = this.renderTasks(task.tasks);
 
-        console.log("TASKS ARE: ", JSON.stringify(task.tasks));
-
         return (
             <View style={styles.mainContainer}>
 
@@ -170,7 +168,7 @@ export default class Component extends React.Component<null, State> {
                         innerContainerStyles={{ flexDirection: "row" }}
                         backgroundColor={primaryColor1}
                         rightComponent={{
-                            icon: "arrow-back",
+                            icon: "rowing",
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { this.processSignOut(); }
@@ -186,7 +184,7 @@ export default class Component extends React.Component<null, State> {
                 </ScrollView>
 
                 <AddIcon
-                    onPress={() => this.handleOnIconClick()}
+                    onPress={() => this.handleOnCreateTaskClick()}
                 />
 
             </View>

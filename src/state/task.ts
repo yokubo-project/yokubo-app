@@ -139,6 +139,29 @@ class Tasks {
 
     }
 
+    @action deleteTask = async (taskUid: string) => {
+
+        if (this.isLoading) {
+            // bailout, noop
+            return;
+        }
+
+        this.isLoading = true;
+        const target = TaskAPI.deleteTask(auth.credentials.accessToken, taskUid);
+
+        try {
+            const response = await APIClient.requestType(target);
+            // Delete old task from tasks
+            this.tasks = this.tasks.filter(task => task.uid !== response.uid);
+            this.error = null;
+            this.isAuthenticated = true;
+            this.isLoading = false;
+        } catch (error) {
+            this.wipe("Unknown");
+        }
+
+    }
+
     @action createItem = async (taskUid: string, item: IPostItem) => {
 
         if (this.isLoading) {
@@ -152,8 +175,34 @@ class Tasks {
         return APIClient.requestType(target)
             .then(item => {
                 // Attach new item to items
-                // this.tasks.push(item); // TODO
                 this.taskItems.push(item);
+                this.error = null;
+                this.isAuthenticated = true;
+                this.isLoading = false;
+            }).catch(error => {
+                this.wipe("Unknown");
+            });
+
+    }
+
+    @action deleteItem = async (taskUid: string, itemUid: string) => {
+
+        if (this.isLoading) {
+            // bailout, noop
+            return;
+        }
+
+        this.isLoading = true;
+        const target = TaskAPI.deleteItem(auth.credentials.accessToken, taskUid, itemUid);
+
+        return APIClient.requestType(target)
+            .then(item => {
+                // Delete old item from items
+                this.taskItems = this.taskItems.filter(taskItem => taskItem.uid !== item.uid);
+                // Also remove it from tasks
+                this.tasks.forEach(task => {
+                    task.items = task.items.filter(taskItem => taskItem.uid !== item.uid);
+                });
                 this.error = null;
                 this.isAuthenticated = true;
                 this.isLoading = false;
@@ -166,8 +215,6 @@ class Tasks {
     @action setTaskItems = async (taskUid: string) => {
         const [filteredTask] = this.tasks.filter(task => task.uid === taskUid);
         this.taskItems = filteredTask.items;
-        console.log("TASK ITEM SARE: ", JSON.stringify(this.taskItems));
-        console.log("SET UP  TASK ITEMS: ", JSON.stringify(this.taskItems));
     }
 
     @action sortTaskItems = async (taskUid: string, sortKey: string, sortDirection: string) => {
@@ -177,7 +224,6 @@ class Tasks {
     @action setTaskMetrics = async (taskUid: string) => {
         const [filteredTask] = this.tasks.filter(task => task.uid === taskUid);
         this.taskMetrics = filteredTask.metrics;
-        console.log("SET UP  TASK METRICS: ", JSON.stringify(this.taskMetrics));
     }
 
     @action dismissError() {

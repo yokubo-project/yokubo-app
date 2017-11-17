@@ -16,8 +16,6 @@ import CreateTask from "./src/components/task/CreateTask";
 import Items from "./src/components/item/Items";
 import CreateItem from "./src/components/item/CreateItem";
 
-import PrivateScene from "./src/PrivateScene";
-
 interface Props {
 }
 
@@ -55,11 +53,8 @@ class Routes extends React.Component<null, null> {
 
     isSignedIn() {
         if (!auth.isAuthenticated) {
-            console.log("IS NOT SIGNED IN");
-            // Actions.signIn();
             return false;
         } else {
-            console.log("IS SIGNED IN");
             return true;
         }
     }

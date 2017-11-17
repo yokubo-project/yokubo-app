@@ -123,6 +123,10 @@ export default class Component extends React.Component<Props, State> {
         return renderedMetricTags;
     }
 
+    handleOnDeleteItemClick(itemUid) {
+        task.deleteItem(this.props.uid, itemUid);
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -165,6 +169,8 @@ export default class Component extends React.Component<Props, State> {
                                     key={entry.uid}
                                     title={entry.name}
                                     subtitle={this.renderMetrices(entry)}
+                                    rightIcon={{ icon: "delete" }}
+                                    onPressRightIcon={() => this.handleOnDeleteItemClick(entry.uid)}
                                 />
                             ))
                         }

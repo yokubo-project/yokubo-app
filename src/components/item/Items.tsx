@@ -62,6 +62,11 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
+    handleOnDeleteTaskClick(taskUid) {
+        task.deleteTask(taskUid);        
+        Actions.tasks();
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -75,6 +80,12 @@ export default class Component extends React.Component<Props, State> {
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
+                        }}
+                        rightComponent={{
+                            icon: "delete",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { this.handleOnDeleteTaskClick(this.props.uid); }
                         }}
                         centerComponent={{ text: "Items", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}

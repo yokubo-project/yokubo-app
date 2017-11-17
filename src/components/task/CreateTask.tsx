@@ -140,13 +140,14 @@ export default class Component extends React.Component<null, State> {
 
     _pickImage = async () => {
 
+        console.log("picking image ...");
         let uploadResponse, uploadResult;
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
 
-        console.log(pickerResult);
+        console.log("picker result is: ", JSON.stringify(pickerResult));
 
         try {
             this.setState({ image: pickerResult.uri });
@@ -179,7 +180,8 @@ export default class Component extends React.Component<null, State> {
             type: `image/${fileType}`,
         } as any);
 
-        let options = {
+        // TODO: typing
+        let options: any = {
             method: "POST",
             body: formData,
             headers: {
