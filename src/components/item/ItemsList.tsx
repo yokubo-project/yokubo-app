@@ -123,8 +123,11 @@ export default class Component extends React.Component<Props, State> {
         return renderedMetricTags;
     }
 
-    handleOnDeleteItemClick(itemUid) {
-        task.deleteItem(this.props.uid, itemUid);
+    handleOnEditItemClick(item) {
+        Actions.patchItem({
+            uid: this.props.uid,
+            item
+        });
     }
 
     render() {
@@ -170,7 +173,7 @@ export default class Component extends React.Component<Props, State> {
                                     title={entry.name}
                                     subtitle={this.renderMetrices(entry)}
                                     rightIcon={{ icon: "delete" }}
-                                    onPressRightIcon={() => this.handleOnDeleteItemClick(entry.uid)}
+                                    onPressRightIcon={() => this.handleOnEditItemClick(entry)}
                                 />
                             ))
                         }

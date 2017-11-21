@@ -19,6 +19,7 @@ interface State {
 
 interface Props {
     uid: string;
+    item: any; // TODO Typing
 }
 const styles = StyleSheet.create({
     mainContainer: {
@@ -49,15 +50,15 @@ export default class Component extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            name: "",
+            name: this.props.item.name,
             nameError: null,
-            fromDate: null,
-            toDate: null,
+            fromDate: this.props.item.period[0],
+            toDate: this.props.item.period[1],
             metrics: task.taskMetrics
         };
     }
 
-    async createItem() {
+    async patchItem() {
 
         const mymetrics = this.state.metrics.map(metric => {
             return {
@@ -68,11 +69,10 @@ export default class Component extends React.Component<Props, State> {
 
         console.log("METRICS ARE: ", JSON.stringify(mymetrics, null, 2));
 
-        task.createItem(this.props.uid, {
+        task.patchItem(this.props.uid, this.props.item.uid, {
             name: this.state.name,
-            desc: "Desc",
             period: [this.state.fromDate, this.state.toDate],
-            metrics: mymetrics
+            // metrics: mymetrics
         });
         Actions.pop();
     }
@@ -83,7 +83,6 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
-    // TODO: Seperate date pickers for from and to
     parseFromDate(value: any) {
         this.setState({
             fromDate: value,
@@ -110,6 +109,12 @@ export default class Component extends React.Component<Props, State> {
         this.setState({
             metrics: inputMetricEntries
         });
+    }
+
+
+    handleOnDeleteItemClick(itemUid) {
+        task.deleteItem(this.props.uid, itemUid);
+        Actions.items({uid: this.props.uid});
     }
 
     renderMetrices(metrices: any) {
@@ -149,6 +154,12 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
+                        rightComponent={{
+                            icon: "delete",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { this.handleOnDeleteItemClick(this.props.item.uid); }
+                        }}
                         centerComponent={{ text: "New Entry", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
@@ -156,13 +167,13 @@ export default class Component extends React.Component<Props, State> {
                 </View>
 
                 <Text>
-                    {`Creating item for, ${this.props.uid}`}
+                    {`Editing item for, ${this.props.uid}`}
                 </Text>
 
                 {/* Form input for name */}
                 <FormInput
                     inputStyle={styles.inputStyle}
-                    placeholder="Enter item name"
+                    defaultValue={this.state.name}
                     onChangeText={(e) => this.parseName(e)}
                     underlineColorAndroid={primaryColor1}
                     selectionColor="black" // cursor color
@@ -174,7 +185,6 @@ export default class Component extends React.Component<Props, State> {
                     style={{ width: 300 }}
                     date={this.state.fromDate}
                     mode="datetime"
-                    placeholder="Select start date"
                     format="YYYY-MM-DD HH:mm"
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
@@ -216,7 +226,6 @@ export default class Component extends React.Component<Props, State> {
                     style={{ width: 300 }}
                     date={this.state.toDate}
                     mode="datetime"
-                    placeholder="Select end date"
                     format="YYYY-MM-DD HH:mm"
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
@@ -260,8 +269,8 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"CREATE"}
-                        onPress={() => { this.createItem(); }}
+                        title={"UPDATE"}
+                        onPress={() => { this.patchItem(); }}
                     />
                 </View>
 

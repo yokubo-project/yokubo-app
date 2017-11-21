@@ -15,6 +15,7 @@ import CreateTask from "./src/components/task/CreateTask";
 
 import Items from "./src/components/item/Items";
 import CreateItem from "./src/components/item/CreateItem";
+import PatchItem from "./src/components/item/PatchItem";
 
 interface Props {
 }
@@ -82,6 +83,7 @@ class Routes extends React.Component<null, null> {
                     <Scene key="createTask" component={CreateTask} title="New Task" hideNavBar={true} />
                     <Scene key="items" component={Items} title="Items" hideNavBar={true} />
                     <Scene key="createItem" component={CreateItem} title="New Item" hideNavBar={true} />
+                    <Scene key="patchItem" component={PatchItem} title="Patch Item" hideNavBar={true} />
                 </Stack>
             </Router>
         );

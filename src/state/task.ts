@@ -185,6 +185,30 @@ class Tasks {
 
     }
 
+    @action patchItem = async (taskUid: string, itemUid: string, item: IPatchItem) => {
+
+        if (this.isLoading) {
+            // bailout, noop
+            return;
+        }
+
+        this.isLoading = true;
+        const target = TaskAPI.patchItem(auth.credentials.accessToken, taskUid, itemUid, item);
+
+        return APIClient.requestType(target)
+            .then(item => {
+                // Replace old item with patched item
+                const foundIndex = this.taskItems.findIndex(taskItem => taskItem.uid === item.uid);
+                this.taskItems[foundIndex] = item;
+                this.error = null;
+                this.isAuthenticated = true;
+                this.isLoading = false;
+            }).catch(error => {
+                this.wipe("Unknown");
+            });
+
+    }
+
     @action deleteItem = async (taskUid: string, itemUid: string) => {
 
         if (this.isLoading) {
@@ -199,10 +223,10 @@ class Tasks {
             .then(item => {
                 // Delete old item from items
                 this.taskItems = this.taskItems.filter(taskItem => taskItem.uid !== item.uid);
-                // Also remove it from tasks
-                this.tasks.forEach(task => {
-                    task.items = task.items.filter(taskItem => taskItem.uid !== item.uid);
-                });
+                // // Also remove it from tasks
+                // this.tasks.forEach(task => {
+                //     task.items = task.items.filter(taskItem => taskItem.uid !== item.uid);
+                // });
                 this.error = null;
                 this.isAuthenticated = true;
                 this.isLoading = false;
