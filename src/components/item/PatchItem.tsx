@@ -54,7 +54,7 @@ export default class Component extends React.Component<Props, State> {
             nameError: null,
             fromDate: this.props.item.period[0],
             toDate: this.props.item.period[1],
-            metrics: task.taskMetrics
+            metrics: this.props.item.metricQuantities
         };
     }
 
@@ -62,17 +62,15 @@ export default class Component extends React.Component<Props, State> {
 
         const mymetrics = this.state.metrics.map(metric => {
             return {
-                TaskMetricUid: metric.uid,
+                uid: metric.uid,
                 quantity: metric.quantity
             };
         });
 
-        console.log("METRICS ARE: ", JSON.stringify(mymetrics, null, 2));
-
         task.patchItem(this.props.uid, this.props.item.uid, {
             name: this.state.name,
             period: [this.state.fromDate, this.state.toDate],
-            // metrics: mymetrics
+            metrics: mymetrics
         });
         Actions.pop();
     }
@@ -114,7 +112,7 @@ export default class Component extends React.Component<Props, State> {
 
     handleOnDeleteItemClick(itemUid) {
         task.deleteItem(this.props.uid, itemUid);
-        Actions.items({uid: this.props.uid});
+        Actions.items({ uid: this.props.uid });
     }
 
     renderMetrices(metrices: any) {
@@ -123,11 +121,11 @@ export default class Component extends React.Component<Props, State> {
                 {metrices.map(metric => {
                     return (
                         <View key={metric.uid}>
-                            <Text>Metric is {metric.name}</Text>
-                            <Text>Unit is {metric.unit}</Text>
+                            <Text>Metric is {metric.metric.name}</Text>
+                            <Text>Unit is {metric.metric.unit}</Text>
                             <FormInput
                                 inputStyle={styles.inputStyle}
-                                placeholder="Value is"
+                                defaultValue={metric.quantity.toString()}
                                 keyboardType="numeric"
                                 onChangeText={(e) => this.passMetricToState(metric.uid, e)}
                                 underlineColorAndroid={primaryColor1}
@@ -262,7 +260,7 @@ export default class Component extends React.Component<Props, State> {
                     }}
                 />
 
-                {this.renderMetrices(task.taskMetrics)}
+                {this.renderMetrices(this.state.metrics)}
 
                 <View style={styles.formContainer}>
                     <Button
