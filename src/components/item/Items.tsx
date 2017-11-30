@@ -63,8 +63,12 @@ export default class Component extends React.Component<Props, State> {
     }
 
     handleOnDeleteTaskClick(taskUid) {
-        task.deleteTask(taskUid);        
+        task.deleteTask(taskUid);
         Actions.tasks();
+    }
+
+    handleOnUpdateTaskClick(taskUid) {
+        Actions.patchTask({ taskUid });
     }
 
     render() {
@@ -81,12 +85,23 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        rightComponent={{
-                            icon: "delete",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { this.handleOnDeleteTaskClick(this.props.uid); }
-                        }}
+                        rightComponent={
+                            <View style={{ flex: 1, flexDirection: "row", marginTop: 23 }}>
+                                <Icon
+                                    name="delete"
+                                    color="#fff"
+                                    underlayColor="transparent"
+                                    style={{ marginRight: 12 }}
+                                    onPress={() => { this.handleOnDeleteTaskClick(this.props.uid); }}
+                                />
+                                <Icon
+                                    name="edit"
+                                    color="#fff"
+                                    underlayColor="transparent"
+                                    onPress={() => { this.handleOnUpdateTaskClick(this.props.uid); }}
+                                />
+                            </View>
+                        }
                         centerComponent={{ text: "Items", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}

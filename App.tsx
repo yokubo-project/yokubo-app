@@ -12,6 +12,7 @@ import Home from "./src/components/auth/Home";
 
 import Tasks from "./src/components/task/Tasks";
 import CreateTask from "./src/components/task/CreateTask";
+import PatchTask from "./src/components/task/PatchTask";
 
 import Items from "./src/components/item/Items";
 import CreateItem from "./src/components/item/CreateItem";
@@ -81,6 +82,7 @@ class Routes extends React.Component<null, null> {
                     <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
                     <Scene key="tasks" component={Tasks} title="Tasks" hideNavBar={true} />
                     <Scene key="createTask" component={CreateTask} title="New Task" hideNavBar={true} />
+                    <Scene key="patchTask" component={PatchTask} title="Update Task" hideNavBar={true} />
                     <Scene key="items" component={Items} title="Items" hideNavBar={true} />
                     <Scene key="createItem" component={CreateItem} title="New Item" hideNavBar={true} />
                     <Scene key="patchItem" component={PatchItem} title="Patch Item" hideNavBar={true} />

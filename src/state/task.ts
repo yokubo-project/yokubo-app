@@ -139,6 +139,31 @@ class Tasks {
 
     }
 
+    @action patchTask = async (taskUid: string, task: IPatchTask) => {
+
+        if (this.isLoading) {
+            // bailout, noop
+            return;
+        }
+
+        this.isLoading = true;
+        const target = TaskAPI.patchTask(auth.credentials.accessToken, taskUid, task);
+
+        return APIClient.requestType(target)
+            .then(response => {
+                console.log("UPDATED TASK IS: ", JSON.stringify(response, null, 2));
+                // Replace old item with patched item
+                const foundIndex = this.tasks.findIndex(task => task.uid === response.uid);
+                this.tasks[foundIndex] = response;
+                this.error = null;
+                this.isAuthenticated = true;
+                this.isLoading = false;
+            }).catch(error => {
+                this.wipe("Unknown");
+            });
+
+    }
+
     @action deleteTask = async (taskUid: string) => {
 
         if (this.isLoading) {
