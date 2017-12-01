@@ -60,7 +60,7 @@ export default class Component extends React.Component<Props, State> {
     // }
 
     sortEntries(sortKey, sortDirection) {
-        // task.sortEntries(sortKey, sortDirection);
+        task.sortTaskItems(sortKey, sortDirection);
     }
 
     renderMetrices(entry) {
@@ -78,42 +78,39 @@ export default class Component extends React.Component<Props, State> {
         );
     }
 
-    renderMetricTags(entries) {
+    renderMetricTags(metrics) {
 
         // TODO: Sort algorithmus not stable if entry is missing some metrics, as key may reference another metric
-        const metrices = [];
-        entries.forEach(entry => {
-            if (entry.metrices.length > 0) {
-                entry.metrices.forEach(metric => {
-                    metrices.push({
-                        metricName: metric.metricName,
-                        key: metric.key,
-                    });
-                });
-            }
-        });
-        const uniqMetricNames = _.uniqWith(metrices, _.isEqual);
-
-        const renderedMetricTagsAsc = uniqMetricNames.map(metric => {
+        const renderedMetricTagsAsc = metrics.map(metric => {
             return (
                 <Text
-                    key={`${metric.key}asc`}
+                    key={`${metric.uid}asc`}
                     style={styles.tagElement}
-                    onPress={() => { this.sortEntries(`metrices[${metric.key}].metricValue`, "asc"); }}
+                    onPress={() => {
+                        this.sortEntries((item) => {
+                            const merticQuanitity = item.metricQuantities.filter((metricQuantity) => metricQuantity.metric.uid === metric.uid)[0];
+                            return merticQuanitity.quantity;
+                        }, "asc");
+                    }}
                 >
-                    {`${metric.metricName} asc`}
+                    {`${metric.name} asc`}
                 </Text>
             );
         });
 
-        const renderedMetricTagsDesc = uniqMetricNames.map(metric => {
+        const renderedMetricTagsDesc = metrics.map(metric => {
             return (
                 <Text
-                    key={`${metric.key}desc`}
+                    key={`${metric.uid}desc`}
                     style={styles.tagElement}
-                    onPress={() => { this.sortEntries(`metrices[${metric.key}].metricValue`, "desc"); }}
+                    onPress={() => {
+                        this.sortEntries((item) => {
+                            const merticQuanitity = item.metricQuantities.filter((metricQuantity) => metricQuantity.metric.uid === metric.uid)[0];
+                            return merticQuanitity.quantity;
+                        }, "desc");
+                    }}
                 >
-                    {`${metric.metricName} desc`}
+                    {`${metric.name} desc`}
                 </Text>
             );
         });
@@ -150,17 +147,17 @@ export default class Component extends React.Component<Props, State> {
                         </Text>
                         <Text
                             style={styles.tagElement}
-                            onPress={() => { this.sortEntries("datum", "asc"); }}
+                            onPress={() => { this.sortEntries("createdAt", "asc"); }}
                         >
                             {"datum asc"}
                         </Text>
                         <Text
                             style={styles.tagElement}
-                            onPress={() => { this.sortEntries("datum", "desc"); }}
+                            onPress={() => { this.sortEntries("createdAt", "desc"); }}
                         >
                             {"datum desc"}
                         </Text>
-                        {/* {this.renderMetricTags(task.activeTask.items)} */}
+                        {this.renderMetricTags(task.taskMetrics)}
                     </View>
                 </View>
 

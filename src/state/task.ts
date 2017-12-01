@@ -266,7 +266,7 @@ class Tasks {
         this.taskItems = filteredTask.items;
     }
 
-    @action sortTaskItems = async (taskUid: string, sortKey: string, sortDirection: string) => {
+    @action sortTaskItems = async (sortKey: string, sortDirection: string) => {
         this.taskItems = _.orderBy(this.taskItems, sortKey, sortDirection);
     }
 
