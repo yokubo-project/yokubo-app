@@ -80,12 +80,12 @@ class Routes extends React.Component<null, null> {
                     <Scene key="home" component={Home} title="Home" hideNavBar={true} />
                     <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
                     <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
-                    <Scene key="tasks" component={Tasks} title="Tasks" hideNavBar={true} />
+                    <Scene key="tasks" component={Tasks} title="Tasks" hideNavBar={true} type="reset" />
                     <Scene key="createTask" component={CreateTask} title="New Task" hideNavBar={true} />
                     <Scene key="patchTask" component={PatchTask} title="Update Task" hideNavBar={true} />
                     <Scene key="items" component={Items} title="Items" hideNavBar={true} />
                     <Scene key="createItem" component={CreateItem} title="New Item" hideNavBar={true} />
-                    <Scene key="patchItem" component={PatchItem} title="Patch Item" hideNavBar={true} />
+                    <Scene key="patchItem" component={PatchItem} title="Patch Item" hideNavBar={true} panHandlers={null} />
                 </Stack>
             </Router>
         );

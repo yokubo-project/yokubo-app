@@ -9,6 +9,7 @@ import ItemsList from "./ItemsList";
 import ItemsStats from "./ItemsStats";
 import ItemsChart from "./ItemsChart";
 import AddIcon from "../elements/AddIcon";
+import DeleteTask from "../task/DeleteTask";
 
 import task from "../../state/task";
 
@@ -16,6 +17,7 @@ const primaryColor1 = "green";
 
 interface State {
     selectedTab: string;
+    showDeleteModal: boolean;
 }
 
 interface Props {
@@ -47,6 +49,7 @@ export default class Component extends React.Component<Props, State> {
         super(props);
         this.state = {
             selectedTab: "itemList",
+            showDeleteModal: false
         };
         task.setTaskItems(this.props.uid);
         task.setTaskMetrics(this.props.uid);
@@ -62,13 +65,20 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
-    handleOnDeleteTaskClick(taskUid) {
-        task.deleteTask(taskUid);
-        Actions.tasks();
-    }
-
     handleOnUpdateTaskClick(taskUid) {
         Actions.patchTask({ taskUid });
+    }
+
+    hideVisibility() {
+        this.setState({
+            showDeleteModal: false
+        });
+    }
+
+    showVisibility() {
+        this.setState({
+            showDeleteModal: true
+        });
     }
 
     render() {
@@ -92,7 +102,7 @@ export default class Component extends React.Component<Props, State> {
                                     color="#fff"
                                     underlayColor="transparent"
                                     style={{ marginRight: 12 }}
-                                    onPress={() => { this.handleOnDeleteTaskClick(this.props.uid); }}
+                                    onPress={() => { this.showVisibility(); }}
                                 />
                                 <Icon
                                     name="edit"
@@ -107,6 +117,12 @@ export default class Component extends React.Component<Props, State> {
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
                 </View>
+
+                <DeleteTask
+                    taskUid={this.props.uid}
+                    visible={this.state.showDeleteModal}
+                    hideVisibility={() => this.hideVisibility()}
+                />
 
                 <View style={styles.formContainer}>
                     <TabNavigator>

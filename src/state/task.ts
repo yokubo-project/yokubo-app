@@ -248,10 +248,10 @@ class Tasks {
             .then(item => {
                 // Delete old item from items
                 this.taskItems = this.taskItems.filter(taskItem => taskItem.uid !== item.uid);
-                // // Also remove it from tasks
-                // this.tasks.forEach(task => {
-                //     task.items = task.items.filter(taskItem => taskItem.uid !== item.uid);
-                // });
+                // Also remove it from tasks
+                this.tasks.forEach(task => {
+                    task.items ? task.items = task.items.filter(taskItem => taskItem.uid !== item.uid) : null;
+                });
                 this.error = null;
                 this.isAuthenticated = true;
                 this.isLoading = false;

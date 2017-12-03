@@ -112,7 +112,7 @@ export default class Component extends React.Component<Props, State> {
 
     handleOnDeleteItemClick(itemUid) {
         task.deleteItem(this.props.uid, itemUid);
-        Actions.items({ uid: this.props.uid });
+        Actions.pop();
     }
 
     renderMetrices(metrices: any) {

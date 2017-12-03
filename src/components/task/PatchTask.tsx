@@ -75,7 +75,6 @@ export default class Component extends React.Component<Props, State> {
         super(props);
 
         const activeTask = task.tasks.filter(task => task.uid === this.props.taskUid)[0];
-        console.log("ACTIVE TASK IS: ", JSON.stringify(activeTask));
 
         this.state = {
             name: activeTask.name,
@@ -88,7 +87,7 @@ export default class Component extends React.Component<Props, State> {
         };
     }
 
-    async createTask() {
+    async updateTask() {
         task.patchTask(this.props.taskUid, {
             name: this.state.name,
             imageUid: this.state.imageUid,
@@ -288,8 +287,8 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"CREATE"}
-                        onPress={() => { this.createTask(); }}
+                        title={"UPDATE"}
+                        onPress={() => { this.updateTask(); }}
                     />
                 </View>
 
