@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { StyleSheet, Text, View, ViewStyle, ScrollView } from "react-native";
 import { List, ListItem } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
+import { material } from "react-native-typography";
 import * as _ from "lodash";
 
 import task from "../../state/task";
@@ -48,6 +49,13 @@ const styles = StyleSheet.create({
     }
 });
 
+// COLORS: 
+// GRAY: 333333
+// GRAY FONT: C0C0C0
+// DARK ORANGE: FFA345
+// LIGHT ORANGE: FFE2C6
+// WHITE: FEFEFE
+
 @observer
 export default class Component extends React.Component<Props, State> {
 
@@ -72,7 +80,7 @@ export default class Component extends React.Component<Props, State> {
 
         return (
             <View>
-                <Text>Datum: {entry.createdAt}</Text>
+                <Text style={material.body1}>Datum: {entry.createdAt}</Text>
                 {metrices}
             </View>
         );

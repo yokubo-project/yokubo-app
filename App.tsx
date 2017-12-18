@@ -1,5 +1,6 @@
 import React from "react";
 import { Router, Stack, Scene, Actions } from "react-native-router-flux";
+import { StyleSheet, ActivityIndicator } from "react-native";
 import firebase from "firebase";
 import { Provider as MobxProvider, observer } from "mobx-react";
 import { Text, View } from "react-native";
@@ -18,14 +19,31 @@ import Items from "./src/components/item/Items";
 import CreateItem from "./src/components/item/CreateItem";
 import PatchItem from "./src/components/item/PatchItem";
 
+const primaryColor1 = "green";
+
 interface Props {
 }
 
 interface State {
 }
 
-const NotFound = () => <Text>404 ... Page not found!</Text>;
-const Spinner = () => <View />;
+const styles = StyleSheet.create({
+    spinnerContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+    }
+});
+
+const Spinner = () => {
+    return (
+        <View style={styles.spinnerContainer}>
+            <ActivityIndicator size="large" color={primaryColor1} />
+            <Text>Rehydration is taking place...</Text>
+        </View>
+    );
+};
 
 class App extends React.Component<Props, State> {
 
@@ -76,7 +94,15 @@ class Routes extends React.Component<null, null> {
         return (
             <Router>
                 <Stack key="root">
-                    <Scene key="isAuth" component={Home} title="isAuth" hideNavBar={true} onEnter={this.isSignedIn} success={() => { Actions.tasks(); }} failure={() => { Actions.signIn(); }} />
+                    <Scene
+                        key="isAuth"
+                        component={Home}
+                        title="isAuth"
+                        hideNavBar={true}
+                        onEnter={this.isSignedIn}
+                        success={() => { Actions.tasks(); }}
+                        failure={() => { Actions.signIn(); }}
+                    />
                     <Scene key="home" component={Home} title="Home" hideNavBar={true} />
                     <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
                     <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
