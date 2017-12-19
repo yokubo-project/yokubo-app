@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { Text, StyleSheet, View, ViewStyle } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { VictoryChart, VictoryTheme, VictoryBar } from "victory-native";
+import moment from "moment";
 import task from "../../state/task";
 
 const primaryColor1 = "green";
@@ -42,13 +43,22 @@ export default class Component extends React.Component<Props, State> {
 
         const metrices = [];
         let counter = 0;
+
         entries.forEach(entry => {
-            if (entry.metricQuantities.length > 0) {
-                metrices.push({
-                    entity: ++counter,
-                    value: parseFloat(entry.metricQuantities[0].quantity)
-                });
-            }
+            const startDate = entry.period[0];
+            const endDate = entry.period[1];
+            const diff = moment.duration(moment(endDate).diff(moment(startDate)));
+            const diffInMinutes = diff.asMinutes();
+
+            console.log("Start Time: ", startDate);
+            console.log("End Time: ", endDate);
+            console.log("Minutes Diff: ", diffInMinutes);
+
+            metrices.push({
+                entity: ++counter,
+                value: parseFloat(diffInMinutes.toString())
+            });
+
         });
 
         return metrices;
@@ -57,14 +67,21 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <Text>Showing Bar for {task.taskItems[0].metricQuantities[0].metric ? task.taskItems[0].metricQuantities[0].metric.name : "unknown"}</Text>
                 <VictoryChart
-                    theme={VictoryTheme.material}
                     domainPadding={10}
                 >
                     <VictoryBar
                         style={{
-                            data: { fill: primaryColor1 }
+                            data: { 
+                                fill: primaryColor1,
+                                stroke: primaryColor1,
+                                fillOpacity: 0.7,
+                                strokeWidth: 3                                
+                            }
+                        }}
+                        animate={{
+                            duration: 2000,
+                            onLoad: { duration: 1000 }
                         }}
                         data={this.renderEntryStatictics(task.taskItems)}
                         x="entity"
