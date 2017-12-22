@@ -151,7 +151,6 @@ class Tasks {
 
         return APIClient.requestType(target)
             .then(response => {
-                console.log("UPDATED TASK IS: ", JSON.stringify(response, null, 2));
                 // Replace old item with patched item
                 const foundIndex = this.tasks.findIndex(task => task.uid === response.uid);
                 this.tasks[foundIndex] = response;

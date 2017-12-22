@@ -50,10 +50,6 @@ export default class Component extends React.Component<Props, State> {
             const diff = moment.duration(moment(endDate).diff(moment(startDate)));
             const diffInMinutes = diff.asMinutes();
 
-            console.log("Start Time: ", startDate);
-            console.log("End Time: ", endDate);
-            console.log("Minutes Diff: ", diffInMinutes);
-
             metrices.push({
                 entity: ++counter,
                 value: parseFloat(diffInMinutes.toString())

@@ -1,10 +1,11 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { StyleSheet, Text, View, ViewStyle, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ViewStyle, ScrollView, FlatList } from "react-native";
 import { List, ListItem } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import { material } from "react-native-typography";
 import * as _ from "lodash";
+import moment from "moment";
 
 import task from "../../state/task";
 
@@ -78,10 +79,19 @@ export default class Component extends React.Component<Props, State> {
             );
         });
 
+        const startDate = entry.period[0];
+        const endDate = entry.period[1];
+        const diff = moment.duration(moment(endDate).diff(moment(startDate)));
+        const diffHours = `${(diff.hours().toString() === "1") ? "Stunde" : "Stunden"}`;
+        const diffMinutes = `${(diff.minutes().toString() === "1") ? "Minute" : "Minuten"}`;
+        const diffSeconds = `${(diff.seconds().toString() === "1") ? "Sekunde" : "Sekunden"}`;
+        const diffFormatted = moment.utc(diff.asMilliseconds()).format(`H [${diffHours}] m [${diffMinutes}] s [${diffSeconds}]`);
+
         return (
             <View>
-                <Text style={material.body1}>Datum: {entry.createdAt}</Text>
+                <Text style={material.body1}>Datum: {moment(entry.createdAt).toLocaleString()}</Text>
                 {metrices}
+                <Text style={material.body1}>Duration: {diffFormatted}</Text>
             </View>
         );
     }
@@ -171,17 +181,18 @@ export default class Component extends React.Component<Props, State> {
 
                 <ScrollView style={styles.listContainer}>
                     <List containerStyle={{ marginBottom: 20 }}>
-                        {
-                            task.taskItems.map((entry) => (
+                        <FlatList
+                            data={task.taskItems}
+                            keyExtractor={item => item.uid.toString()}
+                            renderItem={({ item }) => (
                                 <ListItem
-                                    key={entry.uid}
-                                    title={entry.name}
-                                    subtitle={this.renderMetrices(entry)}
+                                    title={item.name}
+                                    subtitle={this.renderMetrices(item)}
                                     rightIcon={{ icon: "delete" }}
-                                    onPressRightIcon={() => this.handleOnEditItemClick(entry)}
+                                    onPressRightIcon={() => this.handleOnEditItemClick(item)}
                                 />
-                            ))
-                        }
+                            )}
+                        />
                     </List>
                 </ScrollView>
 
