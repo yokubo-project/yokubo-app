@@ -7,7 +7,7 @@ import Modal from "react-native-modal";
 import { ImagePicker } from "expo";
 
 import auth from "../../state/auth";
-import task from "../../state/task";
+import taskState from "../../state/taskState";
 
 const primaryColor1 = "green";
 
@@ -81,7 +81,7 @@ export default class Component extends React.Component<null, State> {
     }
 
     async createTask() {
-        task.createTask({
+        taskState.createTask({
             name: this.state.name,
             imageUid: this.state.imageUid,
             metrics: this.state.metrics

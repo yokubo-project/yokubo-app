@@ -6,7 +6,7 @@ import { Header } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
 import auth from "../../state/auth";
-import task from "../../state/task";
+import taskState from "../../state/taskState";
 
 import AddIcon from "../elements/AddIcon";
 const primaryColor1 = "green";
@@ -17,7 +17,6 @@ interface State {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
     headerContainer: {
@@ -33,7 +32,6 @@ const styles = StyleSheet.create({
     } as ViewStyle,
     listContainer: {
         flexGrow: 5,
-        // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
     formContainerTextElement: {
@@ -77,7 +75,7 @@ export default class Component extends React.Component<null, State> {
     }
 
     componentWillMount() {
-        task.fetchTasks();
+        taskState.fetchTasks();
     }
 
     async processSignOut() {
@@ -104,13 +102,13 @@ export default class Component extends React.Component<null, State> {
                 if (taskIndex < tasks.length) {
 
                     const task = tasks[taskIndex];
-                    
+
                     columns.push(
                         <TouchableOpacity
                             key={`column${columnIndex}`}
                             onPress={() => {
                                 Actions.items({
-                                    uid: task.uid,
+                                    task,
                                 });
                             }}
                             style={styles.formContainerTouchableElement}
@@ -158,7 +156,7 @@ export default class Component extends React.Component<null, State> {
 
     render() {
 
-        const tasks = this.renderTasks(task.tasks);
+        const tasks = this.renderTasks(taskState.tasks);
 
         return (
             <View style={styles.mainContainer}>

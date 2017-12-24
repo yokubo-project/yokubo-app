@@ -5,7 +5,7 @@ import { Header, FormInput, FormValidationMessage, Button } from "react-native-e
 import { Actions } from "react-native-router-flux";
 import DatePicker from "react-native-datepicker";
 
-import task from "../../state/task";
+import taskState from "../../state/taskState";
 
 const primaryColor1 = "green";
 
@@ -21,10 +21,10 @@ interface Props {
     uid: string;
     item: any; // TODO Typing
 }
+
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
     headerContainer: {
@@ -67,7 +67,7 @@ export default class Component extends React.Component<Props, State> {
             };
         });
 
-        task.patchItem(this.props.uid, this.props.item.uid, {
+        taskState.patchItem(this.props.uid, this.props.item.uid, {
             name: this.state.name,
             period: [this.state.fromDate, this.state.toDate],
             metrics: mymetrics
@@ -111,7 +111,7 @@ export default class Component extends React.Component<Props, State> {
 
 
     handleOnDeleteItemClick(itemUid) {
-        task.deleteItem(this.props.uid, itemUid);
+        taskState.deleteItem(this.props.uid, itemUid);
         Actions.pop();
     }
 

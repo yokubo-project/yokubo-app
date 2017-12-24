@@ -7,19 +7,19 @@ import { material } from "react-native-typography";
 import * as _ from "lodash";
 import moment from "moment";
 
-import task from "../../state/task";
+import { IFullTask } from "../../state/taskState";
 
 interface State {
+    task: IFullTask;
 }
 
 interface Props {
-    uid: string;
+    task: IFullTask;
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
     formContainer: {
@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     } as ViewStyle,
     listContainer: {
         flexGrow: 6,
-        // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
     tagContainer: {
@@ -50,26 +49,28 @@ const styles = StyleSheet.create({
     }
 });
 
-// COLORS: 
-// GRAY: 333333
-// GRAY FONT: C0C0C0
-// DARK ORANGE: FFA345
-// LIGHT ORANGE: FFE2C6
-// WHITE: FEFEFE
-
 @observer
 export default class Component extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            task: this.props.task,
+        };
     }
 
-    // componentWillMount() {
-    //     task.fetchEntries(this.props.uid);
-    // }
+    componentWillReceiveProps(nextProps: Props) {
+        console.log("RECEIVED PROPS IN ITEMS LIST");
+        this.setState({
+            task: nextProps.task
+        });
+    }
 
     sortEntries(sortKey, sortDirection) {
-        task.sortTaskItems(sortKey, sortDirection);
+        const task = this.state.task;
+        task.items = _.orderBy(task.items, sortKey, sortDirection);
+        this.setState({ task });
     }
 
     renderMetrices(entry) {
@@ -98,7 +99,7 @@ export default class Component extends React.Component<Props, State> {
 
     renderMetricTags(metrics) {
 
-        // TODO: Sort algorithmus not stable if entry is missing some metrics, as key may reference another metric
+        // TODO: Sort algorithmus not stable if entry is missing some metrics, as key may reference another metric --> Refactore or comment
         const renderedMetricTagsAsc = metrics.map(metric => {
             return (
                 <Text
@@ -140,7 +141,7 @@ export default class Component extends React.Component<Props, State> {
 
     handleOnEditItemClick(item) {
         Actions.patchItem({
-            uid: this.props.uid,
+            uid: this.state.task.uid,
             item
         });
     }
@@ -175,14 +176,14 @@ export default class Component extends React.Component<Props, State> {
                         >
                             {"datum desc"}
                         </Text>
-                        {this.renderMetricTags(task.taskMetrics)}
+                        {this.renderMetricTags(this.state.task.metrics)}
                     </View>
                 </View>
 
                 <ScrollView style={styles.listContainer}>
                     <List containerStyle={{ marginBottom: 20 }}>
                         <FlatList
-                            data={task.taskItems}
+                            data={this.state.task.items}
                             keyExtractor={item => item.uid.toString()}
                             renderItem={({ item }) => (
                                 <ListItem

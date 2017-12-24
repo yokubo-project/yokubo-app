@@ -6,6 +6,7 @@ import { Provider as MobxProvider, observer } from "mobx-react";
 import { Text, View } from "react-native";
 
 import auth from "./src/state/auth";
+import taskState from "./src/state/taskState";
 
 import SignIn from "./src/components/auth/SignIn";
 import SignUp from "./src/components/auth/SignUp";
@@ -47,19 +48,9 @@ const Spinner = () => {
 
 class App extends React.Component<Props, State> {
 
-    componentWillMount() {
-
-        // This is a temporary fix to get rid of Timeout warning
-        // issued by firebase https://github.com/firebase/firebase-js-sdk/issues/97
-        (console as any).ignoredYellowBox = [
-            "Setting a timer"
-        ];
-
-    }
-
     render() {
         return (
-            <MobxProvider auth={auth}>
+            <MobxProvider auth={auth} taskState={taskState}>
                 <Routes />
             </MobxProvider>
         );

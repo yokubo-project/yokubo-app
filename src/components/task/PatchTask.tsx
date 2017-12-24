@@ -7,7 +7,7 @@ import Modal from "react-native-modal";
 import { ImagePicker } from "expo";
 
 import auth from "../../state/auth";
-import task from "../../state/task";
+import taskState from "../../state/taskState";
 
 const primaryColor1 = "green";
 
@@ -74,7 +74,7 @@ export default class Component extends React.Component<Props, State> {
     constructor(props) {
         super(props);
 
-        const activeTask = task.tasks.filter(task => task.uid === this.props.taskUid)[0];
+        const activeTask = taskState.tasks.filter(task => task.uid === this.props.taskUid)[0];
 
         this.state = {
             name: activeTask.name,
@@ -88,7 +88,7 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async updateTask() {
-        task.patchTask(this.props.taskUid, {
+        taskState.patchTask(this.props.taskUid, {
             name: this.state.name,
             imageUid: this.state.imageUid,
             // metrics: this.state.metrics

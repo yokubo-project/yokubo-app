@@ -11,7 +11,7 @@ import ItemsChart from "./ItemsChart";
 import AddIcon from "../elements/AddIcon";
 import DeleteTask from "../task/DeleteTask";
 
-import task from "../../state/task";
+import { IFullTask } from "../../state/taskState";
 
 const primaryColor1 = "green";
 
@@ -21,7 +21,7 @@ interface State {
 }
 
 interface Props {
-    uid: string;
+    task: IFullTask;
 }
 
 const styles = StyleSheet.create({
@@ -51,8 +51,6 @@ export default class Component extends React.Component<Props, State> {
             selectedTab: "itemList",
             showDeleteModal: false
         };
-        task.setTaskItems(this.props.uid);
-        task.setTaskMetrics(this.props.uid);
     }
 
     changeTab(selectedTab) {
@@ -61,7 +59,7 @@ export default class Component extends React.Component<Props, State> {
 
     handleOnAddIconClick() {
         Actions.createItem({
-            uid: this.props.uid,
+            task: this.props.task,
         });
     }
 
@@ -108,7 +106,7 @@ export default class Component extends React.Component<Props, State> {
                                     name="edit"
                                     color="#fff"
                                     underlayColor="transparent"
-                                    onPress={() => { this.handleOnUpdateTaskClick(this.props.uid); }}
+                                    onPress={() => { this.handleOnUpdateTaskClick(this.props.task.uid); }}
                                 />
                             </View>
                         }
@@ -119,7 +117,7 @@ export default class Component extends React.Component<Props, State> {
                 </View>
 
                 <DeleteTask
-                    taskUid={this.props.uid}
+                    taskUid={this.props.task.uid}
                     visible={this.state.showDeleteModal}
                     hideVisibility={() => this.hideVisibility()}
                 />
@@ -135,7 +133,7 @@ export default class Component extends React.Component<Props, State> {
                             renderSelectedIcon={() => <Icon color={primaryColor1} name="list" size={30} />}
                             onPress={() => this.changeTab("itemList")}>
                             <ItemsList
-                                uid={this.props.uid}
+                                task={this.props.task}
                             />
                         </TabNavigator.Item>
                         <TabNavigator.Item
@@ -147,7 +145,7 @@ export default class Component extends React.Component<Props, State> {
                             renderSelectedIcon={() => <Icon color={primaryColor1} name="equalizer" size={30} />}
                             onPress={() => this.changeTab("itemStats")}>
                             <ItemsStats
-                                uid={this.props.uid}
+                                task={this.props.task}
                             />
                         </TabNavigator.Item>
                         <TabNavigator.Item
@@ -159,7 +157,7 @@ export default class Component extends React.Component<Props, State> {
                             renderSelectedIcon={() => <Icon color={primaryColor1} name="dashboard" size={30} />}
                             onPress={() => this.changeTab("itemCharts")}>
                             <ItemsChart
-                                uid={this.props.uid}
+                                task={this.props.task}
                             />
                         </TabNavigator.Item>
                     </TabNavigator>

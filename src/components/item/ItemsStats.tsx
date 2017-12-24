@@ -3,19 +3,19 @@ import { observer } from "mobx-react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Actions } from "react-native-router-flux";
 
-import task from "../../state/task";
+import { IFullTask } from "../../state/taskState";
 
 interface State {
+    task: IFullTask;
 }
 
 interface Props {
-    uid: string;
+    task: IFullTask;
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
     formContainer: {
@@ -30,10 +30,10 @@ export default class Component extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
-    }
 
-    componentWillMount() {
-        // task.fetchEntries(this.props.uid);
+        this.state = {
+            task: this.props.task,
+        };
     }
 
     renderEntryStatictics(entries) {
@@ -75,7 +75,7 @@ export default class Component extends React.Component<Props, State> {
             <View style={styles.mainContainer}>
 
                 <View style={styles.formContainer}>
-                    {this.renderEntryStatictics(task.taskItems)}
+                    {this.renderEntryStatictics(this.state.task.items)}
                 </View>
 
             </View>

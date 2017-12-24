@@ -5,7 +5,8 @@ import { Header, FormInput, FormValidationMessage, Button } from "react-native-e
 import { Actions } from "react-native-router-flux";
 import DatePicker from "react-native-datepicker";
 
-import task from "../../state/task";
+import taskState from "../../state/taskState";
+import { IFullTask } from "../../state/taskState";
 
 const primaryColor1 = "green";
 
@@ -18,8 +19,9 @@ interface State {
 }
 
 interface Props {
-    uid: string;
+    task: IFullTask;
 }
+
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
@@ -53,7 +55,7 @@ export default class Component extends React.Component<Props, State> {
             nameError: null,
             fromDate: null,
             toDate: null,
-            metrics: task.taskMetrics
+            metrics: this.props.task.metrics
         };
     }
 
@@ -66,15 +68,18 @@ export default class Component extends React.Component<Props, State> {
             };
         });
 
-        console.log("METRICS ARE: ", JSON.stringify(mymetrics, null, 2));
-
-        task.createItem(this.props.uid, {
+        taskState.createItem(this.props.task.uid, {
             name: this.state.name,
             desc: "Desc",
             period: [this.state.fromDate, this.state.toDate],
             metrics: mymetrics
         });
-        Actions.pop();
+
+        // TODO: Fix : should be actions.pop but that does not rerender so new item is not shown
+        // Wokraround is navigation to view, but then the back button is not correct
+        Actions.items({
+            task: this.props.task,
+        });
     }
 
     parseName(value: any) {
@@ -156,7 +161,7 @@ export default class Component extends React.Component<Props, State> {
                 </View>
 
                 <Text>
-                    {`Creating item for, ${this.props.uid}`}
+                    {`Creating item for, ${this.props.task.uid}`}
                 </Text>
 
                 {/* Form input for name */}
@@ -253,7 +258,7 @@ export default class Component extends React.Component<Props, State> {
                     }}
                 />
 
-                {this.renderMetrices(task.taskMetrics)}
+                {this.renderMetrices(this.props.task.metrics)}
 
                 <View style={styles.formContainer}>
                     <Button

@@ -5,7 +5,7 @@ import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 
 import auth from "../../state/auth";
-import task from "../../state/task";
+import taskState from "../../state/taskState";
 
 const primaryColor1 = "green";
 
@@ -63,7 +63,7 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async deleteTask() {
-        task.deleteTask(this.props.taskUid);
+        taskState.deleteTask(this.props.taskUid);
         Actions.pop();
     }
 

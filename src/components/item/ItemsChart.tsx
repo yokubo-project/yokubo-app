@@ -4,21 +4,22 @@ import { Text, StyleSheet, View, ViewStyle } from "react-native";
 import { Actions } from "react-native-router-flux";
 import { VictoryChart, VictoryTheme, VictoryBar } from "victory-native";
 import moment from "moment";
-import task from "../../state/task";
+
+import { IFullTask } from "../../state/taskState";
 
 const primaryColor1 = "green";
 
 interface State {
+    task: IFullTask;
 }
 
 interface Props {
-    uid: string;
+    task: IFullTask;
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        // justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
     formContainer: {
@@ -33,10 +34,10 @@ export default class Component extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
-    }
 
-    componentWillMount() {
-        // task.fetchEntries(this.props.uid);
+        this.state = {
+            task: this.props.task,
+        };
     }
 
     renderEntryStatictics(entries) {
@@ -68,18 +69,18 @@ export default class Component extends React.Component<Props, State> {
                 >
                     <VictoryBar
                         style={{
-                            data: { 
+                            data: {
                                 fill: primaryColor1,
                                 stroke: primaryColor1,
                                 fillOpacity: 0.7,
-                                strokeWidth: 3                                
+                                strokeWidth: 3
                             }
                         }}
                         animate={{
                             duration: 2000,
                             onLoad: { duration: 1000 }
                         }}
-                        data={this.renderEntryStatictics(task.taskItems)}
+                        data={this.renderEntryStatictics(this.state.task.items)}
                         x="entity"
                         y="value"
                     />
