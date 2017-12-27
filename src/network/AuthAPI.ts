@@ -2,8 +2,7 @@ import * as Config from "../config";
 import * as authApiClient from "auth-stapler";
 import { ITypedAPITarget } from "network-stapler";
 
-import auth from "../state/auth";
-import { ICredentials, IProfile } from "../state/auth";
+import { ICredentials, IProfile } from "../state/authStore";
 
 export const AuthAPI = {
     refreshAccessToken(refreshtoken: string): ITypedAPITarget<ICredentials> {
@@ -81,13 +80,13 @@ export const AuthAPI = {
             url: "app/v1/user/profile",
             method: "GET",
             headers: {
-                "Authorization": "Bearer " + accessToken,
+                "Authorization": `Bearer ${accessToken}`,
             },
             parse: (json) => {
                 return json as IProfile;
             }
         };
-    },    
+    },
     patchProfile(name: string, accessToken: string): ITypedAPITarget<IProfile> {
         return {
             url: "app/v1/user/profile",
@@ -96,7 +95,7 @@ export const AuthAPI = {
                 name
             },
             headers: {
-                "Authorization": "Bearer " + accessToken,
+                "Authorization": `Bearer ${accessToken}`,
             },
             parse: (json) => {
                 return json as IProfile;

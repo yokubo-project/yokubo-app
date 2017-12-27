@@ -300,7 +300,7 @@ hydrate("auth", auth).then(() => {
         });
     } else {
         console.log("rehydrated, no credentials are available.");
-        auth.isRehydrated = true;        
+        auth.isRehydrated = true;
     }
 });
 

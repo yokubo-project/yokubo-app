@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Header, Button, FormInput, FormValidationMessage } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
-import auth from "../../state/auth";
+import authStore from "../../state/authStore";
 
 const primaryColor1 = "green";
 
@@ -154,9 +154,9 @@ export default class Component extends React.Component<Props, State> {
             return;
         }
 
-        await auth.signUp(email, password, name);
-        if (auth.error !== null) {
-            switch (auth.error) {
+        await authStore.signUp(email, password, name);
+        if (authStore.error !== null) {
+            switch (authStore.error) {
                 case "PasswordWrong":
                     this.setState({
                         inputNameError: null,

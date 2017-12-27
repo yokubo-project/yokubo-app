@@ -7,7 +7,7 @@ import APIClient from "../network/APIClient";
 import { APIClientStatusCodeError } from "network-stapler";
 
 import * as config from "../config";
-import auth from "../state/auth";
+import authStore from "../state/authStore";
 
 
 export interface IPostTask {
@@ -85,7 +85,7 @@ export type TaskError = "Unknown";
 
 class Tasks {
 
-    @observable tasks: any = [];
+    @observable tasks: any = observable.map();
     @observable error: TaskError = null;
     @observable isLoading: boolean = false;
 
@@ -97,7 +97,7 @@ class Tasks {
         }
 
         this.isLoading = true;
-        const target = TaskAPI.getTasks(auth.credentials.accessToken);
+        const target = TaskAPI.getTasks(authStore.credentials.accessToken);
 
         return APIClient.requestType(target)
             .then(tasks => {
@@ -119,7 +119,7 @@ class Tasks {
         }
 
         this.isLoading = true;
-        const target = TaskAPI.postTask(auth.credentials.accessToken, task);
+        const target = TaskAPI.postTask(authStore.credentials.accessToken, task);
 
         return APIClient.requestType(target)
             .then(task => {
@@ -141,7 +141,7 @@ class Tasks {
         }
 
         this.isLoading = true;
-        const target = TaskAPI.patchTask(auth.credentials.accessToken, taskUid, task);
+        const target = TaskAPI.patchTask(authStore.credentials.accessToken, taskUid, task);
 
         return APIClient.requestType(target)
             .then(response => {
@@ -164,7 +164,7 @@ class Tasks {
         }
 
         this.isLoading = true;
-        const target = TaskAPI.deleteTask(auth.credentials.accessToken, taskUid);
+        const target = TaskAPI.deleteTask(authStore.credentials.accessToken, taskUid);
 
         try {
             const response = await APIClient.requestType(target);
@@ -186,13 +186,19 @@ class Tasks {
         }
 
         this.isLoading = true;
-        const target = TaskAPI.postItem(auth.credentials.accessToken, taskUid, item);
+        const target = TaskAPI.postItem(authStore.credentials.accessToken, taskUid, item);
 
         return APIClient.requestType(target)
             .then(item => {
-                // Attach new item to items of task
-                const foundIndex = this.tasks.findIndex(task => task.uid === taskUid);
-                this.tasks[foundIndex].items.push(item);
+                // Attach new item to task
+                this.tasks.forEach(task => {
+                    if (task.uid === taskUid) {
+                        // Workaround as mobx doest not recognize when array in deeply nested object is extended 
+                        const localTask = JSON.parse(JSON.stringify(task));
+                        localTask.items ? localTask.items.push(item) : [item];
+                        task.items = localTask.items;
+                    }
+                });
 
                 this.error = null;
                 this.isLoading = false;
@@ -210,15 +216,16 @@ class Tasks {
         }
 
         this.isLoading = true;
-        const target = TaskAPI.patchItem(auth.credentials.accessToken, taskUid, itemUid, item);
+        const target = TaskAPI.patchItem(authStore.credentials.accessToken, taskUid, itemUid, item);
 
         return APIClient.requestType(target)
             .then(item => {
                 // Replace old item with patched item
-                const foundTaskIndex = this.tasks.findIndex(task => task.uid === taskUid);
-                const foundTask = this.tasks[foundTaskIndex].items;
-                const foundItemIndex = foundTask.items.findIndex(taskItem => taskItem.uid === item.uid);
-                foundTask.items[foundItemIndex] = item;
+                this.tasks.forEach(task => {
+                    task.items ? task.items = task.items.map(taskItem => {
+                        return taskItem.uid === item.uid ? item : taskItem;
+                    }) : null;
+                });
 
                 this.error = null;
                 this.isLoading = false;
@@ -236,11 +243,11 @@ class Tasks {
         }
 
         this.isLoading = true;
-        const target = TaskAPI.deleteItem(auth.credentials.accessToken, taskUid, itemUid);
+        const target = TaskAPI.deleteItem(authStore.credentials.accessToken, taskUid, itemUid);
 
         return APIClient.requestType(target)
             .then(item => {
-                // Also remove it from tasks
+                // Remove item from task
                 this.tasks.forEach(task => {
                     task.items ? task.items = task.items.filter(taskItem => taskItem.uid !== item.uid) : null;
                 });

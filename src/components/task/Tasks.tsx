@@ -5,8 +5,8 @@ import { StyleSheet, Text, TextStyle, Image, View, ScrollView, ViewStyle, Toucha
 import { Header } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
-import auth from "../../state/auth";
-import taskState from "../../state/taskState";
+import authStore from "../../state/authStore";
+import taskStore from "../../state/taskStore";
 
 import AddIcon from "../elements/AddIcon";
 const primaryColor1 = "green";
@@ -75,11 +75,11 @@ export default class Component extends React.Component<null, State> {
     }
 
     componentWillMount() {
-        taskState.fetchTasks();
+        taskStore.fetchTasks();
     }
 
     async processSignOut() {
-        auth.signOut();
+        authStore.signOut();
         Actions.home();
     }
 
@@ -156,7 +156,7 @@ export default class Component extends React.Component<null, State> {
 
     render() {
 
-        const tasks = this.renderTasks(taskState.tasks);
+        const tasks = this.renderTasks(taskStore.tasks);
 
         return (
             <View style={styles.mainContainer}>

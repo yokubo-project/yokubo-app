@@ -5,8 +5,8 @@ import firebase from "firebase";
 import { Provider as MobxProvider, observer } from "mobx-react";
 import { Text, View } from "react-native";
 
-import auth from "./src/state/auth";
-import taskState from "./src/state/taskState";
+import authStore from "./src/state/authStore";
+import taskStore from "./src/state/taskStore";
 
 import SignIn from "./src/components/auth/SignIn";
 import SignUp from "./src/components/auth/SignUp";
@@ -50,7 +50,7 @@ class App extends React.Component<Props, State> {
 
     render() {
         return (
-            <MobxProvider auth={auth} taskState={taskState}>
+            <MobxProvider authStore={authStore} taskStore={taskStore}>
                 <Routes />
             </MobxProvider>
         );
@@ -63,7 +63,7 @@ class App extends React.Component<Props, State> {
 class Routes extends React.Component<null, null> {
 
     isSignedIn() {
-        if (!auth.isAuthenticated) {
+        if (!authStore.isAuthenticated) {
             return false;
         } else {
             return true;
@@ -76,7 +76,7 @@ class Routes extends React.Component<null, null> {
 
     render() {
 
-        if (auth.isRehydrated === false) {
+        if (authStore.isRehydrated === false) {
             return (
                 <Spinner />
             );

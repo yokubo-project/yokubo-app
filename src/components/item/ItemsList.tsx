@@ -7,7 +7,7 @@ import { material } from "react-native-typography";
 import * as _ from "lodash";
 import moment from "moment";
 
-import { IFullTask } from "../../state/taskState";
+import { IFullTask } from "../../state/taskStore";
 
 interface State {
     task: IFullTask;
@@ -61,7 +61,6 @@ export default class Component extends React.Component<Props, State> {
     }
 
     componentWillReceiveProps(nextProps: Props) {
-        console.log("RECEIVED PROPS IN ITEMS LIST");
         this.setState({
             task: nextProps.task
         });

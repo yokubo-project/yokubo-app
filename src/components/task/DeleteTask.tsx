@@ -4,8 +4,7 @@ import { Header, FormInput, FormValidationMessage, Button } from "react-native-e
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 
-import auth from "../../state/auth";
-import taskState from "../../state/taskState";
+import taskStore from "../../state/taskStore";
 
 const primaryColor1 = "green";
 
@@ -63,7 +62,7 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async deleteTask() {
-        taskState.deleteTask(this.props.taskUid);
+        taskStore.deleteTask(this.props.taskUid);
         Actions.pop();
     }
 

@@ -11,7 +11,7 @@ import ItemsChart from "./ItemsChart";
 import AddIcon from "../elements/AddIcon";
 import DeleteTask from "../task/DeleteTask";
 
-import { IFullTask } from "../../state/taskState";
+import { IFullTask } from "../../state/taskStore";
 
 const primaryColor1 = "green";
 

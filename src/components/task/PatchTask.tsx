@@ -6,8 +6,8 @@ import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 import { ImagePicker } from "expo";
 
-import auth from "../../state/auth";
-import taskState from "../../state/taskState";
+import authStore from "../../state/authStore";
+import taskStore from "../../state/taskStore";
 
 const primaryColor1 = "green";
 
@@ -74,7 +74,7 @@ export default class Component extends React.Component<Props, State> {
     constructor(props) {
         super(props);
 
-        const activeTask = taskState.tasks.filter(task => task.uid === this.props.taskUid)[0];
+        const activeTask = taskStore.tasks.filter(task => task.uid === this.props.taskUid)[0];
 
         this.state = {
             name: activeTask.name,
@@ -88,7 +88,7 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async updateTask() {
-        taskState.patchTask(this.props.taskUid, {
+        taskStore.patchTask(this.props.taskUid, {
             name: this.state.name,
             imageUid: this.state.imageUid,
             // metrics: this.state.metrics
@@ -194,7 +194,7 @@ export default class Component extends React.Component<Props, State> {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "multipart/form-data",
-                "Authorization": "Bearer " + auth.credentials.accessToken,
+                "Authorization": `Bearer ${authStore.credentials.accessToken}`,
             },
         };
 

@@ -5,8 +5,8 @@ import { Header, FormInput, FormValidationMessage, Button } from "react-native-e
 import { Actions } from "react-native-router-flux";
 import DatePicker from "react-native-datepicker";
 
-import taskState from "../../state/taskState";
-import { IFullTask } from "../../state/taskState";
+import taskStore from "../../state/taskStore";
+import { IFullTask } from "../../state/taskStore";
 
 const primaryColor1 = "green";
 
@@ -68,7 +68,7 @@ export default class Component extends React.Component<Props, State> {
             };
         });
 
-        taskState.createItem(this.props.task.uid, {
+        taskStore.createItem(this.props.task.uid, {
             name: this.state.name,
             desc: "Desc",
             period: [this.state.fromDate, this.state.toDate],
@@ -77,9 +77,10 @@ export default class Component extends React.Component<Props, State> {
 
         // TODO: Fix : should be actions.pop but that does not rerender so new item is not shown
         // Wokraround is navigation to view, but then the back button is not correct
-        Actions.items({
-            task: this.props.task,
-        });
+        // Actions.items({
+        //     task: this.props.task,
+        // });
+        Actions.pop();
     }
 
     parseName(value: any) {

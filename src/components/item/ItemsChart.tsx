@@ -5,7 +5,7 @@ import { Actions } from "react-native-router-flux";
 import { VictoryChart, VictoryTheme, VictoryBar } from "victory-native";
 import moment from "moment";
 
-import { IFullTask } from "../../state/taskState";
+import { IFullTask } from "../../state/taskStore";
 
 const primaryColor1 = "green";
 
