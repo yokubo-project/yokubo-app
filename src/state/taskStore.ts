@@ -1,14 +1,9 @@
 import { observable, action } from "mobx";
-import { create, persist } from "mobx-persist";
-import * as _ from "lodash";
 
 import { TaskAPI } from "../network/TaskAPI";
 import APIClient from "../network/APIClient";
-import { APIClientStatusCodeError } from "network-stapler";
 
-import * as config from "../config";
 import authStore from "../state/authStore";
-
 
 export interface IPostTask {
     name: string;

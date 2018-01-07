@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
-import * as _ from "lodash";
 import { StyleSheet, Text, TextStyle, Image, View, ScrollView, ViewStyle, TouchableOpacity } from "react-native";
+import * as _ from "lodash";
 import { Header } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 

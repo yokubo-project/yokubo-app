@@ -1,9 +1,7 @@
 import React from "react";
+import { StyleSheet, ActivityIndicator, Text, View } from "react-native";
 import { Router, Stack, Scene, Actions } from "react-native-router-flux";
-import { StyleSheet, ActivityIndicator } from "react-native";
-import firebase from "firebase";
 import { Provider as MobxProvider, observer } from "mobx-react";
-import { Text, View } from "react-native";
 
 import authStore from "./src/state/authStore";
 import taskStore from "./src/state/taskStore";

@@ -5,7 +5,7 @@
     "jsx": "react-native",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */
-    // "noUnusedLocals": true
+    "experimentalDecorators": true, /* Enables experimental support for ES7 decorators. */
+    // "noUnusedLocals": true,
   }
 }

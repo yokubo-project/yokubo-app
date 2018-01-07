@@ -63,8 +63,8 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
-    handleOnUpdateTaskClick(taskUid) {
-        Actions.patchTask({ taskUid });
+    handleOnUpdateTaskClick(task) {
+        Actions.patchTask({ task });
     }
 
     hideVisibility() {
@@ -80,6 +80,9 @@ export default class Component extends React.Component<Props, State> {
     }
 
     render() {
+
+        const headerText = this.props.task.name.length > 20 ? `${this.props.task.name.slice(0, 20)}...` : this.props.task.name;
+
         return (
             <View style={styles.mainContainer}>
 
@@ -106,11 +109,11 @@ export default class Component extends React.Component<Props, State> {
                                     name="edit"
                                     color="#fff"
                                     underlayColor="transparent"
-                                    onPress={() => { this.handleOnUpdateTaskClick(this.props.task.uid); }}
+                                    onPress={() => { this.handleOnUpdateTaskClick(this.props.task); }}
                                 />
                             </View>
                         }
-                        centerComponent={{ text: "Items", style: { color: "#fff", fontSize: 20 } }}
+                        centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />

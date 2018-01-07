@@ -14,12 +14,6 @@ export interface ICredentials {
     tokenType: string;
 }
 
-interface IJSONError {
-    error: string;
-    statusCode: number;
-    message: string;
-}
-
 interface IPasswordResetToken {
     username?: string;
     token: string;

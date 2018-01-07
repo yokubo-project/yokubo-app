@@ -1,5 +1,4 @@
 import React from "react";
-// const Buffer = require("buffer/").Buffer;
 import { StyleSheet, View, ViewStyle, Text, Image } from "react-native";
 import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
@@ -8,6 +7,7 @@ import { ImagePicker } from "expo";
 
 import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
+import { IFullTask } from "../../state/taskStore";
 
 const primaryColor1 = "green";
 
@@ -25,7 +25,7 @@ interface State {
 }
 
 interface Props {
-    taskUid: string;
+    task: IFullTask;
 }
 
 const styles = StyleSheet.create({
@@ -74,21 +74,19 @@ export default class Component extends React.Component<Props, State> {
     constructor(props) {
         super(props);
 
-        const activeTask = taskStore.tasks.filter(task => task.uid === this.props.taskUid)[0];
-
         this.state = {
-            name: activeTask.name,
-            imageUid: activeTask.image.uid,
-            metrics: activeTask.metrics,
+            name: this.props.task.name,
+            imageUid: this.props.task.image.uid,
+            metrics: this.props.task.metrics,
             nameError: null,
             imageUidError: null,
             isInputFieldsModalVisible: false,
-            image: activeTask.image.file
+            image: this.props.task.image.file
         };
     }
 
     async updateTask() {
-        taskStore.patchTask(this.props.taskUid, {
+        taskStore.patchTask(this.props.task.uid, {
             name: this.state.name,
             imageUid: this.state.imageUid,
             // metrics: this.state.metrics
@@ -202,6 +200,9 @@ export default class Component extends React.Component<Props, State> {
     }
 
     render() {
+
+        const headerText = this.props.task.name.length > 15 ? `Update ${this.props.task.name.slice(0, 15)}...` : `Update ${this.props.task.name}`;
+
         return (
             <View style={styles.mainContainer}>
 
@@ -215,7 +216,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "Update Task", style: { color: "#fff", fontSize: 20 } }}
+                        centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />

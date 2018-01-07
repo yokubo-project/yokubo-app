@@ -1,8 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { Text, StyleSheet, View, ViewStyle } from "react-native";
-import { Actions } from "react-native-router-flux";
-import { VictoryChart, VictoryTheme, VictoryBar } from "victory-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import { VictoryChart, VictoryBar } from "victory-native";
 import moment from "moment";
 
 import { IFullTask } from "../../state/taskStore";

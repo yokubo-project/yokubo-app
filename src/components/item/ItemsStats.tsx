@@ -1,7 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
-import { Actions } from "react-native-router-flux";
 
 import { IFullTask } from "../../state/taskStore";
 

@@ -1,5 +1,4 @@
 import React from "react";
-// const Buffer = require("buffer/").Buffer;
 import { StyleSheet, View, ViewStyle, Text, Image } from "react-native";
 import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
@@ -150,9 +149,8 @@ export default class Component extends React.Component<null, State> {
         console.log("picker result is: ", JSON.stringify(pickerResult));
 
         try {
-            this.setState({ image: pickerResult.uri });
-
             if (!pickerResult.cancelled) {
+                this.setState({ image: pickerResult.uri });
                 uploadResponse = await this.uploadImageAsync(pickerResult.uri);
                 uploadResult = await uploadResponse.json();
                 this.parseImageUid(uploadResult[0].uid);

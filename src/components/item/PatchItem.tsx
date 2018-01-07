@@ -6,6 +6,7 @@ import { Actions } from "react-native-router-flux";
 import DatePicker from "react-native-datepicker";
 
 import taskStore from "../../state/taskStore";
+import { IItem } from "../../state/taskStore";
 
 const primaryColor1 = "green";
 
@@ -18,7 +19,7 @@ interface State {
 }
 
 interface Props {
-    uid: string;
+    taskUid: string;
     item: any; // TODO Typing
 }
 
@@ -67,7 +68,7 @@ export default class Component extends React.Component<Props, State> {
             };
         });
 
-        taskStore.patchItem(this.props.uid, this.props.item.uid, {
+        taskStore.patchItem(this.props.taskUid, this.props.item.uid, {
             name: this.state.name,
             period: [this.state.fromDate, this.state.toDate],
             metrics: mymetrics
@@ -111,7 +112,7 @@ export default class Component extends React.Component<Props, State> {
 
 
     handleOnDeleteItemClick(itemUid) {
-        taskStore.deleteItem(this.props.uid, itemUid);
+        taskStore.deleteItem(this.props.taskUid, itemUid);
         Actions.pop();
     }
 
@@ -158,14 +159,14 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { this.handleOnDeleteItemClick(this.props.item.uid); }
                         }}
-                        centerComponent={{ text: "New Entry", style: { color: "#fff", fontSize: 20 } }}
+                        centerComponent={{ text: "Update Item", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />
                 </View>
 
                 <Text>
-                    {`Editing item for, ${this.props.uid}`}
+                    {`Editing item for, ${this.props.taskUid}`}
                 </Text>
 
                 {/* Form input for name */}

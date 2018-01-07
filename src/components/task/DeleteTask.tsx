@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, View, ViewStyle, Text, Image } from "react-native";
-import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
+import { StyleSheet, View, ViewStyle, Text } from "react-native";
+import { Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 

@@ -1,5 +1,3 @@
-import * as Config from "../config";
-import * as authApiClient from "auth-stapler";
 import { ITypedAPITarget } from "network-stapler";
 
 import { ICredentials, IProfile } from "../state/authStore";

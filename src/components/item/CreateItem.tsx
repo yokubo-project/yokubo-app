@@ -75,11 +75,6 @@ export default class Component extends React.Component<Props, State> {
             metrics: mymetrics
         });
 
-        // TODO: Fix : should be actions.pop but that does not rerender so new item is not shown
-        // Wokraround is navigation to view, but then the back button is not correct
-        // Actions.items({
-        //     task: this.props.task,
-        // });
         Actions.pop();
     }
 
@@ -89,7 +84,6 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
-    // TODO: Seperate date pickers for from and to
     parseFromDate(value: any) {
         this.setState({
             fromDate: value,
@@ -155,7 +149,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "New Entry", style: { color: "#fff", fontSize: 20 } }}
+                        centerComponent={{ text: "Create Item", style: { color: "#fff", fontSize: 20 } }}
                         statusBarProps={{ barStyle: "dark-content", translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
                     />

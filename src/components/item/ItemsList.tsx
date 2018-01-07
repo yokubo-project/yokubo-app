@@ -140,7 +140,7 @@ export default class Component extends React.Component<Props, State> {
 
     handleOnEditItemClick(item) {
         Actions.patchItem({
-            uid: this.state.task.uid,
+            taskUid: this.state.task.uid,
             item
         });
     }
