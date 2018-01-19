@@ -1,13 +1,13 @@
 {
   "expo": {
     "name": "Bode",
-    "icon": "./assets/app-icon-512.png",
+    "icon": "./assets/logo_bode_twolines.png",
     "version": "1.0.1",
     "slug": "bode",
     "sdkVersion": "21.0.0",
     "loading": {
-      "icon": "./assets/app-icon-512.png",
-      "backgroundColor": "#009900",
+      "icon": "./assets/logo_bode_oneline.png",
+      "backgroundColor": "#333333",
       "hideExponentText": true
     },
     "packagerOpts": {

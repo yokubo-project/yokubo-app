@@ -18,7 +18,6 @@ import Items from "./src/components/item/Items";
 import CreateItem from "./src/components/item/CreateItem";
 import PatchItem from "./src/components/item/PatchItem";
 
-const primaryColor1 = "green";
 
 interface Props {
 }
@@ -26,20 +25,26 @@ interface Props {
 interface State {
 }
 
+const spinnerColor = "#00F2D2";
+
 const styles = StyleSheet.create({
     spinnerContainer: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
+        backgroundColor: "#333333",
+    },
+    rehydrationText: {
+        color: "#00F2D2",
     }
 });
 
 const Spinner = () => {
     return (
         <View style={styles.spinnerContainer}>
-            <ActivityIndicator size="large" color={primaryColor1} />
-            <Text>Rehydration is taking place...</Text>
+            <ActivityIndicator size="large" color={spinnerColor} />
+            <Text style={styles.rehydrationText}>Rehydration is taking place...</Text>
         </View>
     );
 };
@@ -90,7 +95,7 @@ class Routes extends React.Component<null, null> {
                         hideNavBar={true}
                         onEnter={this.isSignedIn}
                         success={() => { Actions.tasks(); }}
-                        failure={() => { Actions.signIn(); }}
+                        failure={() => { Actions.home(); }}
                     />
                     <Scene key="home" component={Home} title="Home" hideNavBar={true} />
                     <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
