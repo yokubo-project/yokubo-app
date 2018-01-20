@@ -2,7 +2,10 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 
-const primaryColor1 = "green";
+const backgroundColor = "#333333";
+const textColor = "#00F2D2";
+const errorTextColor = "#00F2D2";
+const inputTextColor = "#DDD";
 
 interface Props {
     onPress: () => void;
@@ -20,8 +23,10 @@ export default class Component extends React.Component<Props, null> {
                     justifyContent: "center",
                     width: 55,
                     height: 55,
-                    backgroundColor: primaryColor1,
+                    backgroundColor: backgroundColor,
                     borderRadius: 100,
+                    borderWidth: 1,
+                    borderColor: textColor,
                     position: "absolute",
                     bottom: 60,
                     right: 30,
@@ -31,7 +36,7 @@ export default class Component extends React.Component<Props, null> {
                 <Icon
                     name={"add"}
                     size={25}
-                    color="#fff"
+                    color={textColor}
                 />
             </TouchableOpacity>
 

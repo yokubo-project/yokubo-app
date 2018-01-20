@@ -9,7 +9,11 @@ import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 
 import AddIcon from "../elements/AddIcon";
-const primaryColor1 = "green";
+
+const backgroundColor = "#333333";
+const textColor = "#00F2D2";
+const errorTextColor = "#00F2D2";
+const inputTextColor = "#DDD";
 
 interface State {
 }
@@ -17,22 +21,22 @@ interface State {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: backgroundColor,
     } as ViewStyle,
     headerContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor
     } as ViewStyle,
     formContainer: {
         flex: 2,
         flexDirection: "row",
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor
     } as ViewStyle,
     listContainer: {
         flexGrow: 5,
-        backgroundColor: "#fff",
+        backgroundColor
     } as ViewStyle,
     formContainerTextElement: {
         position: "absolute",
@@ -56,14 +60,6 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 10,
         height: 200,
-    },
-    borderStyle: {
-        borderColor: "black",
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderRadius: 25,
-        flex: 1,
-        overflow: "hidden"
     },
 });
 
@@ -118,6 +114,8 @@ export default class Component extends React.Component<null, State> {
                                 key={`column${columnIndex}`}
                                 source={{ uri: task.image.file }}
                                 style={styles.formContainerImageElement}
+                                // @ts-ignore
+                                borderRadius={10}
                             >
                                 <Text
                                     key={`column${columnIndex}`}
@@ -164,16 +162,16 @@ export default class Component extends React.Component<null, State> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={primaryColor1}
+                        backgroundColor={backgroundColor}
                         rightComponent={{
                             icon: "rowing",
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { this.processSignOut(); }
                         }}
-                        centerComponent={{ text: "Tasks", style: { color: "#fff", fontSize: 20 } }}
-                        statusBarProps={{ barStyle: "dark-content", translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
+                        centerComponent={{ text: "Tasks", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        statusBarProps={{ translucent: true }}
+                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
 

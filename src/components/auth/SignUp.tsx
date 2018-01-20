@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     inputStyle: {
         color: inputTextColor,
         fontSize: 20,
-        marginBottom: 10        
+        marginBottom: 10
     }
 });
 export default class Component extends React.Component<Props, State> {

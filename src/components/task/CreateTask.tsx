@@ -1,14 +1,19 @@
 import React from "react";
-import { StyleSheet, View, ViewStyle, Text, Image } from "react-native";
+import { StyleSheet, View, ViewStyle, Text, Image, TouchableOpacity } from "react-native";
 import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
-import { ImagePicker } from "expo";
+import { ImagePicker, FileSystem } from "expo";
 
 import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 
-const primaryColor1 = "green";
+const backgroundColor = "#333333";
+const textColor = "#00F2D2";
+const errorTextColor = "#00F2D2";
+const inputTextColor = "#DDD";
+
+const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
 interface State {
     name: string;
@@ -26,26 +31,31 @@ interface State {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        // justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor: backgroundColor,
+        alignItems: "stretch",
     } as ViewStyle,
     headerContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor
     } as ViewStyle,
     formContainer: {
         flex: 2,
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor
+    } as ViewStyle,
+    imageContainer: {
+        backgroundColor: backgroundColor,
+        alignItems: "center",
+        marginBottom: 20
     } as ViewStyle,
     inputStyle: {
+        color: inputTextColor,
+        fontSize: 20,
         marginRight: 100,
-        color: "black",
-        fontSize: 20
     },
     modalInputStyle: {
-        color: "black",
+        color: inputTextColor,
         fontSize: 20
     },
     modalContent: {
@@ -56,8 +66,9 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         borderColor: "rgba(0, 0, 0, 0.1)",
     },
-    modalButtonStyle: {
-        // flex: 1
+    imageStyle: {
+        width: 150,
+        height: 150,
     }
 });
 
@@ -199,43 +210,57 @@ export default class Component extends React.Component<null, State> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={primaryColor1}
+                        backgroundColor={backgroundColor}
                         leftComponent={{
                             icon: "arrow-back",
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "New Task", style: { color: "#fff", fontSize: 20 } }}
-                        statusBarProps={{ barStyle: "dark-content", translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
+                        centerComponent={{ text: "New Task", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        statusBarProps={{ translucent: true }}
+                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
+                </View>
+
+                <View
+                    style={styles.imageContainer}
+                >
+                    <TouchableOpacity
+                        activeOpacity={0.9}
+                        onPress={this._pickImage}
+                    >
+                        <Image
+                            source={this.state.image ? { uri: this.state.image } : PLACEHOLDER_IMAGE}
+                            style={styles.imageStyle}
+                            resizeMode="cover"
+                            // @ts-ignore
+                            borderRadius={100}
+                        />
+                    </TouchableOpacity>
                 </View>
 
                 <FormInput
                     inputStyle={styles.inputStyle}
-                    placeholder="Enter name of task"
+                    placeholder="Name"
                     onChangeText={(e) => this.parseName(e)}
-                    underlineColorAndroid={primaryColor1}
-                    selectionColor="black" // cursor color
+                    underlineColorAndroid={textColor}
+                    selectionColor={inputTextColor} // cursor color
                 />
                 {this.showNameError()}
 
-                <Button
-                    raised
-                    buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
-                    textStyle={{ textAlign: "center", fontSize: 18 }}
-                    title={"Pick Image"}
-                    onPress={this._pickImage}
-                />
-                {this.state.image &&
-                    <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
-
-                <Text>Metrices: {this.state.metrics.map(field => `name: ${field.name} - unit: ${field.unit}; `)}</Text>
+                {this.state.metrics && this.state.metrics.length > 0 && <Text style={{
+                    color: inputTextColor,
+                    fontSize: 20
+                }}>
+                    Metrics:
+                </Text>
+                }
+                <Text>{this.state.metrics.map(field => `name: ${field.name} - unit: ${field.unit}; `)}</Text>
 
                 <Button
                     raised
-                    buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
+                    buttonStyle={{ backgroundColor, borderRadius: 0 }}
                     textStyle={{ textAlign: "center", fontSize: 18 }}
                     title={"Add Metric"}
                     onPress={this._showInputFieldsModal}
@@ -252,20 +277,19 @@ export default class Component extends React.Component<null, State> {
                             inputStyle={styles.modalInputStyle}
                             placeholder="Name"
                             onChangeText={(value) => this.parseNewMetricName(value)}
-                            underlineColorAndroid={primaryColor1}
-                            selectionColor="black" // cursor color
+                            underlineColorAndroid={textColor}
+                            selectionColor={inputTextColor} // cursor color
                         />
                         <FormInput
                             inputStyle={styles.modalInputStyle}
                             placeholder="Unit"
                             onChangeText={(value) => this.parseNewMetricUnit(value)}
-                            underlineColorAndroid={primaryColor1}
-                            selectionColor="black" // cursor color
+                            underlineColorAndroid={textColor}
+                            selectionColor={inputTextColor} // cursor color
                         />
                         <Button
-                            inputStyle={styles.modalButtonStyle}
                             raised
-                            buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
+                            buttonStyle={{ backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
                             title={"Add metric"}
                             onPress={() => { this.addMetric(); }}
@@ -276,7 +300,7 @@ export default class Component extends React.Component<null, State> {
                 <View style={styles.formContainer}>
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"CREATE"}
                         onPress={() => { this.createTask(); }}
