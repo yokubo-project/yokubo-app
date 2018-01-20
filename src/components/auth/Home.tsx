@@ -8,6 +8,8 @@ const textColor = "#00F2D2";
 const errorTextColor = "#00F2D2";
 const inputTextColor = "#DDD";
 
+const LOGO_PATH = require("../../../assets/logo_bode_oneline_cropped.gif");
+
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
@@ -43,7 +45,7 @@ export default class Component extends React.Component<null, null> {
             <View style={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                     <Image
-                        source={require("../../../assets/logo_bode_oneline_cropped.gif")}
+                        source={LOGO_PATH}
                         style={styles.image}
                         resizeMode="contain"
                     />

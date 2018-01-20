@@ -33,29 +33,18 @@ const styles = StyleSheet.create({
         backgroundColor,
     } as ViewStyle,
     formContainer: {
-        flex: 3,
-        justifyContent: "space-around",
+        flex: 5,
+        justifyContent: "flex-start",
         backgroundColor,
+        marginTop: 10
     } as ViewStyle,
-    spaceContainer: {
-        flex: 3,
-        justifyContent: "space-around",
-        backgroundColor,
-    } as ViewStyle,
-    signUpText: {
-        textAlign: "center",
-        color: textColor,
-        marginBottom: 10,
-    } as TextStyle,
-    forgotPwdText: {
-        textAlign: "center",
-        color: textColor,
-    },
     inputStyle: {
         color: inputTextColor,
         fontSize: 20,
+        marginBottom: 10
     }
 });
+
 export default class Component extends React.Component<Props, State> {
 
     constructor(props) {
@@ -211,6 +200,7 @@ export default class Component extends React.Component<Props, State> {
                         onChangeText={(e) => this.parsePassword(e)}
                         underlineColorAndroid={textColor}
                         selectionColor={inputTextColor} // cursor color
+                        secureTextEntry={true}
                     />
                     {this.showPasswordError()}
 
@@ -224,18 +214,35 @@ export default class Component extends React.Component<Props, State> {
                         onPress={() => { this.processSignIn(); }}
                     />
 
-                    <Text style={styles.signUpText} onPress={() => { Actions.signUp(); }}>
-                        {"SIGN UP FOR BODE"}
-                    </Text>
+                    <View style={{ flexDirection: "row", paddingTop: 30, justifyContent: "center" }}>
+                        <Text
+                            style={{ padding: 5, fontSize: 20, color: inputTextColor }}
+                        >
+                            Not a member yet?
+                        </Text>
+                        <Text
+                            style={{ padding: 5, fontSize: 20, color: textColor }}
+                            onPress={() => { Actions.signUp(); }}
+                        >
+                            Sign Up
+                        </Text>
+                    </View>
 
-                    <Text style={styles.forgotPwdText} onPress={() => { console.log("Forgot your pwd was clicked.."); }}>
-                        {"FORGOT YOUR PASSWORD?"}
-                    </Text>
+                    <View style={{ flexDirection: "row", paddingTop: 15, justifyContent: "center" }}>
+                        <Text
+                            style={{ padding: 5, fontSize: 20, color: inputTextColor }}
+                        >
+                            Forgot your password?
+                        </Text>
+                        <Text
+                            style={{ padding: 5, fontSize: 20, color: textColor }}
+                            onPress={() => { console.log("Forgot your pwd was clicked.."); }}
+                        >
+                            Help
+                        </Text>
+                    </View>
                 </View>
 
-                <View style={styles.spaceContainer}>
-
-                </View>
             </View>
         );
     }
