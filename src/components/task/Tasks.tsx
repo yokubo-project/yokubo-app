@@ -28,15 +28,15 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor
     } as ViewStyle,
+    listContainer: {
+        flexGrow: 7,
+        backgroundColor,
+    } as ViewStyle,    
     formContainer: {
         flex: 2,
         flexDirection: "row",
         justifyContent: "space-around",
-        backgroundColor
-    } as ViewStyle,
-    listContainer: {
-        flexGrow: 5,
-        backgroundColor
+        backgroundColor: backgroundColor,
     } as ViewStyle,
     formContainerTextElement: {
         position: "absolute",

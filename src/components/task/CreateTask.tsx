@@ -56,15 +56,17 @@ const styles = StyleSheet.create({
     },
     modalInputStyle: {
         color: inputTextColor,
-        fontSize: 20
+        fontSize: 20,
+        marginBottom: 10
     },
     modalContent: {
-        flex: 1,
-        backgroundColor: "white",
+        backgroundColor,
         justifyContent: "center",
         alignItems: "stretch",
-        borderRadius: 4,
-        borderColor: "rgba(0, 0, 0, 0.1)",
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingLeft: 10,
+        paddingRight: 10
     },
     imageStyle: {
         width: 150,
@@ -249,22 +251,32 @@ export default class Component extends React.Component<null, State> {
                 />
                 {this.showNameError()}
 
-                {this.state.metrics && this.state.metrics.length > 0 && <Text style={{
-                    color: inputTextColor,
-                    fontSize: 20
+                <View style={{
+                    marginTop: 15,
+                    marginLeft: 15
                 }}>
-                    Metrics:
-                </Text>
-                }
-                <Text>{this.state.metrics.map(field => `name: ${field.name} - unit: ${field.unit}; `)}</Text>
-
-                <Button
-                    raised
-                    buttonStyle={{ backgroundColor, borderRadius: 0 }}
-                    textStyle={{ textAlign: "center", fontSize: 18 }}
-                    title={"Add Metric"}
-                    onPress={this._showInputFieldsModal}
-                />
+                    <Text style={{color: inputTextColor, fontSize: 20}}>Metrics:</Text>
+                    {
+                        !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
+                        color: inputTextColor,
+                        fontSize: 20,
+                    }}>
+                            You haven't added any metrics yet.
+                        </Text>
+                    }
+                        {this.state.metrics.map(field => 
+                            <View key={field.name} style={{ flexDirection: "row", paddingTop: 15}}>
+                                <Text style={{color: textColor, fontSize: 20, paddingRight: 5}}>{"\u2022"}</Text>
+                                <Text style={{color: inputTextColor, fontSize: 20, paddingRight: 5}}>{field.name}: {field.unit}</Text>
+                            </View>
+                        )}
+                    <Text
+                        style={{color: textColor, fontSize: 20, textAlign: "center", paddingTop: 10}}
+                        onPress={this._showInputFieldsModal}
+                    >
+                        Add metric
+                    </Text>
+                </View>
 
                 <Modal
                     isVisible={this.state.isInputFieldsModalVisible}
@@ -272,7 +284,6 @@ export default class Component extends React.Component<null, State> {
                     onBackButtonPress={this._hideInputFieldsModal}
                 >
                     <View style={styles.modalContent}>
-                        <Text>Hello, please enter your new metric</Text>
                         <FormInput
                             inputStyle={styles.modalInputStyle}
                             placeholder="Name"
@@ -291,7 +302,7 @@ export default class Component extends React.Component<null, State> {
                             raised
                             buttonStyle={{ backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
-                            title={"Add metric"}
+                            title={"ADD METRIC"}
                             onPress={() => { this.addMetric(); }}
                         />
                     </View>
@@ -302,7 +313,7 @@ export default class Component extends React.Component<null, State> {
                         raised
                         buttonStyle={{ backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"CREATE"}
+                        title={"CREATE TASK"}
                         onPress={() => { this.createTask(); }}
                     />
                 </View>
