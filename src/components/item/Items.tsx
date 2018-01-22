@@ -13,7 +13,10 @@ import DeleteTask from "../task/DeleteTask";
 
 import { IFullTask } from "../../state/taskStore";
 
-const primaryColor1 = "green";
+const backgroundColor = "#333333";
+const textColor = "#00F2D2";
+const errorTextColor = "#00F2D2";
+const inputTextColor = "#DDD";
 
 interface State {
     selectedTab: string;
@@ -27,18 +30,17 @@ interface Props {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        // justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor,
     } as ViewStyle,
     headerContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor,
     } as ViewStyle,
     formContainer: {
-        flexGrow: 6,
+        flexGrow: 7,
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor,
     } as ViewStyle,
 });
 
@@ -89,7 +91,7 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={primaryColor1}
+                        backgroundColor={backgroundColor}
                         leftComponent={{
                             icon: "arrow-back",
                             color: "#fff",
@@ -113,9 +115,9 @@ export default class Component extends React.Component<Props, State> {
                                 />
                             </View>
                         }
-                        centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20 } }}
-                        statusBarProps={{ barStyle: "dark-content", translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
+                        centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        statusBarProps={{ translucent: true }}
+                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
 
@@ -129,11 +131,11 @@ export default class Component extends React.Component<Props, State> {
                     <TabNavigator>
                         <TabNavigator.Item
                             titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: primaryColor1 }}
+                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: backgroundColor }}
                             selected={this.state.selectedTab === "itemList"}
                             title={this.state.selectedTab === "itemList" ? "List" : null}
                             renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="list" size={33} />}
-                            renderSelectedIcon={() => <Icon color={primaryColor1} name="list" size={30} />}
+                            renderSelectedIcon={() => <Icon color={backgroundColor} name="list" size={30} />}
                             onPress={() => this.changeTab("itemList")}>
                             <ItemsList
                                 task={this.props.task}
@@ -141,11 +143,11 @@ export default class Component extends React.Component<Props, State> {
                         </TabNavigator.Item>
                         <TabNavigator.Item
                             titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: primaryColor1 }}
+                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: backgroundColor }}
                             selected={this.state.selectedTab === "itemStats"}
                             title={this.state.selectedTab === "itemStats" ? "Statistics" : null}
                             renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
-                            renderSelectedIcon={() => <Icon color={primaryColor1} name="equalizer" size={30} />}
+                            renderSelectedIcon={() => <Icon color={backgroundColor} name="equalizer" size={30} />}
                             onPress={() => this.changeTab("itemStats")}>
                             <ItemsStats
                                 task={this.props.task}
@@ -153,11 +155,11 @@ export default class Component extends React.Component<Props, State> {
                         </TabNavigator.Item>
                         <TabNavigator.Item
                             titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: primaryColor1 }}
+                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: backgroundColor }}
                             selected={this.state.selectedTab === "itemCharts"}
                             title={this.state.selectedTab === "itemCharts" ? "Charts" : null}
                             renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="dashboard" size={33} />}
-                            renderSelectedIcon={() => <Icon color={primaryColor1} name="dashboard" size={30} />}
+                            renderSelectedIcon={() => <Icon color={backgroundColor} name="dashboard" size={30} />}
                             onPress={() => this.changeTab("itemCharts")}>
                             <ItemsChart
                                 task={this.props.task}

@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { StyleSheet, Text, View, ViewStyle, ScrollView, FlatList } from "react-native";
+import { StyleSheet, Text, View, ViewStyle, TextStyle, ScrollView, FlatList } from "react-native";
 import { List, ListItem } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import { material } from "react-native-typography";
@@ -8,6 +8,11 @@ import * as _ from "lodash";
 import moment from "moment";
 
 import { IFullTask } from "../../state/taskStore";
+
+const backgroundColor = "#333333";
+const textColor = "#00F2D2";
+const errorTextColor = "#00F2D2";
+const inputTextColor = "#DDD";
 
 interface State {
     task: IFullTask;
@@ -20,16 +25,16 @@ interface Props {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor,
     } as ViewStyle,
     formContainer: {
         flex: 2,
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor,
     } as ViewStyle,
     listContainer: {
-        flexGrow: 6,
-        backgroundColor: "#fff",
+        flexGrow: 9,
+        backgroundColor,
     } as ViewStyle,
     tagContainer: {
         flexDirection: "row",
@@ -46,6 +51,17 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingBottom: 5,
         borderRadius: 3
+    },
+    listElement: {
+        backgroundColor,
+        paddingTop: 5,
+        paddingBottom: 10,
+    },
+    listText: {
+        // ...material.body1, 
+        color: inputTextColor,
+        fontSize: 14,
+        marginLeft: 10
     }
 });
 
@@ -75,7 +91,7 @@ export default class Component extends React.Component<Props, State> {
     renderMetrices(entry) {
         const metrices = entry.metricQuantities.map(metric => {
             return (
-                <Text key={metric.uid}>{metric.metric.name}: {metric.quantity} {metric.metric.unit}</Text>
+                <Text style={styles.listText} key={metric.uid}>{metric.metric.name}: {metric.quantity} {metric.metric.unit}</Text>
             );
         });
 
@@ -89,9 +105,9 @@ export default class Component extends React.Component<Props, State> {
 
         return (
             <View>
-                <Text style={material.body1}>Datum: {moment(entry.createdAt).toLocaleString()}</Text>
+                <Text style={styles.listText}>Datum: {moment(entry.createdAt).format("DD.MM.YYYY")}</Text>
                 {metrices}
-                <Text style={material.body1}>Duration: {diffFormatted}</Text>
+                <Text style={styles.listText}>Duration: {diffFormatted}</Text>
             </View>
         );
     }
@@ -111,7 +127,7 @@ export default class Component extends React.Component<Props, State> {
                         }, "asc");
                     }}
                 >
-                    {`${metric.name} asc`}
+                    {`${metric.name} `} &#8593;
                 </Text>
             );
         });
@@ -128,7 +144,7 @@ export default class Component extends React.Component<Props, State> {
                         }, "desc");
                     }}
                 >
-                    {`${metric.name} desc`}
+                    {`${metric.name} `} &#8595;
                 </Text>
             );
         });
@@ -155,25 +171,25 @@ export default class Component extends React.Component<Props, State> {
                             style={styles.tagElement}
                             onPress={() => { this.sortEntries("name", "asc"); }}
                         >
-                            {"name asc"}
+                            {"Name"} &#8593;
                         </Text>
                         <Text
                             style={styles.tagElement}
                             onPress={() => { this.sortEntries("name", "desc"); }}
                         >
-                            {"name desc"}
+                            {"Name"} &#8595;
                         </Text>
                         <Text
                             style={styles.tagElement}
                             onPress={() => { this.sortEntries("createdAt", "asc"); }}
                         >
-                            {"datum asc"}
+                            {"Datum"} &#8593;
                         </Text>
                         <Text
                             style={styles.tagElement}
                             onPress={() => { this.sortEntries("createdAt", "desc"); }}
                         >
-                            {"datum desc"}
+                            {"Datum"} &#8595;
                         </Text>
                         {this.renderMetricTags(this.state.task.metrics)}
                     </View>
@@ -186,7 +202,9 @@ export default class Component extends React.Component<Props, State> {
                             keyExtractor={item => item.uid.toString()}
                             renderItem={({ item }) => (
                                 <ListItem
+                                    style={styles.listElement}
                                     title={item.name}
+                                    titleStyle={{ color: textColor, fontSize: 18, fontWeight: "bold" }}
                                     subtitle={this.renderMetrices(item)}
                                     rightIcon={{ icon: "delete" }}
                                     onPressRightIcon={() => this.handleOnEditItemClick(item)}
