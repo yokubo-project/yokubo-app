@@ -5,33 +5,25 @@ import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 
 import taskStore from "../../state/taskStore";
+import { IFullTask } from "../../state/taskStore";
 
-const primaryColor1 = "green";
+const backgroundColor = "#333333";
+const textColor = "#00F2D2";
+const errorTextColor = "#00F2D2";
+const inputTextColor = "#DDD";
 
 interface State {
 }
 
 interface Props {
-    taskUid: string;
+    task: IFullTask;
     visible: boolean;
     hideVisibility: () => void;
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex: 1,
-        // justifyContent: "space-around",
-        backgroundColor: "#fff",
-    } as ViewStyle,
-    headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
-        backgroundColor: "#fff",
-    } as ViewStyle,
-    formContainer: {
-        flex: 2,
-        justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor: backgroundColor,
     } as ViewStyle,
     inputStyle: {
         marginRight: 100,
@@ -43,16 +35,14 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     modalContent: {
-        flex: 1,
-        backgroundColor: "white",
+        backgroundColor,
         justifyContent: "center",
         alignItems: "stretch",
-        borderRadius: 4,
-        borderColor: "rgba(0, 0, 0, 0.1)",
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingLeft: 10,
+        paddingRight: 10
     },
-    modalButtonStyle: {
-        // flex: 1
-    }
 });
 
 export default class Component extends React.Component<Props, State> {
@@ -62,7 +52,7 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async deleteTask() {
-        taskStore.deleteTask(this.props.taskUid);
+        taskStore.deleteTask(this.props.task.uid);
         Actions.pop();
     }
 
@@ -75,18 +65,41 @@ export default class Component extends React.Component<Props, State> {
                     onBackButtonPress={() => this.props.hideVisibility()}
                 >
                     <View style={styles.modalContent}>
-                        <Text>Are you sure you want delete this task?</Text>
+                        <View style={{
+                            marginTop: 15,
+                            marginLeft: 15,
+                            marginBottom: 15,
+                            marginRight: 15,
+                            flexDirection: "row",
+                            flexWrap: "wrap"
+                        }}>
+                            <Text
+                                style={{ padding: 5, color: inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
+                            >
+                                Delete task
+                            </Text>
+                            <Text
+                                style={{ color: textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
+                            >
+                                {this.props.task.name}
+                            </Text>
+                            <Text
+                                style={{ padding: 5, color: inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
+                            >
+                                ?
+                            </Text>
+                        </View>
+
                         <Button
-                            inputStyle={styles.modalButtonStyle}
                             raised
-                            buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
+                            buttonStyle={{ backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
-                            title={"Yes"}
+                            title={"DELETE"}
                             onPress={() => { this.deleteTask(); }}
                         />
                     </View>
                 </Modal>
-            
+
             </View>
         );
     }

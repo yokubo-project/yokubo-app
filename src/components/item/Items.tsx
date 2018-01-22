@@ -120,7 +120,7 @@ export default class Component extends React.Component<Props, State> {
                 </View>
 
                 <DeleteTask
-                    taskUid={this.props.task.uid}
+                    task={this.props.task}
                     visible={this.state.showDeleteModal}
                     hideVisibility={() => this.hideVisibility()}
                 />
