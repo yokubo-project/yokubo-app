@@ -75,22 +75,22 @@ export default class Component extends React.Component<Props, State> {
     renderEntryStatictics(entries) {
 
         const metrices = [];
-        let duration: any = null;
+        let timespan: any = null;
         entries.forEach(entry => {
 
             // Calculate duration
             const start = moment.utc(entry.period[0]);
             const end = moment.utc(entry.period[1]);
             const ms = end.diff(start);
-            const days = moment.duration(ms);
-            const time = Math.floor(days.asHours()) + moment.utc(ms).format(":mm:ss");
+            const duration = moment.duration(ms);
+            const time = Math.floor(duration.asHours()) + moment.utc(ms).format(":mm:ss");
 
-            if (duration !== null) {
-                duration.totalValue += ms;
-                duration.minValue = ms < duration.minValue ? ms : duration.minValue;
-                duration.maxValue = ms > duration.maxValue ? ms : duration.maxValue;
+            if (timespan !== null) {
+                timespan.totalValue += ms;
+                timespan.minValue = ms < timespan.minValue ? ms : timespan.minValue;
+                timespan.maxValue = ms > timespan.maxValue ? ms : timespan.maxValue;
             } else {
-                duration = {
+                timespan = {
                     metricKey: "duration",
                     metricName: "Duration",
                     totalValue: ms,
@@ -133,11 +133,11 @@ export default class Component extends React.Component<Props, State> {
 
         renderedMetrices.unshift(
             <View key={"duration"}>
-                <Text style={styles.metricTextHeader}>{duration.metricName}</Text>
-                <Text style={styles.metricText}>Total: {Math.floor(moment.duration(duration.totalValue).asHours()) + moment.utc(duration.totalValue).format(":mm:ss")}</Text>
-                <Text style={styles.metricText}>Average: {Math.floor(moment.duration(duration.totalValue / entries.length).asHours()) + moment.utc(duration.totalValue / entries.length).format(":mm:ss")}</Text>
-                <Text style={styles.metricText}>Min:  {Math.floor(moment.duration(duration.minValue).asHours()) + moment.utc(duration.minValue).format(":mm:ss")}</Text>
-                <Text style={styles.metricText}>Max:  {Math.floor(moment.duration(duration.maxValue).asHours()) + moment.utc(duration.maxValue).format(":mm:ss")}</Text>
+                <Text style={styles.metricTextHeader}>{timespan.metricName}</Text>
+                <Text style={styles.metricText}>Total: {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}</Text>
+                <Text style={styles.metricText}>Average: {Math.floor(moment.duration(timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length).format("[h] mm[m] ss[s]")}</Text>
+                <Text style={styles.metricText}>Min:  {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}</Text>
+                <Text style={styles.metricText}>Max:  {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}</Text>
             </View>);
 
         renderedMetrices.unshift(

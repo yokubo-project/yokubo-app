@@ -76,6 +76,10 @@ export default class Component extends React.Component<Props, State> {
         };
     }
 
+    renderDate(duration) {
+        return Math.floor(moment.duration(duration).asHours()) + moment.utc(duration).format("[h] mm[m] ss[s]");
+    }
+
     componentWillReceiveProps(nextProps: Props) {
         this.setState({
             task: nextProps.task
@@ -95,19 +99,17 @@ export default class Component extends React.Component<Props, State> {
             );
         });
 
-        const startDate = entry.period[0];
-        const endDate = entry.period[1];
-        const diff = moment.duration(moment(endDate).diff(moment(startDate)));
-        const diffHours = `${(diff.hours().toString() === "1") ? "Stunde" : "Stunden"}`;
-        const diffMinutes = `${(diff.minutes().toString() === "1") ? "Minute" : "Minuten"}`;
-        const diffSeconds = `${(diff.seconds().toString() === "1") ? "Sekunde" : "Sekunden"}`;
-        const diffFormatted = moment.utc(diff.asMilliseconds()).format(`H [${diffHours}] m [${diffMinutes}] s [${diffSeconds}]`);
+        const start = moment.utc(entry.period[0]);
+        const end = moment.utc(entry.period[1]);
+        const ms = end.diff(start);
+        const duration = moment.duration(ms);
+        const time = Math.floor(duration.asHours()) + moment.utc(ms).format("[h] mm[m] ss[s]");
 
         return (
             <View>
                 <Text style={styles.listText}>Datum: {moment(entry.createdAt).format("DD.MM.YYYY")}</Text>
                 {metrices}
-                <Text style={styles.listText}>Duration: {diffFormatted}</Text>
+                <Text style={styles.listText}>Duration: {time}</Text>
             </View>
         );
     }
