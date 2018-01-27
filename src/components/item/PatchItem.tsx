@@ -8,7 +8,10 @@ import DatePicker from "react-native-datepicker";
 import taskStore from "../../state/taskStore";
 import { IItem } from "../../state/taskStore";
 
-const primaryColor1 = "green";
+const backgroundColor = "#333333";
+const textColor = "#00F2D2";
+const errorTextColor = "#00F2D2";
+const inputTextColor = "#DDD";
 
 interface State {
     name: string;
@@ -26,21 +29,36 @@ interface Props {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: backgroundColor,
     } as ViewStyle,
     headerContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor
     } as ViewStyle,
     formContainer: {
         flex: 2,
         justifyContent: "space-around",
-        backgroundColor: "#fff",
+        backgroundColor
     } as ViewStyle,
+    metricInputStyle: {
+        color: inputTextColor,
+        fontSize: 20,
+        width: "100%", // combining width: 100% and minWidth: 50% results in FormInput taking up 50% of screen on vertical axis
+        minWidth: "50%",
+    },
     inputStyle: {
-        color: "black",
-        fontSize: 20
+        color: inputTextColor,
+        fontSize: 20,
+        width: "100%", // combining width: 100% and minWidth: 50% results in FormInput taking up 50% of screen on vertical axis
+        minWidth: "50%",
+    },
+    unitStyle: {
+        textAlign: "left",
+        color: inputTextColor,
+        fontSize: 20,
+        marginLeft: 0,
+        paddingTop: 12,
     }
 });
 
@@ -121,17 +139,16 @@ export default class Component extends React.Component<Props, State> {
             <View>
                 {metrices.map(metric => {
                     return (
-                        <View key={metric.uid}>
-                            <Text>Metric is {metric.metric.name}</Text>
-                            <Text>Unit is {metric.metric.unit}</Text>
+                        <View key={metric.uid} style={{ flexDirection: "row" }}>
                             <FormInput
-                                inputStyle={styles.inputStyle}
+                                inputStyle={styles.metricInputStyle}
                                 defaultValue={metric.quantity.toString()}
                                 keyboardType="numeric"
                                 onChangeText={(e) => this.passMetricToState(metric.uid, e)}
-                                underlineColorAndroid={primaryColor1}
-                                selectionColor="black" // cursor color
+                                underlineColorAndroid={textColor}
+                                selectionColor={inputTextColor} // cursor color
                             />
+                            <Text style={styles.unitStyle}>{metric.metric.unit}</Text>
                         </View>
                     );
                 })}
@@ -146,7 +163,7 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={primaryColor1}
+                        backgroundColor={backgroundColor}
                         leftComponent={{
                             icon: "arrow-back",
                             color: "#fff",
@@ -159,23 +176,19 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { this.handleOnDeleteItemClick(this.props.item.uid); }
                         }}
-                        centerComponent={{ text: "Update Item", style: { color: "#fff", fontSize: 20 } }}
-                        statusBarProps={{ barStyle: "dark-content", translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 0, height: 75 }}
+                        centerComponent={{ text: "Update Item", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        statusBarProps={{ translucent: true }}
+                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-
-                <Text>
-                    {`Editing item for, ${this.props.taskUid}`}
-                </Text>
 
                 {/* Form input for name */}
                 <FormInput
                     inputStyle={styles.inputStyle}
                     defaultValue={this.state.name}
                     onChangeText={(e) => this.parseName(e)}
-                    underlineColorAndroid={primaryColor1}
-                    selectionColor="black" // cursor color
+                    underlineColorAndroid={textColor}
+                    selectionColor={inputTextColor} // cursor color
                 />
                 {this.showNameError()}
 
@@ -200,7 +213,8 @@ export default class Component extends React.Component<Props, State> {
                             fontSize: 20,
                             position: "absolute",
                             left: 0,
-                            marginLeft: 0
+                            marginLeft: 0,
+                            color: inputTextColor
                         },
                         placeholderText: {
                             fontSize: 20,
@@ -213,7 +227,7 @@ export default class Component extends React.Component<Props, State> {
                 {/* Line: Because datepicker line is not customizable we draw a line manually */}
                 <View
                     style={{
-                        borderBottomColor: primaryColor1,
+                        borderBottomColor: textColor,
                         marginLeft: 20,
                         marginRight: 20,
                         borderBottomWidth: 1,
@@ -241,7 +255,8 @@ export default class Component extends React.Component<Props, State> {
                             fontSize: 20,
                             position: "absolute",
                             left: 0,
-                            marginLeft: 0
+                            marginLeft: 0,
+                            color: inputTextColor
                         },
                         placeholderText: {
                             fontSize: 20,
@@ -254,7 +269,7 @@ export default class Component extends React.Component<Props, State> {
                 {/* Line: Because datepicker line is not customizable we draw a line manually */}
                 <View
                     style={{
-                        borderBottomColor: primaryColor1,
+                        borderBottomColor: textColor,
                         marginLeft: 20,
                         marginRight: 20,
                         borderBottomWidth: 1,
@@ -266,9 +281,9 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.formContainer}>
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor: primaryColor1, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"UPDATE"}
+                        title={"UPDATE ITEM"}
                         onPress={() => { this.patchItem(); }}
                     />
                 </View>
