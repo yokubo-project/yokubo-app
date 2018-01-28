@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     listContainer: {
         flexGrow: 7,
         backgroundColor,
-    } as ViewStyle,    
+    } as ViewStyle,
     formContainer: {
         flex: 2,
         flexDirection: "row",
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: "white",
         bottom: 10,
+        width: "100%"
     } as TextStyle,
     formContainerTouchableElement: {
         margin: 10,
@@ -111,19 +112,19 @@ export default class Component extends React.Component<null, State> {
                             activeOpacity={0.8}
                         >
                             <Image
-                                key={`column${columnIndex}`}
+                                key={`image${columnIndex}`}
                                 source={{ uri: task.image.file }}
                                 style={styles.formContainerImageElement}
                                 // @ts-ignore
                                 borderRadius={10}
                             >
-                                <Text
-                                    key={`column${columnIndex}`}
-                                    style={styles.formContainerTextElement}
-                                >
-                                    {task.name}
-                                </Text>
                             </Image>
+                            <Text
+                                key={`text${columnIndex}`}
+                                style={styles.formContainerTextElement}
+                            >
+                                {task.name}
+                            </Text>
                         </TouchableOpacity>
                     );
 
