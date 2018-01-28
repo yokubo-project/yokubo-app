@@ -156,6 +156,7 @@ export default class Component extends React.Component<null, State> {
         let uploadResponse, uploadResult;
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
         });
 
