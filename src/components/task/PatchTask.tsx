@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, ViewStyle, Text, Image, TouchableOpacity } from "react-native";
-import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
+import { Header, FormInput, FormValidationMessage, Button, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 import { ImagePicker } from "expo";
@@ -231,6 +231,17 @@ export default class Component extends React.Component<Props, State> {
                             onPress: () => { Actions.pop(); }
                         }}
                         centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        rightComponent={
+                            <View style={{ flex: 1, flexDirection: "row", marginTop: 23 }}>
+                                <Icon
+                                    name="delete"
+                                    color="#fff"
+                                    underlayColor="transparent"
+                                    style={{ marginRight: 12 }}
+                                    onPress={() => { this.showVisibility(); }}
+                                />
+                            </View>
+                        }                        
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />

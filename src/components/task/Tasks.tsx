@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { StyleSheet, Text, TextStyle, Image, View, ScrollView, ViewStyle, TouchableOpacity } from "react-native";
 import * as _ from "lodash";
-import { Header } from "react-native-elements";
+import { Header, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
 import authStore from "../../state/authStore";
@@ -38,13 +38,17 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: backgroundColor,
     } as ViewStyle,
-    formContainerTextElement: {
+    formContainerXElement: {
+        flexDirection: "row",
+        justifyContent: "center",
         position: "absolute",
+        bottom: 10,
+        width: "100%"
+    },
+    formContainerTextElement: {
         fontSize: 20,
         textAlign: "center",
         color: "white",
-        bottom: 10,
-        width: "100%"
     } as TextStyle,
     formContainerTouchableElement: {
         margin: 10,
@@ -104,9 +108,10 @@ export default class Component extends React.Component<null, State> {
                         <TouchableOpacity
                             key={`column${columnIndex}`}
                             onPress={() => {
-                                Actions.items({
-                                    task,
-                                });
+                                Actions.items({ task });
+                            }}
+                            onLongPress={() => {
+                                Actions.patchTask({ task });
                             }}
                             style={styles.formContainerTouchableElement}
                             activeOpacity={0.8}
@@ -119,12 +124,14 @@ export default class Component extends React.Component<null, State> {
                                 borderRadius={10}
                             >
                             </Image>
-                            <Text
-                                key={`text${columnIndex}`}
-                                style={styles.formContainerTextElement}
-                            >
-                                {task.name}
-                            </Text>
+                            <View style={styles.formContainerXElement}>
+                                <Text
+                                    key={`text${columnIndex}`}
+                                    style={styles.formContainerTextElement}
+                                >
+                                    {task.name}
+                                </Text>
+                            </View>
                         </TouchableOpacity>
                     );
 
@@ -164,13 +171,19 @@ export default class Component extends React.Component<null, State> {
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
                         backgroundColor={backgroundColor}
-                        rightComponent={{
-                            icon: "rowing",
+                        leftComponent={{
+                            icon: "account-circle",
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { this.processSignOut(); }
                         }}
                         centerComponent={{ text: "Tasks", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        rightComponent={{
+                            icon: "add",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { this.handleOnCreateTaskClick(); }
+                        }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -179,10 +192,6 @@ export default class Component extends React.Component<null, State> {
                 <ScrollView style={styles.listContainer}>
                     {tasks}
                 </ScrollView>
-
-                <AddIcon
-                    onPress={() => this.handleOnCreateTaskClick()}
-                />
 
             </View>
         );
