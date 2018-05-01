@@ -76,7 +76,7 @@ export interface IItem {
     createdAt: string;
 }
 
-export type TaskError = "Unknown";
+export type TaskError = "Unknown" | "InvalidTimePeriod";
 
 class Tasks {
 
@@ -85,15 +85,10 @@ class Tasks {
     @observable isLoading: boolean = false;
 
     @action fetchTasks = async () => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
-        const target = TaskAPI.getTasks(authStore.credentials.accessToken);
 
+        const target = TaskAPI.getTasks(authStore.credentials.accessToken);
         return APIClient.requestType(target)
             .then(tasks => {
                 // Initialize tasks
@@ -103,19 +98,13 @@ class Tasks {
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
     @action createTask = async (task: IPostTask) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
-        const target = TaskAPI.postTask(authStore.credentials.accessToken, task);
 
+        const target = TaskAPI.postTask(authStore.credentials.accessToken, task);
         return APIClient.requestType(target)
             .then(task => {
                 // Attach new task to tasks
@@ -125,19 +114,13 @@ class Tasks {
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
     @action patchTask = async (taskUid: string, task: IPatchTask) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
-        const target = TaskAPI.patchTask(authStore.credentials.accessToken, taskUid, task);
 
+        const target = TaskAPI.patchTask(authStore.credentials.accessToken, taskUid, task);
         return APIClient.requestType(target)
             .then(response => {
                 // Replace old item with patched item
@@ -148,19 +131,13 @@ class Tasks {
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
     @action deleteTask = async (taskUid: string) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
-        const target = TaskAPI.deleteTask(authStore.credentials.accessToken, taskUid);
 
+        const target = TaskAPI.deleteTask(authStore.credentials.accessToken, taskUid);
         try {
             const response = await APIClient.requestType(target);
             // Delete old task from tasks
@@ -170,19 +147,13 @@ class Tasks {
         } catch (error) {
             this.wipe("Unknown");
         }
-
     }
 
     @action createItem = async (taskUid: string, item: IPostItem) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
-        const target = TaskAPI.postItem(authStore.credentials.accessToken, taskUid, item);
 
+        const target = TaskAPI.postItem(authStore.credentials.accessToken, taskUid, item);
         return APIClient.requestType(target)
             .then(item => {
                 // Attach new item to task
@@ -194,25 +165,18 @@ class Tasks {
                         task.items = localTask.items;
                     }
                 });
-
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
     @action patchItem = async (taskUid: string, itemUid: string, item: IPatchItem) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
-        const target = TaskAPI.patchItem(authStore.credentials.accessToken, taskUid, itemUid, item);
 
+        const target = TaskAPI.patchItem(authStore.credentials.accessToken, taskUid, itemUid, item);
         return APIClient.requestType(target)
             .then(item => {
                 // Replace old item with patched item
@@ -227,19 +191,13 @@ class Tasks {
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
     @action deleteItem = async (taskUid: string, itemUid: string) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
-        const target = TaskAPI.deleteItem(authStore.credentials.accessToken, taskUid, itemUid);
 
+        const target = TaskAPI.deleteItem(authStore.credentials.accessToken, taskUid, itemUid);
         return APIClient.requestType(target)
             .then(item => {
                 // Remove item from task
@@ -251,7 +209,6 @@ class Tasks {
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
     @action dismissError() {
@@ -266,12 +223,7 @@ class Tasks {
 }
 
 let tasks: Tasks;
-
 tasks = new Tasks();
-
-// development, make auth available on window object...
-(window as any).tasks = tasks;
 
 // singleton, exposes an instance by default
 export default tasks;
-

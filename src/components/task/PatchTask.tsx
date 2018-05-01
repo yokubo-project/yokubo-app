@@ -5,9 +5,11 @@ import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 import { ImagePicker } from "expo";
 
+import * as Config from "../../config";
 import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 import { IFullTask } from "../../state/taskStore";
+import DeleteTask from "../task/DeleteTask";
 
 const backgroundColor = "#333333";
 const textColor = "#00F2D2";
@@ -27,6 +29,7 @@ interface State {
     }>;
     isInputFieldsModalVisible: boolean;
     image: any;
+    showDeleteModal: boolean;
 }
 
 interface Props {
@@ -94,7 +97,8 @@ export default class Component extends React.Component<Props, State> {
             nameError: null,
             imageUidError: null,
             isInputFieldsModalVisible: false,
-            image: this.props.task.image.file
+            image: this.props.task.image.file,
+            showDeleteModal: false
         };
     }
 
@@ -187,8 +191,7 @@ export default class Component extends React.Component<Props, State> {
     }
 
     uploadImageAsync = async (uri) => {
-        let apiUrl = "http://139.59.134.125:8080/api/v1/images";
-
+        let apiUrl = `${Config.BASE_URL}/api/v1/images`;
         let uriParts = uri.split(".");
         let fileType = uriParts[uriParts.length - 1];
 
@@ -213,12 +216,30 @@ export default class Component extends React.Component<Props, State> {
         return fetch(apiUrl, options);
     }
 
+    hideVisibility() {
+        this.setState({
+            showDeleteModal: false
+        });
+    }
+
+    showVisibility() {
+        this.setState({
+            showDeleteModal: true
+        });
+    }
+
     render() {
 
         const headerText = this.props.task.name.length > 15 ? `Update ${this.props.task.name.slice(0, 15)}...` : `Update ${this.props.task.name}`;
 
         return (
             <View style={styles.mainContainer}>
+
+                <DeleteTask
+                    task={this.props.task}
+                    visible={this.state.showDeleteModal}
+                    hideVisibility={() => this.hideVisibility()}
+                />
 
                 <View style={styles.headerContainer}>
                     <Header
@@ -241,7 +262,7 @@ export default class Component extends React.Component<Props, State> {
                                     onPress={() => { this.showVisibility(); }}
                                 />
                             </View>
-                        }                        
+                        }
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />

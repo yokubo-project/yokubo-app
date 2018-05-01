@@ -89,7 +89,6 @@ export default class Component extends React.Component<null, State> {
     }
 
     renderTasks(tasks) {
-
         let taskIndex = 0;
         const columnCount = 2;
         const rowCount = _.ceil(tasks.length / columnCount);
@@ -101,7 +100,6 @@ export default class Component extends React.Component<null, State> {
             _.range(columnCount).forEach((columnIndex) => {
 
                 if (taskIndex < tasks.length) {
-
                     const task = tasks[taskIndex];
 
                     columns.push(
@@ -134,9 +132,7 @@ export default class Component extends React.Component<null, State> {
                             </View>
                         </TouchableOpacity>
                     );
-
                 } else {
-
                     columns.push(
                         <Text
                             key={`column${columnIndex}`}
@@ -146,27 +142,21 @@ export default class Component extends React.Component<null, State> {
                     );
                 }
                 ++taskIndex;
-
             });
             rows.push(
                 <View key={`row${rowIndex}`} style={styles.formContainer}>
                     {columns}
                 </View>
             );
-
         });
 
         return rows;
-
     }
 
     render() {
-
         const tasks = this.renderTasks(taskStore.tasks);
-
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
@@ -188,11 +178,9 @@ export default class Component extends React.Component<null, State> {
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-
                 <ScrollView style={styles.listContainer}>
                     {tasks}
                 </ScrollView>
-
             </View>
         );
     }

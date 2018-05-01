@@ -5,6 +5,7 @@ import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 import { ImagePicker, FileSystem } from "expo";
 
+import * as Config from "../../config";
 import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 
@@ -180,8 +181,7 @@ export default class Component extends React.Component<null, State> {
     }
 
     uploadImageAsync = async (uri) => {
-        let apiUrl = "http://139.59.134.125:8080/api/v1/images";
-
+        let apiUrl = `${Config.BASE_URL}/api/v1/images`;
         let uriParts = uri.split(".");
         let fileType = uriParts[uriParts.length - 1];
 
@@ -256,23 +256,23 @@ export default class Component extends React.Component<null, State> {
                     marginTop: 15,
                     marginLeft: 15
                 }}>
-                    <Text style={{color: inputTextColor, fontSize: 20}}>Metrics:</Text>
+                    <Text style={{ color: inputTextColor, fontSize: 20 }}>Metrics:</Text>
                     {
                         !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
-                        color: inputTextColor,
-                        fontSize: 20,
-                    }}>
+                            color: inputTextColor,
+                            fontSize: 20,
+                        }}>
                             You haven't added any metrics yet.
                         </Text>
                     }
-                        {this.state.metrics.map(field => 
-                            <View key={field.name} style={{ flexDirection: "row", paddingTop: 15}}>
-                                <Text style={{color: textColor, fontSize: 20, paddingRight: 5}}>{"\u2022"}</Text>
-                                <Text style={{color: inputTextColor, fontSize: 20, paddingRight: 5}}>{field.name}: {field.unit}</Text>
-                            </View>
-                        )}
+                    {this.state.metrics.map(field =>
+                        <View key={field.name} style={{ flexDirection: "row", paddingTop: 15 }}>
+                            <Text style={{ color: textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
+                            <Text style={{ color: inputTextColor, fontSize: 20, paddingRight: 5 }}>{field.name}: {field.unit}</Text>
+                        </View>
+                    )}
                     <Text
-                        style={{color: textColor, fontSize: 20, textAlign: "center", paddingTop: 10}}
+                        style={{ color: textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                         onPress={this._showInputFieldsModal}
                     >
                         Add metric

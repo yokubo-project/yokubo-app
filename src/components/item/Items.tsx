@@ -9,7 +9,6 @@ import ItemsList from "./ItemsList";
 import ItemsStats from "./ItemsStats";
 import ItemsChart from "./ItemsChart";
 import AddIcon from "../elements/AddIcon";
-import DeleteTask from "../task/DeleteTask";
 
 import { IFullTask } from "../../state/taskStore";
 
@@ -20,7 +19,6 @@ const inputTextColor = "#DDD";
 
 interface State {
     selectedTab: string;
-    showDeleteModal: boolean;
 }
 
 interface Props {
@@ -51,7 +49,6 @@ export default class Component extends React.Component<Props, State> {
         super(props);
         this.state = {
             selectedTab: "itemList",
-            showDeleteModal: false
         };
     }
 
@@ -62,22 +59,6 @@ export default class Component extends React.Component<Props, State> {
     handleOnAddIconClick() {
         Actions.createItem({
             task: this.props.task,
-        });
-    }
-
-    handleOnUpdateTaskClick(task) {
-        Actions.patchTask({ task });
-    }
-
-    hideVisibility() {
-        this.setState({
-            showDeleteModal: false
-        });
-    }
-
-    showVisibility() {
-        this.setState({
-            showDeleteModal: true
         });
     }
 
@@ -98,34 +79,11 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        rightComponent={
-                            <View style={{ flex: 1, flexDirection: "row", marginTop: 23 }}>
-                                <Icon
-                                    name="delete"
-                                    color="#fff"
-                                    underlayColor="transparent"
-                                    style={{ marginRight: 12 }}
-                                    onPress={() => { this.showVisibility(); }}
-                                />
-                                <Icon
-                                    name="edit"
-                                    color="#fff"
-                                    underlayColor="transparent"
-                                    onPress={() => { this.handleOnUpdateTaskClick(this.props.task); }}
-                                />
-                            </View>
-                        }
                         centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-
-                <DeleteTask
-                    task={this.props.task}
-                    visible={this.state.showDeleteModal}
-                    hideVisibility={() => this.hideVisibility()}
-                />
 
                 <View style={styles.formContainer}>
                     <TabNavigator>
