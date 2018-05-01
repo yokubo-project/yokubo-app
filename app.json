@@ -1,23 +1,23 @@
 {
   "expo": {
-    "name": "Bode",
-    "icon": "./assets/logo_bode_twolines.png",
+    "name": "Yokubo",
+    "icon": "./assets/yokubo_app_logo.png",
     "version": "1.0.1",
-    "slug": "bode",
+    "slug": "yokubo",
     "sdkVersion": "24.0.0",
     "splash": {
-      "image": "./assets/logo_bode_oneline.png",
+      "image": "./assets/logo_yokubo.png",
       "backgroundColor": "#333333",
       "resizeMode": "contain"
-    },        
+    },
     "packagerOpts": {
       "config": "rn-cli.config.js"
     },
     "ios": {
-      "bundleIdentifier": "at.hoeselm.bode"
+      "bundleIdentifier": "org.yokubo.app"
     },
     "android": {
-      "package": "at.hoeselm.bode"
+      "package": "org.yokubo.app"
     }
   }
 }

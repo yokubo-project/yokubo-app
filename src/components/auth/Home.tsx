@@ -8,7 +8,7 @@ const textColor = "#00F2D2";
 const errorTextColor = "#00F2D2";
 const inputTextColor = "#DDD";
 
-const LOGO = require("../../../assets/logo_bode_oneline_cropped.gif");
+const LOGO = require("../../../assets/yokubo_logo.png");
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -52,7 +52,7 @@ export default class Component extends React.Component<null, null> {
                     <Text
                         style={styles.quote}
                     >
-                        Gives you the support to reach your goals.
+                        It's the challenge that makes the greatness.
                     </Text>
                 </View>
                 <View style={styles.buttonContainer}>
