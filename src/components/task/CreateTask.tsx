@@ -152,16 +152,12 @@ export default class Component extends React.Component<null, State> {
     }
 
     _pickImage = async () => {
-
-        console.log("picking image ...");
         let uploadResponse, uploadResult;
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
         });
-
-        console.log("picker result is: ", JSON.stringify(pickerResult));
 
         try {
             if (!pickerResult.cancelled) {
@@ -177,7 +173,6 @@ export default class Component extends React.Component<null, State> {
         }
 
         return uploadResult;
-
     }
 
     uploadImageAsync = async (uri) => {
@@ -209,7 +204,6 @@ export default class Component extends React.Component<null, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
@@ -225,7 +219,6 @@ export default class Component extends React.Component<null, State> {
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-
                 <View
                     style={styles.imageContainer}
                 >
@@ -242,7 +235,6 @@ export default class Component extends React.Component<null, State> {
                         />
                     </TouchableOpacity>
                 </View>
-
                 <FormInput
                     inputStyle={styles.inputStyle}
                     placeholder="Name"
@@ -308,7 +300,6 @@ export default class Component extends React.Component<null, State> {
                         />
                     </View>
                 </Modal>
-
                 <View style={styles.formContainer}>
                     <Button
                         raised
@@ -318,7 +309,6 @@ export default class Component extends React.Component<null, State> {
                         onPress={() => { this.createTask(); }}
                     />
                 </View>
-
             </View>
         );
     }

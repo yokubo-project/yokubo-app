@@ -150,7 +150,6 @@ export default class Component extends React.Component<Props, State> {
                 </Text>
             );
         });
-
         const renderedMetricTags = renderedMetricTagsAsc.concat(renderedMetricTagsDesc);
 
         return renderedMetricTags;
@@ -166,7 +165,6 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.formContainer}>
                     <View style={styles.tagContainer}>
                         <Text
@@ -196,7 +194,6 @@ export default class Component extends React.Component<Props, State> {
                         {this.renderMetricTags(this.state.task.metrics)}
                     </View>
                 </View>
-
                 <ScrollView style={styles.listContainer}>
                     <List containerStyle={{ marginBottom: 20 }}>
                         <FlatList
@@ -215,7 +212,6 @@ export default class Component extends React.Component<Props, State> {
                         />
                     </List>
                 </ScrollView>
-
             </View>
         );
     }

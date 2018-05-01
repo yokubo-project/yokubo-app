@@ -77,7 +77,6 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async createItem() {
-
         const mymetrics = this.state.metrics.map(metric => {
             return {
                 TaskMetricUid: metric.uid,
@@ -91,7 +90,6 @@ export default class Component extends React.Component<Props, State> {
             period: [this.state.fromDate, this.state.toDate],
             metrics: mymetrics
         });
-
         Actions.pop();
     }
 
@@ -154,7 +152,6 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
@@ -279,7 +276,6 @@ export default class Component extends React.Component<Props, State> {
                         onPress={() => { this.createItem(); }}
                     />
                 </View>
-
             </View>
         );
     }

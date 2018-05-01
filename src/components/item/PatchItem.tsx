@@ -78,7 +78,6 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async patchItem() {
-
         const mymetrics = this.state.metrics.map(metric => {
             return {
                 uid: metric.uid,
@@ -159,7 +158,6 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
@@ -287,7 +285,6 @@ export default class Component extends React.Component<Props, State> {
                         onPress={() => { this.patchItem(); }}
                     />
                 </View>
-
             </View>
         );
     }

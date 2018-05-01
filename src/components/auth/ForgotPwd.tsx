@@ -109,7 +109,6 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
@@ -125,9 +124,7 @@ export default class Component extends React.Component<Props, State> {
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-
                 <View style={styles.formContainer}>
-
                     <FormInput
                         inputStyle={styles.inputStyle}
                         placeholder="Email"
@@ -153,7 +150,6 @@ export default class Component extends React.Component<Props, State> {
                             {this.state.emailHint}
                         </Text>}
                     </View>
-
                     <View style={{ flexDirection: "row", padding: 30, justifyContent: "center" }}>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: inputTextColor }}
@@ -168,7 +164,6 @@ export default class Component extends React.Component<Props, State> {
                         </Text>
                     </View>
                 </View>
-
             </View>
         );
     }

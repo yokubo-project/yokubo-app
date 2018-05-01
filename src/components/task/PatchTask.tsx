@@ -161,16 +161,12 @@ export default class Component extends React.Component<Props, State> {
     }
 
     _pickImage = async () => {
-
-        console.log("picking image ...");
         let uploadResponse, uploadResult;
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
         });
-
-        console.log("picker result is: ", JSON.stringify(pickerResult));
 
         try {
             this.setState({ image: pickerResult.uri });
@@ -229,18 +225,15 @@ export default class Component extends React.Component<Props, State> {
     }
 
     render() {
-
         const headerText = this.props.task.name.length > 15 ? `Update ${this.props.task.name.slice(0, 15)}...` : `Update ${this.props.task.name}`;
 
         return (
             <View style={styles.mainContainer}>
-
                 <DeleteTask
                     task={this.props.task}
                     visible={this.state.showDeleteModal}
                     hideVisibility={() => this.hideVisibility()}
                 />
-
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
@@ -267,7 +260,6 @@ export default class Component extends React.Component<Props, State> {
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-
                 <View
                     style={styles.imageContainer}
                 >
@@ -284,7 +276,6 @@ export default class Component extends React.Component<Props, State> {
                         />
                     </TouchableOpacity>
                 </View>
-
                 <FormInput
                     inputStyle={styles.inputStyle}
                     defaultValue={this.state.name}
@@ -320,7 +311,6 @@ export default class Component extends React.Component<Props, State> {
                         Add metric
                     </Text>
                 </View>
-
                 <Modal
                     isVisible={this.state.isInputFieldsModalVisible}
                     onBackdropPress={this._hideInputFieldsModal}
@@ -350,7 +340,6 @@ export default class Component extends React.Component<Props, State> {
                         />
                     </View>
                 </Modal>
-
                 <View style={styles.formContainer}>
                     <Button
                         raised
@@ -360,7 +349,6 @@ export default class Component extends React.Component<Props, State> {
                         onPress={() => { this.updateTask(); }}
                     />
                 </View>
-
             </View>
         );
     }

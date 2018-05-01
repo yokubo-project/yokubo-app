@@ -28,26 +28,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor,
     } as ViewStyle,
-    // metricTextEven: {
-    //     color: inputTextColor,
-    //     fontSize: 18,
-    //     paddingLeft: 10,
-    //     paddingTop: 5,
-    //     paddingBottom: 5,
-    //     marginLeft: 5,
-    //     marginRight: 5,
-    //     backgroundColor: "#4a4a4a"
-    // } as TextStyle,
-    // metricTextOdd: {
-    //     color: inputTextColor,
-    //     fontSize: 18,
-    //     paddingLeft: 10,
-    //     paddingTop: 5,
-    //     paddingBottom: 5,        
-    //     marginLeft: 5,
-    //     marginRight: 5,
-    //     backgroundColor
-    // } as TextStyle  
     metricTextHeader: {
         color: textColor,
         fontSize: 18,
@@ -73,11 +53,9 @@ export default class Component extends React.Component<Props, State> {
     }
 
     renderEntryStatictics(entries) {
-
         const metrices = [];
         let timespan: any = null;
         entries.forEach(entry => {
-
             // Calculate duration
             const start = moment.utc(entry.period[0]);
             const end = moment.utc(entry.period[1]);

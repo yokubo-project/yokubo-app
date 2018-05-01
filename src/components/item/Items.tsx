@@ -8,8 +8,6 @@ import TabNavigator from "react-native-tab-navigator";
 import ItemsList from "./ItemsList";
 import ItemsStats from "./ItemsStats";
 import ItemsChart from "./ItemsChart";
-import AddIcon from "../elements/AddIcon";
-
 import { IFullTask } from "../../state/taskStore";
 
 const backgroundColor = "#333333";
@@ -63,12 +61,10 @@ export default class Component extends React.Component<Props, State> {
     }
 
     render() {
-
         const headerText = this.props.task.name.length > 20 ? `${this.props.task.name.slice(0, 20)}...` : this.props.task.name;
 
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
@@ -80,11 +76,16 @@ export default class Component extends React.Component<Props, State> {
                             onPress: () => { Actions.pop(); }
                         }}
                         centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        rightComponent={{
+                            icon: "add",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { this.handleOnAddIconClick(); }
+                        }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-
                 <View style={styles.formContainer}>
                     <TabNavigator>
                         <TabNavigator.Item
@@ -125,11 +126,6 @@ export default class Component extends React.Component<Props, State> {
                         </TabNavigator.Item>
                     </TabNavigator>
                 </View>
-
-                <AddIcon
-                    onPress={() => this.handleOnAddIconClick()}
-                />
-
             </View>
         );
     }

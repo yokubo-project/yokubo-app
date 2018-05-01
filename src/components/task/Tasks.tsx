@@ -8,8 +8,6 @@ import { Actions } from "react-native-router-flux";
 import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 
-import AddIcon from "../elements/AddIcon";
-
 const backgroundColor = "#333333";
 const textColor = "#00F2D2";
 const errorTextColor = "#00F2D2";
