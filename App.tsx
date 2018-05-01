@@ -6,9 +6,10 @@ import { Provider as MobxProvider, observer } from "mobx-react";
 import authStore from "./src/state/authStore";
 import taskStore from "./src/state/taskStore";
 
+import Home from "./src/components/auth/Home";
 import SignIn from "./src/components/auth/SignIn";
 import SignUp from "./src/components/auth/SignUp";
-import Home from "./src/components/auth/Home";
+import ForgotPwd from "./src/components/auth/ForgotPwd";
 
 import Tasks from "./src/components/task/Tasks";
 import CreateTask from "./src/components/task/CreateTask";
@@ -78,7 +79,6 @@ class Routes extends React.Component<null, null> {
     }
 
     render() {
-
         if (authStore.isRehydrated === false) {
             return (
                 <Spinner />
@@ -100,6 +100,7 @@ class Routes extends React.Component<null, null> {
                     <Scene key="home" component={Home} title="Home" hideNavBar={true} />
                     <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
                     <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
+                    <Scene key="forgotPwd" component={ForgotPwd} title="Forgot Password" hideNavBar={true} />
                     <Scene key="tasks" component={Tasks} title="Tasks" hideNavBar={true} type="reset" />
                     <Scene key="createTask" component={CreateTask} title="New Task" hideNavBar={true} />
                     <Scene key="patchTask" component={PatchTask} title="Update Task" hideNavBar={true} />

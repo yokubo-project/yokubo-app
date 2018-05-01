@@ -48,22 +48,9 @@ export const AuthAPI = {
             }
         };
     },
-    setForgottenPassword(token: string, password: string): ITypedAPITarget<ICredentials> {
-        return {
-            url: "api/v1/auth/set-forgotten-password",
-            method: "POST",
-            body: {
-                token,
-                password
-            },
-            parse: (json) => {
-                return json as ICredentials;
-            }
-        };
-    },
     forgotPassword(username: string): ITypedAPITarget<string> {
         return {
-            url: "api/v1/auth/forgot-password",
+            url: "api/v1/auth/forgotpwd",
             method: "POST",
             body: {
                 username

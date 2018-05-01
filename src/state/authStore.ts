@@ -32,7 +32,7 @@ export interface IProfile {
     image: IImage | null;
 }
 
-export type AuthError = "PasswordWrong" | "UserAlreadyExists" | "InvalidUsername" | "PasswordWeak" | "UserDisabled" | "UserNotFound" | "Unknown";
+export type AuthError = "InvalidLogin" | "UserAlreadyExists" | "InvalidUsername" | "PasswordWeak" | "UserDisabled" | "Unknown";
 
 class Auth {
 
@@ -46,16 +46,10 @@ class Auth {
     @observable isRehydrated: boolean = false;
 
     @action signInWithPassword = async (username: string, password: string) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
 
         const target = AuthAPI.loginWithPassword(username, password);
-
         return APIClient.requestType(target)
             .then(credentials => {
                 this.error = null;
@@ -65,8 +59,8 @@ class Auth {
                 this.credentials = credentials;
             }).catch(error => {
                 if (error instanceof APIClientStatusCodeError) {
-                    if (error.statusCode === 422) {
-                        this.wipe("PasswordWrong");
+                    if (error.statusCode === 400 && error.response.message === "InvalidLogin") {
+                        this.wipe("InvalidLogin");
                     } else {
                         this.wipe("Unknown");
                     }
@@ -77,21 +71,11 @@ class Auth {
 
     }
 
-    @action signUp = async (
-        username: string,
-        password: string,
-        name: string,
-    ) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+    @action signUp = async (username: string, password: string, name: string) => {
+        if (this.isLoading) { return; }
         this.isLoading = true;
 
         const target = AuthAPI.register(username, password, name);
-
         return APIClient.requestType(target)
             .then(credentials => {
                 this.error = null;
@@ -101,39 +85,9 @@ class Auth {
                 this.credentials = credentials;
             }).catch(error => {
                 if (error instanceof APIClientStatusCodeError) {
-                    if (error.statusCode === 409) {
+                    if (error.statusCode === 400 && error.response.message === "UserAlreadyExists") {
                         this.wipe("UserAlreadyExists");
-                    } else if (error.statusCode === 464) {
-                        this.wipe("PasswordWeak");
-                    } else {
-                        this.wipe("Unknown");
-                    }
-                } else {
-                    this.wipe("Unknown");
-                }
-            });
-    }
-
-    @action setForgottenPassword = async (token: string, password: string) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
-        this.isLoading = true;
-
-        const target = AuthAPI.setForgottenPassword(token, password);
-
-        return APIClient.requestType(target)
-            .then(credentials => {
-                this.error = null;
-                this.isAuthenticated = true;
-                this.isLoading = false;
-                this.credentials = credentials;
-            }).catch(error => {
-                if (error instanceof APIClientStatusCodeError) {
-                    if (error.statusCode === 464) {
+                    } else if (error.statusCode === 400 && error.response.message === "PasswordWeak") {
                         this.wipe("PasswordWeak");
                     } else {
                         this.wipe("Unknown");
@@ -145,16 +99,10 @@ class Auth {
     }
 
     @action sendForgottenPwdMail = async (username: string) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
 
         const target = AuthAPI.forgotPassword(username);
-
         return APIClient.requestType(target)
             .then(credentials => {
                 this.error = null;
@@ -166,16 +114,10 @@ class Auth {
     }
 
     @action patchProfile = async (name: string) => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
 
         const target = AuthAPI.patchProfile(name, this.credentials.accessToken);
-
         return APIClient.requestType(target)
             .then(profile => {
                 this.error = null;
@@ -188,16 +130,10 @@ class Auth {
     }
 
     @action getProfile = async () => {
-
-        if (this.isLoading) {
-            // bailout, noop
-            return;
-        }
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
 
         const target = AuthAPI.getProfile(this.credentials.accessToken);
-
         return APIClient.requestType(target)
             .then(profile => {
                 this.error = null;
@@ -218,11 +154,10 @@ class Auth {
     }
 
     @action tokenExchange = async () => {
-
+        if (this.isLoading) { return; }
         this.isLoading = true;
 
         try {
-
             if (this.credentials === null) {
                 throw new Error(`No valid credentials are available`);
             }
@@ -234,13 +169,11 @@ class Auth {
                     grantType: "refreshToken"
                 })
             });
-
             if (!res.ok) {
                 throw Error(`${res.status}: ${res.statusText}`);
             }
 
             const { accessToken, refreshToken, expiresIn, tokenType } = await res.json();
-
             this.credentials = {
                 accessToken,
                 refreshToken,
@@ -251,7 +184,6 @@ class Auth {
             this.error = null;
             this.isAuthenticated = true;
             this.isLoading = false;
-
         } catch (e) {
             this.wipe("Unknown");
         }
@@ -266,41 +198,26 @@ class Auth {
 
 }
 
-
 let auth: Auth;
+auth = new Auth();
 
 // persist this mobx state through AsyncStorage
 const hydrate = create({
     storage: require("AsyncStorage"),
 });
 
-
-const persistStore = create({
-    storage: require("AsyncStorage")
-});
-
-auth = new Auth();
-
 hydrate("auth", auth).then(() => {
     // trigger token exchange if credentials are available...
     if (auth.credentials !== null) {
-        console.log("hydrate.auth: credentials are available, awaiting new token...");
         auth.tokenExchange().then(() => {
-            console.log("hydrate.auth: received new token!");
             auth.isRehydrated = true;
         }).catch(() => {
-            console.log("hydrate.auth: failed to receive new token!");
             auth.isRehydrated = true;
         });
     } else {
-        console.log("rehydrated, no credentials are available.");
         auth.isRehydrated = true;
     }
 });
-
-
-// development, make auth available on window object...
-(window as any).auth = auth;
 
 // singleton, exposes an instance by default
 export default auth;

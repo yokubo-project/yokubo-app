@@ -93,7 +93,6 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async processSignIn() {
-
         const email = this.state.inputEmail;
         const password = this.state.inputPassword;
 
@@ -115,34 +114,19 @@ export default class Component extends React.Component<Props, State> {
 
         await authStore.signInWithPassword(email, password);
 
-        // TODO: Refactore error handling
         if (authStore.error !== null) {
             switch (authStore.error) {
                 case "UserDisabled":
                     this.setState({
                         inputEmailError: null,
                         inputPasswordError: null,
-                        inputGeneralError: "This user is disabled."
+                        inputGeneralError: "This user is disabled"
                     });
                     break;
-                case "InvalidUsername":
-                    this.setState({
-                        inputEmailError: "Email is invalid.",
-                        inputPasswordError: null,
-                        inputGeneralError: null
-                    });
-                    break;
-                case "UserNotFound":
-                    this.setState({
-                        inputEmailError: "User not found.",
-                        inputPasswordError: null,
-                        inputGeneralError: null
-                    });
-                    break;
-                case "PasswordWrong":
+                case "InvalidLogin":
                     this.setState({
                         inputEmailError: null,
-                        inputPasswordError: "Password is wrong.",
+                        inputPasswordError: "Invalid email or password",
                         inputGeneralError: null
                     });
                     break;
@@ -150,7 +134,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputEmailError: null,
                         inputPasswordError: null,
-                        inputGeneralError: "An unexpected error happened."
+                        inputGeneralError: "An unexpected error happened"
                     });
             }
         } else {
@@ -236,7 +220,7 @@ export default class Component extends React.Component<Props, State> {
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: textColor }}
-                            onPress={() => { console.log("Forgot your pwd was clicked.."); }}
+                            onPress={() => { Actions.forgotPwd(); }}
                         >
                             Help
                         </Text>
