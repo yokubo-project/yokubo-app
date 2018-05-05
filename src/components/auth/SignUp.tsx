@@ -163,7 +163,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputEmailError: null,
-                        inputPasswordError: "Thats a weak password",
+                        inputPasswordError: "Password is to weak",
                         inputGeneralError: null
                     });
                     break;

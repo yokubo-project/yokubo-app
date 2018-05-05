@@ -15,10 +15,16 @@ const underlayColor = "#202020";
 interface State {
     isDeleteUserModalVisible: boolean;
     isProfileModalVisible: boolean;
-    inputPassword: string;
+    isResetPwdModalVisible: boolean;
+    isLogoutModalVisible: boolean;
+    inputDeleteUserPwd: string;
+    inputCurrentPwd: string;
+    inputNewPwd: string;
     inputName: string;
     inputEmail: string;
-    inputPasswordError: string;
+    inputPwdError: string;
+    inputResetPwdNewPwdError: string;
+    inputResetPwdCurrentPwdError: string;
     inputNameError: string;
     inputEmailError: string;
     inputGeneralError: string;
@@ -69,10 +75,16 @@ export default class Component extends React.Component<null, State> {
         this.state = {
             isDeleteUserModalVisible: false,
             isProfileModalVisible: false,
-            inputPassword: "",
+            isResetPwdModalVisible: false,
+            isLogoutModalVisible: false,
+            inputDeleteUserPwd: "",
+            inputCurrentPwd: "",
+            inputNewPwd: "",
             inputName: "",
             inputEmail: "",
-            inputPasswordError: null,
+            inputPwdError: null,
+            inputResetPwdCurrentPwdError: null,
+            inputResetPwdNewPwdError: null,
             inputNameError: null,
             inputEmailError: null,
             inputGeneralError: null
@@ -84,29 +96,30 @@ export default class Component extends React.Component<null, State> {
     }
 
     async signOut() {
+        this._hideLogoutModal();
         await authStore.signOut();
         Actions.home();
     }
 
     async deleteUser() {
-        await authStore.deleteUser(this.state.inputPassword);
+        await authStore.deleteUser(this.state.inputDeleteUserPwd);
         if (authStore.error !== null) {
             switch (authStore.error) {
                 case "PasswordsDontMatch":
                     this.setState({
-                        inputPasswordError: "Wrong password",
+                        inputPwdError: "Wrong password",
                         inputGeneralError: null
                     });
                     break;
                 default:
                     this.setState({
-                        inputPasswordError: null,
+                        inputPwdError: null,
                         inputGeneralError: "An unexpected error happened"
                     });
             }
         } else {
             this.setState({
-                inputPasswordError: null,
+                inputPwdError: null,
                 inputGeneralError: null
             });
             this._hideDeleteUserModal();
@@ -122,7 +135,7 @@ export default class Component extends React.Component<null, State> {
             this.setState({
                 inputNameError: "Name must have at least 3 characters",
                 inputEmailError: null,
-                inputPasswordError: null,
+                inputPwdError: null,
                 inputGeneralError: null
             });
             return;
@@ -130,7 +143,7 @@ export default class Component extends React.Component<null, State> {
             this.setState({
                 inputNameError: null,
                 inputEmailError: "Email must have at least 5 characters",
-                inputPasswordError: null,
+                inputPwdError: null,
                 inputGeneralError: null
             });
             return;
@@ -170,9 +183,55 @@ export default class Component extends React.Component<null, State> {
         }
     }
 
-    showPasswordError() {
-        if (this.state.inputPasswordError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputPasswordError}</FormValidationMessage>;
+    async resetPwd() {
+        const currentPwd = this.state.inputCurrentPwd;
+        const newPwd = this.state.inputNewPwd;
+
+        if (newPwd.length < 6) {
+            this.setState({
+                inputResetPwdNewPwdError: "Password must have at least 6 characters",
+                inputGeneralError: null
+            });
+            return;
+        }
+
+        await authStore.resetPwd(currentPwd, newPwd);
+        if (authStore.error !== null) {
+            switch (authStore.error) {
+                case "PasswordsDontMatch":
+                    this.setState({
+                        inputResetPwdNewPwdError: null,
+                        inputResetPwdCurrentPwdError: "The password entered does not match your curent password",
+                        inputGeneralError: null
+                    });
+                    break;
+                case "PasswordWeak":
+                    this.setState({
+                        inputResetPwdNewPwdError: "New password is to weak",
+                        inputResetPwdCurrentPwdError: null,
+                        inputGeneralError: null
+                    });
+                    break;
+                default:
+                    this.setState({
+                        inputResetPwdNewPwdError: null,
+                        inputResetPwdCurrentPwdError: null,
+                        inputGeneralError: "An unexpected error happened"
+                    });
+            }
+        } else {
+            this.setState({
+                inputResetPwdNewPwdError: null,
+                inputResetPwdCurrentPwdError: null,
+                inputGeneralError: null
+            });
+            this._hideResetPwdModal();
+        }
+    }
+
+    showPwdError() {
+        if (this.state.inputPwdError) {
+            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputPwdError}</FormValidationMessage>;
         }
         return null;
     }
@@ -191,6 +250,20 @@ export default class Component extends React.Component<null, State> {
         return null;
     }
 
+    showResetPwdNewPwdError() {
+        if (this.state.inputResetPwdNewPwdError) {
+            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputResetPwdNewPwdError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showResetPwdCurrentPwdError() {
+        if (this.state.inputResetPwdCurrentPwdError) {
+            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputResetPwdCurrentPwdError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
     showGeneralError() {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputGeneralError}</FormValidationMessage>;
@@ -201,14 +274,24 @@ export default class Component extends React.Component<null, State> {
     _showDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: true });
     _hideDeleteUserModal = () => this.setState({
         isDeleteUserModalVisible: false,
-        inputPasswordError: null
+        inputPwdError: null,
+        inputGeneralError: null
     })
     _showProfileModal = () => this.setState({ isProfileModalVisible: true });
     _hideProfileModal = () => this.setState({
         isProfileModalVisible: false,
         inputNameError: null,
-        inputEmailError: null
+        inputEmailError: null,
+        inputGeneralError: null
     })
+    _showResetPwdModal = () => this.setState({ isResetPwdModalVisible: true });
+    _hideResetPwdModal = () => this.setState({
+        isResetPwdModalVisible: false,
+        inputResetPwdNewPwdError: null,
+        inputGeneralError: null
+    })
+    _showLogoutModal = () => this.setState({ isLogoutModalVisible: true });
+    _hideLogoutModal = () => this.setState({ isLogoutModalVisible: false });
 
     render() {
         if (authStore.profile === null) {
@@ -268,7 +351,7 @@ export default class Component extends React.Component<null, State> {
                             style={styles.listElement}
                             title={"Change Password"}
                             titleStyle={{ color: textColor, fontSize: 18 }}
-                            onPress={() => console.log("asdf")}
+                            onPress={() => this._showResetPwdModal()}
                             hideChevron={true}
                             underlayColor={underlayColor}
                         />
@@ -292,7 +375,7 @@ export default class Component extends React.Component<null, State> {
                             style={styles.listElement}
                             title={"Logout"}
                             titleStyle={{ color: textColor, fontSize: 18 }}
-                            onPress={() => this.signOut()}
+                            onPress={() => this._showLogoutModal()}
                             hideChevron={true}
                             underlayColor={underlayColor}
                         />
@@ -317,12 +400,12 @@ export default class Component extends React.Component<null, State> {
                         <FormInput
                             inputStyle={styles.modalInputStyle}
                             placeholder="Current Password"
-                            onChangeText={(value) => this.setState({ inputPassword: value })}
+                            onChangeText={(value) => this.setState({ inputDeleteUserPwd: value })}
                             underlineColorAndroid={textColor}
                             selectionColor={inputTextColor} // cursor color
                             secureTextEntry={true}
                         />
-                        {this.showPasswordError()}
+                        {this.showPwdError()}
 
                         <Button
                             raised
@@ -372,6 +455,61 @@ export default class Component extends React.Component<null, State> {
                         {this.showGeneralError()}
                     </View>
                 </Modal>
+
+                <Modal
+                    isVisible={this.state.isResetPwdModalVisible}
+                    onBackdropPress={this._hideResetPwdModal}
+                    onBackButtonPress={this._hideResetPwdModal}
+                >
+                    <View style={styles.modalContent}>
+                        <FormInput
+                            inputStyle={styles.modalInputStyle}
+                            placeholder="Current Password"
+                            onChangeText={(value) => this.setState({ inputCurrentPwd: value })}
+                            underlineColorAndroid={textColor}
+                            selectionColor={inputTextColor} // cursor color
+                            secureTextEntry={true}
+                        />
+                        {this.showResetPwdCurrentPwdError()}
+
+                        <FormInput
+                            inputStyle={styles.modalInputStyle}
+                            placeholder="New Password"
+                            onChangeText={(value) => this.setState({ inputNewPwd: value })}
+                            underlineColorAndroid={textColor}
+                            selectionColor={inputTextColor} // cursor color
+                            secureTextEntry={true}
+                        />
+                        {this.showResetPwdNewPwdError()}
+
+                        <Button
+                            raised
+                            buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                            textStyle={{ textAlign: "center", fontSize: 18 }}
+                            title={"Reset Password"}
+                            onPress={() => { this.resetPwd(); }}
+                        />
+                        {this.showGeneralError()}
+                    </View>
+                </Modal>
+
+                <Modal
+                    isVisible={this.state.isLogoutModalVisible}
+                    onBackdropPress={this._hideLogoutModal}
+                    onBackButtonPress={this._hideLogoutModal}
+                >
+                    <View style={styles.modalContent}>
+                        <Text style={{ color: inputTextColor, fontSize: 15, textAlign: "center", marginBottom: 20 }}>Are you sure you want to logut?</Text>
+                        <Button
+                            raised
+                            buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                            textStyle={{ textAlign: "center", fontSize: 18 }}
+                            title={"Yes, logout"}
+                            onPress={() => { this.signOut(); }}
+                        />
+                    </View>
+                </Modal>
+
             </View>
         );
     }

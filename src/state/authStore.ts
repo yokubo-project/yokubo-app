@@ -165,6 +165,31 @@ class Auth {
             });
     }
 
+    @action resetPwd = async (currentPwd: string, newPwd: string) => {
+        if (this.isLoading) { return; }
+        this.isLoading = true;
+
+        const target = AuthAPI.resetPwd(currentPwd, newPwd, this.credentials.accessToken);
+        return APIClient.requestType(target)
+            .then(credentials => {
+                this.error = null;
+                this.isLoading = false;
+                this.credentials = credentials;
+            }).catch(error => {
+                if (error instanceof APIClientStatusCodeError) {
+                    if (error.statusCode === 400 && error.response.message === "PasswordsDontMatch") {
+                        this.setError("PasswordsDontMatch");
+                    } else if (error.statusCode === 400 && error.response.message === "PasswordWeak") {
+                        this.setError("PasswordWeak");
+                    } else {
+                        this.setError("Unknown");
+                    }
+                } else {
+                    this.setError("Unknown");
+                }
+            });
+    }
+
     @action dismissError() {
         this.error = null;
     }

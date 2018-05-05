@@ -103,4 +103,20 @@ export const AuthAPI = {
             }
         };
     },
+    resetPwd(currentPwd: string, newPwd: string, accessToken: string): ITypedAPITarget<ICredentials> {
+        return {
+            url: "api/v1/auth/resetpwd",
+            method: "POST",
+            body: {
+                currentPwd,
+                newPwd
+            },
+            headers: {
+                "Authorization": `Bearer ${accessToken}`,
+            },
+            parse: (json) => {
+                return json as ICredentials;
+            }
+        };
+    },
 };
