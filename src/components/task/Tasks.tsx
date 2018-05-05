@@ -77,11 +77,6 @@ export default class Component extends React.Component<null, State> {
         taskStore.fetchTasks();
     }
 
-    async processSignOut() {
-        authStore.signOut();
-        Actions.home();
-    }
-
     handleOnCreateTaskClick() {
         Actions.createTask();
     }
@@ -163,7 +158,7 @@ export default class Component extends React.Component<null, State> {
                             icon: "account-circle",
                             color: "#fff",
                             underlayColor: "transparent",
-                            onPress: () => { this.processSignOut(); }
+                            onPress: () => { Actions.profile(); }
                         }}
                         centerComponent={{ text: "Tasks", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         rightComponent={{

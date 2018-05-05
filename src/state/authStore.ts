@@ -6,6 +6,7 @@ import APIClient from "../network/APIClient";
 import { APIClientStatusCodeError } from "network-stapler";
 
 import * as config from "../config";
+import taskStore from "./taskStore";
 
 export interface ICredentials {
     accessToken: string;
@@ -27,18 +28,17 @@ export interface IImage {
 
 export interface IProfile {
     uid: string;
-    scope: string[];
     name: string;
-    image: IImage | null;
+    username: string;
 }
 
-export type AuthError = "InvalidLogin" | "UserAlreadyExists" | "InvalidUsername" | "PasswordWeak" | "UserDisabled" | "Unknown";
+export type AuthError = "InvalidLogin" | "UserAlreadyExists" | "InvalidUsername" | "PasswordWeak" | "PasswordsDontMatch" | "UserDisabled" | "Unknown";
 
 class Auth {
 
     @persist("object") @observable credentials: ICredentials = null;
     @persist @observable username: string = "";
-    @persist("object") @observable userProfile: IProfile = null;
+    @persist("object") @observable profile: IProfile = null;
     @persist("object") @observable passwordResetToken: IPasswordResetToken = null;
     @observable error: AuthError = null;
     @observable isAuthenticated: boolean = false;
@@ -98,6 +98,29 @@ class Auth {
             });
     }
 
+    @action deleteUser = async (currentPwd: string) => {
+        if (this.isLoading) { return; }
+        this.isLoading = true;
+
+        const target = AuthAPI.deleteUser(currentPwd, this.credentials.accessToken);
+        return APIClient.requestType(target)
+            .then(profile => {
+                this.isLoading = false;
+                this.wipe(null);
+                taskStore.tasks = observable.map();
+            }).catch(error => {
+                if (error instanceof APIClientStatusCodeError) {
+                    if (error.statusCode === 400 && error.response.message === "PasswordsDontMatch") {
+                        this.setError("PasswordsDontMatch");
+                    } else {
+                        this.setError("Unknown");
+                    }
+                } else {
+                    this.setError("Unknown");
+                }
+            });
+    }
+
     @action sendForgottenPwdMail = async (username: string) => {
         if (this.isLoading) { return; }
         this.isLoading = true;
@@ -122,7 +145,7 @@ class Auth {
             .then(profile => {
                 this.error = null;
                 this.isLoading = false;
-                this.userProfile = profile;
+                this.profile = profile;
             }).catch(error => {
                 this.wipe("Unknown");
             });
@@ -138,7 +161,7 @@ class Auth {
             .then(profile => {
                 this.error = null;
                 this.isLoading = false;
-                this.userProfile = profile;
+                this.profile = profile;
             }).catch(error => {
                 this.wipe("Unknown");
             });
@@ -193,6 +216,11 @@ class Auth {
         this.credentials = null;
         this.error = error;
         this.isAuthenticated = false;
+        this.isLoading = false;
+    }
+
+    @action private setError(error: AuthError) {
+        this.error = error;
         this.isLoading = false;
     }
 

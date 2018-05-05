@@ -60,9 +60,24 @@ export const AuthAPI = {
             }
         };
     },
+    deleteUser(currentPwd: string, accessToken: string): ITypedAPITarget<IProfile> {
+        return {
+            url: "api/v1/auth/user",
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`,
+            },
+            body: {
+                currentPwd
+            },
+            parse: (json) => {
+                return json as IProfile;
+            }
+        };
+    },
     getProfile(accessToken: string): ITypedAPITarget<IProfile> {
         return {
-            url: "app/v1/user/profile",
+            url: "api/v1/auth/user",
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -74,7 +89,7 @@ export const AuthAPI = {
     },
     patchProfile(name: string, accessToken: string): ITypedAPITarget<IProfile> {
         return {
-            url: "app/v1/user/profile",
+            url: "api/v1/auth/user",
             method: "PATCH",
             body: {
                 name
