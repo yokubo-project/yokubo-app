@@ -14,8 +14,13 @@ const underlayColor = "#202020";
 
 interface State {
     isDeleteUserModalVisible: boolean;
+    isProfileModalVisible: boolean;
     inputPassword: string;
+    inputName: string;
+    inputEmail: string;
     inputPasswordError: string;
+    inputNameError: string;
+    inputEmailError: string;
     inputGeneralError: string;
 }
 
@@ -63,8 +68,13 @@ export default class Component extends React.Component<null, State> {
         super(props);
         this.state = {
             isDeleteUserModalVisible: false,
+            isProfileModalVisible: false,
             inputPassword: "",
+            inputName: "",
+            inputEmail: "",
             inputPasswordError: null,
+            inputNameError: null,
+            inputEmailError: null,
             inputGeneralError: null
         };
     }
@@ -104,6 +114,62 @@ export default class Component extends React.Component<null, State> {
         }
     }
 
+    async patchProfile() {
+        const email = this.state.inputEmail !== "" ? this.state.inputEmail : authStore.username;
+        const name = this.state.inputName !== "" ? this.state.inputName : authStore.profile.name;
+
+        if (name.length < 3) {
+            this.setState({
+                inputNameError: "Name must have at least 3 characters",
+                inputEmailError: null,
+                inputPasswordError: null,
+                inputGeneralError: null
+            });
+            return;
+        } else if (email.length < 5) {
+            this.setState({
+                inputNameError: null,
+                inputEmailError: "Email must have at least 5 characters",
+                inputPasswordError: null,
+                inputGeneralError: null
+            });
+            return;
+        }
+
+        await authStore.patchProfile(email, name);
+        if (authStore.error !== null) {
+            switch (authStore.error) {
+                case "UserAlreadyExists":
+                    this.setState({
+                        inputNameError: null,
+                        inputEmailError: "Email already exists",
+                        inputGeneralError: null
+                    });
+                    break;
+                case "InvalidUsername":
+                    this.setState({
+                        inputNameError: null,
+                        inputEmailError: "Email already exists",
+                        inputGeneralError: null
+                    });
+                    break;
+                default:
+                    this.setState({
+                        inputNameError: null,
+                        inputEmailError: null,
+                        inputGeneralError: "An unexpected error happened"
+                    });
+            }
+        } else {
+            this.setState({
+                inputNameError: null,
+                inputEmailError: null,
+                inputGeneralError: null
+            });
+            this._hideProfileModal();
+        }
+    }
+
     showPasswordError() {
         if (this.state.inputPasswordError) {
             return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputPasswordError}</FormValidationMessage>;
@@ -111,8 +177,38 @@ export default class Component extends React.Component<null, State> {
         return null;
     }
 
+    showEmailError() {
+        if (this.state.inputEmailError) {
+            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputEmailError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showNameError() {
+        if (this.state.inputNameError) {
+            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputNameError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showGeneralError() {
+        if (this.state.inputGeneralError) {
+            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputGeneralError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
     _showDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: true });
-    _hideDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: false });
+    _hideDeleteUserModal = () => this.setState({
+        isDeleteUserModalVisible: false,
+        inputPasswordError: null
+    })
+    _showProfileModal = () => this.setState({ isProfileModalVisible: true });
+    _hideProfileModal = () => this.setState({
+        isProfileModalVisible: false,
+        inputNameError: null,
+        inputEmailError: null
+    })
 
     render() {
         if (authStore.profile === null) {
@@ -164,7 +260,7 @@ export default class Component extends React.Component<null, State> {
                             style={styles.listElement}
                             title={"Update Profile"}
                             titleStyle={{ color: textColor, fontSize: 18 }}
-                            onPress={() => console.log("asdf")}
+                            onPress={() => this._showProfileModal()}
                             hideChevron={true}
                             underlayColor={underlayColor}
                         />
@@ -235,6 +331,45 @@ export default class Component extends React.Component<null, State> {
                             title={"Delete User"}
                             onPress={() => { this.deleteUser(); }}
                         />
+                        {this.showGeneralError()}
+
+                    </View>
+                </Modal>
+
+                <Modal
+                    isVisible={this.state.isProfileModalVisible}
+                    onBackdropPress={this._hideProfileModal}
+                    onBackButtonPress={this._hideProfileModal}
+                >
+                    <View style={styles.modalContent}>
+                        <FormInput
+                            inputStyle={styles.modalInputStyle}
+                            defaultValue={authStore.profile.name}
+                            placeholder={"Name"}
+                            onChangeText={(value) => this.setState({ inputName: value })}
+                            underlineColorAndroid={textColor}
+                            selectionColor={inputTextColor} // cursor color
+                        />
+                        {this.showNameError()}
+
+                        <FormInput
+                            inputStyle={styles.modalInputStyle}
+                            defaultValue={authStore.username}
+                            placeholder={"Email"}
+                            onChangeText={(value) => this.setState({ inputEmail: value })}
+                            underlineColorAndroid={textColor}
+                            selectionColor={inputTextColor} // cursor color
+                        />
+                        {this.showEmailError()}
+
+                        <Button
+                            raised
+                            buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                            textStyle={{ textAlign: "center", fontSize: 18 }}
+                            title={"Update Profile"}
+                            onPress={() => { this.patchProfile(); }}
+                        />
+                        {this.showGeneralError()}
                     </View>
                 </Modal>
             </View>

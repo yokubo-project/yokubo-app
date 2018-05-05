@@ -68,7 +68,6 @@ class Auth {
                     this.wipe("Unknown");
                 }
             });
-
     }
 
     @action signUp = async (username: string, password: string, name: string) => {
@@ -133,23 +132,22 @@ class Auth {
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
-    @action patchProfile = async (name: string) => {
+    @action patchProfile = async (username: string, name: string) => {
         if (this.isLoading) { return; }
         this.isLoading = true;
 
-        const target = AuthAPI.patchProfile(name, this.credentials.accessToken);
+        const target = AuthAPI.patchProfile(username, name, this.credentials.accessToken);
         return APIClient.requestType(target)
             .then(profile => {
                 this.error = null;
                 this.isLoading = false;
                 this.profile = profile;
+                this.username = profile.username;
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
     @action getProfile = async () => {
@@ -165,7 +163,6 @@ class Auth {
             }).catch(error => {
                 this.wipe("Unknown");
             });
-
     }
 
     @action dismissError() {
