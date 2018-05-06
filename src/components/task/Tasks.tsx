@@ -13,9 +13,6 @@ const textColor = "#00F2D2";
 const errorTextColor = "#00F2D2";
 const inputTextColor = "#DDD";
 
-interface State {
-}
-
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
@@ -67,7 +64,7 @@ const styles = StyleSheet.create({
 });
 
 @observer
-export default class Component extends React.Component<null, State> {
+export default class Component extends React.Component<null, null> {
 
     constructor(props) {
         super(props);

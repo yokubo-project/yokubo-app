@@ -76,14 +76,14 @@ export default class Component extends React.Component<Props, State> {
         };
     }
 
-    renderDate(duration) {
-        return Math.floor(moment.duration(duration).asHours()) + moment.utc(duration).format("[h] mm[m] ss[s]");
-    }
-
     componentWillReceiveProps(nextProps: Props) {
         this.setState({
             task: nextProps.task
         });
+    }
+
+    renderDate(duration) {
+        return Math.floor(moment.duration(duration).asHours()) + moment.utc(duration).format("[h] mm[m] ss[s]");
     }
 
     sortEntries(sortKey, sortDirection) {
@@ -115,8 +115,6 @@ export default class Component extends React.Component<Props, State> {
     }
 
     renderMetricTags(metrics) {
-
-        // TODO: Sort algorithmus not stable if entry is missing some metrics, as key may reference another metric --> Refactore or comment
         const renderedMetricTagsAsc = metrics.map(metric => {
             return (
                 <Text
@@ -133,7 +131,6 @@ export default class Component extends React.Component<Props, State> {
                 </Text>
             );
         });
-
         const renderedMetricTagsDesc = metrics.map(metric => {
             return (
                 <Text

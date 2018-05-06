@@ -93,23 +93,6 @@ export default class Component extends React.Component<Props, State> {
         Actions.pop();
     }
 
-    parseName(value: any) {
-        this.setState({
-            name: value
-        });
-    }
-
-    parseFromDate(value: any) {
-        this.setState({
-            fromDate: value,
-        });
-    }
-    parseToDate(value: any) {
-        this.setState({
-            toDate: value
-        });
-    }
-
     showNameError() {
         if (this.state.nameError) {
             return <FormValidationMessage>{this.state.nameError}</FormValidationMessage>;
@@ -172,7 +155,7 @@ export default class Component extends React.Component<Props, State> {
                 <FormInput
                     inputStyle={styles.inputStyle}
                     placeholder="Description"
-                    onChangeText={(e) => this.parseName(e)}
+                    onChangeText={(value) => this.setState({ name: value })}
                     underlineColorAndroid={textColor}
                     selectionColor={inputTextColor} // cursor color
                 />
@@ -188,9 +171,7 @@ export default class Component extends React.Component<Props, State> {
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
                     showIcon={false}
-                    onDateChange={(date) => {
-                        this.parseFromDate(date);
-                    }}
+                    onDateChange={(date) => this.setState({ fromDate: date })}
                     customStyles={{
                         dateInput: {
                             borderWidth: 0,
@@ -232,9 +213,7 @@ export default class Component extends React.Component<Props, State> {
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
                     showIcon={false}
-                    onDateChange={(date) => {
-                        this.parseToDate(date);
-                    }}
+                    onDateChange={(date) => this.setState({ toDate: date })}
                     customStyles={{
                         dateInput: {
                             borderWidth: 0,

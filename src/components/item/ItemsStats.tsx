@@ -130,11 +130,9 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-
                 <View style={styles.formContainer}>
                     {this.renderEntryStatictics(this.state.task.items)}
                 </View>
-
             </View>
         );
     }

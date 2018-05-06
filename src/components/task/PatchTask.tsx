@@ -10,6 +10,7 @@ import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 import { IFullTask } from "../../state/taskStore";
 import DeleteTask from "../task/DeleteTask";
+import { uploadImageAsync } from "../../shared/uploadImage";
 
 const backgroundColor = "#333333";
 const textColor = "#00F2D2";
@@ -111,18 +112,6 @@ export default class Component extends React.Component<Props, State> {
         Actions.pop();
     }
 
-    parseName(value: any) {
-        this.setState({
-            name: value
-        });
-    }
-
-    parseImageUid(value: any) {
-        this.setState({
-            imageUid: value
-        });
-    }
-
     showNameError() {
         if (this.state.nameError) {
             return <FormValidationMessage>{this.state.nameError}</FormValidationMessage>;
@@ -138,17 +127,7 @@ export default class Component extends React.Component<Props, State> {
     }
 
     _showInputFieldsModal = () => this.setState({ isInputFieldsModalVisible: true });
-
     _hideInputFieldsModal = () => this.setState({ isInputFieldsModalVisible: false });
-
-
-    parseNewMetricName(value: any) {
-        this.tempMetricName = value;
-    }
-
-    parseNewMetricUnit(value: any) {
-        this.tempMetricUnit = value;
-    }
 
     addMetric() {
         this.setState({
@@ -161,55 +140,20 @@ export default class Component extends React.Component<Props, State> {
     }
 
     _pickImage = async () => {
-        let uploadResponse, uploadResult;
-
-        let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
         });
 
         try {
-            this.setState({ image: pickerResult.uri });
-
             if (!pickerResult.cancelled) {
-                uploadResponse = await this.uploadImageAsync(pickerResult.uri);
-                uploadResult = await uploadResponse.json();
-                this.parseImageUid(uploadResult[0].uid);
+                this.setState({ image: pickerResult.uri });
+                const imageUid = await uploadImageAsync(pickerResult.uri);
+                this.setState({ imageUid: imageUid });
             }
         } catch (e) {
-            console.log({ uploadResponse });
-            console.log({ uploadResult });
-            console.log({ e });
+            console.log("Error picking image: ", e);
         }
-
-        return uploadResult;
-
-    }
-
-    uploadImageAsync = async (uri) => {
-        let apiUrl = `${Config.BASE_URL}/api/v1/images`;
-        let uriParts = uri.split(".");
-        let fileType = uriParts[uriParts.length - 1];
-
-        let formData = new FormData();
-        formData.append("photo", {
-            uri,
-            name: `photo.${fileType}`,
-            type: `image/${fileType}`,
-        } as any);
-
-        // TODO: typing
-        let options: any = {
-            method: "POST",
-            body: formData,
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${authStore.credentials.accessToken}`,
-            },
-        };
-
-        return fetch(apiUrl, options);
     }
 
     hideVisibility() {
@@ -279,7 +223,7 @@ export default class Component extends React.Component<Props, State> {
                 <FormInput
                     inputStyle={styles.inputStyle}
                     defaultValue={this.state.name}
-                    onChangeText={(e) => this.parseName(e)}
+                    onChangeText={(value) => this.setState({ name: value })}
                     underlineColorAndroid={textColor}
                     selectionColor={inputTextColor} // cursor color
                 />
@@ -320,14 +264,14 @@ export default class Component extends React.Component<Props, State> {
                         <FormInput
                             inputStyle={styles.modalInputStyle}
                             placeholder="Name"
-                            onChangeText={(value) => this.parseNewMetricName(value)}
+                            onChangeText={(value) => this.tempMetricName = value}
                             underlineColorAndroid={textColor}
                             selectionColor={inputTextColor} // cursor color
                         />
                         <FormInput
                             inputStyle={styles.modalInputStyle}
                             placeholder="Unit"
-                            onChangeText={(value) => this.parseNewMetricUnit(value)}
+                            onChangeText={(value) => this.tempMetricUnit = value}
                             underlineColorAndroid={textColor}
                             selectionColor={inputTextColor} // cursor color
                         />
