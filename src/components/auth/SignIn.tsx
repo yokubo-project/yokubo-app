@@ -4,14 +4,31 @@ import { Header, Button, FormInput, FormValidationMessage } from "react-native-e
 import { Actions } from "react-native-router-flux";
 
 import authStore from "../../state/authStore";
+import { theme } from "../../shared/styles";
 
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
-
-interface Props {
-}
+const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
+    headerContainer: {
+        flex: 1,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
+    formContainer: {
+        flex: 5,
+        justifyContent: "flex-start",
+        backgroundColor: theme.backgroundColor,
+        marginTop: 10
+    } as ViewStyle,
+    inputStyle: {
+        color: theme.inputTextColor,
+        fontSize: 20,
+        marginBottom: 10
+    }
+});
 
 interface State {
     inputEmail: string;
@@ -21,31 +38,7 @@ interface State {
     inputGeneralError: string;
 }
 
-const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        justifyContent: "space-around",
-        backgroundColor,
-    } as ViewStyle,
-    headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
-        backgroundColor,
-    } as ViewStyle,
-    formContainer: {
-        flex: 5,
-        justifyContent: "flex-start",
-        backgroundColor,
-        marginTop: 10
-    } as ViewStyle,
-    inputStyle: {
-        color: inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    }
-});
-
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<null, State> {
 
     constructor(props) {
         super(props);
@@ -67,7 +60,7 @@ export default class Component extends React.Component<Props, State> {
 
     showEmailError() {
         if (this.state.inputEmailError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputEmailError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputEmailError}</FormValidationMessage>;
         }
         return null;
     }
@@ -80,14 +73,14 @@ export default class Component extends React.Component<Props, State> {
 
     showPasswordError() {
         if (this.state.inputPasswordError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputPasswordError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputPasswordError}</FormValidationMessage>;
         }
         return null;
     }
 
     showGeneralError() {
         if (this.state.inputGeneralError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputGeneralError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
         return null;
     }
@@ -153,7 +146,7 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={backgroundColor}
+                        backgroundColor={theme.backgroundColor}
                         leftComponent={{
                             icon: "arrow-back",
                             color: "#fff",
@@ -170,8 +163,8 @@ export default class Component extends React.Component<Props, State> {
                         inputStyle={styles.inputStyle}
                         placeholder="Email"
                         onChangeText={(e) => this.parseEmail(e)}
-                        underlineColorAndroid={textColor}
-                        selectionColor={inputTextColor} // cursor color
+                        underlineColorAndroid={theme.textColor}
+                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showEmailError()}
 
@@ -179,8 +172,8 @@ export default class Component extends React.Component<Props, State> {
                         inputStyle={styles.inputStyle}
                         placeholder="Password"
                         onChangeText={(e) => this.parsePassword(e)}
-                        underlineColorAndroid={textColor}
-                        selectionColor={inputTextColor} // cursor color
+                        underlineColorAndroid={theme.textColor}
+                        selectionColor={theme.inputTextColor} // cursor color
                         secureTextEntry={true}
                     />
                     {this.showPasswordError()}
@@ -188,19 +181,19 @@ export default class Component extends React.Component<Props, State> {
 
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"SIGN IN"}
                         onPress={() => { this.processSignIn(); }}
                     />
                     <View style={{ flexDirection: "row", paddingTop: 30, justifyContent: "center" }}>
                         <Text
-                            style={{ padding: 5, fontSize: 20, color: inputTextColor }}
+                            style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
                         >
                             Not a member yet?
                         </Text>
                         <Text
-                            style={{ padding: 5, fontSize: 20, color: textColor }}
+                            style={{ padding: 5, fontSize: 20, color: theme.textColor }}
                             onPress={() => { Actions.signUp(); }}
                         >
                             Sign Up
@@ -208,12 +201,12 @@ export default class Component extends React.Component<Props, State> {
                     </View>
                     <View style={{ flexDirection: "row", paddingTop: 15, justifyContent: "center" }}>
                         <Text
-                            style={{ padding: 5, fontSize: 20, color: inputTextColor }}
+                            style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
                         >
                             Forgot your password?
                         </Text>
                         <Text
-                            style={{ padding: 5, fontSize: 20, color: textColor }}
+                            style={{ padding: 5, fontSize: 20, color: theme.textColor }}
                             onPress={() => { Actions.forgotPwd(); }}
                         >
                             Help

@@ -5,11 +5,24 @@ import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 
 import authStore from "../../../state/authStore";
+import { theme } from "../../../shared/styles";
 
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
+const styles = StyleSheet.create({
+    modalInputStyle: {
+        color: theme.inputTextColor,
+        fontSize: 20,
+        marginBottom: 10
+    },
+    modalContent: {
+        backgroundColor: theme.backgroundColor,
+        justifyContent: "center",
+        alignItems: "stretch",
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+});
 
 interface State {
     inputDeleteUserPwd: string;
@@ -21,23 +34,6 @@ interface Props {
     isVisible: boolean;
     hide: () => void;
 }
-
-const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
-    modalContent: {
-        backgroundColor,
-        justifyContent: "center",
-        alignItems: "stretch",
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
-});
 
 export default class Component extends React.Component<Props, State> {
 
@@ -86,14 +82,14 @@ export default class Component extends React.Component<Props, State> {
 
     showPwdError() {
         if (this.state.inputPwdError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputPwdError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputPwdError}</FormValidationMessage>;
         }
         return null;
     }
 
     showGeneralError() {
         if (this.state.inputGeneralError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputGeneralError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
         return null;
     }
@@ -106,20 +102,28 @@ export default class Component extends React.Component<Props, State> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <Text style={{ color: inputTextColor, fontSize: 15, textAlign: "center", marginBottom: 20 }}>Please enter your current password in order to delete your user. Note that deleting your user is irreversibly and all data associated with your account will be lost.</Text>
+                    <Text style={{
+                        color: theme.inputTextColor,
+                        fontSize: 15,
+                        textAlign: "center",
+                        marginBottom: 20
+                    }}>
+                        Please enter your current password in order to delete your user.
+                        Note that deleting your user is irreversibly and all data associated with your account will be lost.
+                    </Text>
                     <FormInput
                         inputStyle={styles.modalInputStyle}
                         placeholder="Current Password"
                         onChangeText={(value) => this.setState({ inputDeleteUserPwd: value })}
-                        underlineColorAndroid={textColor}
-                        selectionColor={inputTextColor} // cursor color
+                        underlineColorAndroid={theme.textColor}
+                        selectionColor={theme.inputTextColor} // cursor color
                         secureTextEntry={true}
                     />
                     {this.showPwdError()}
 
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"Delete User"}
                         onPress={() => { this.deleteUser(); }}

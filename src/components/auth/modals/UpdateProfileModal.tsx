@@ -4,12 +4,24 @@ import { FormInput, Button, FormValidationMessage } from "react-native-elements"
 import Modal from "react-native-modal";
 
 import authStore from "../../../state/authStore";
+import { theme } from "../../../shared/styles";
 
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
-
+const styles = StyleSheet.create({
+    modalInputStyle: {
+        color: theme.inputTextColor,
+        fontSize: 20,
+        marginBottom: 10
+    },
+    modalContent: {
+        backgroundColor: theme.backgroundColor,
+        justifyContent: "center",
+        alignItems: "stretch",
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+});
 interface State {
     inputName: string;
     inputEmail: string;
@@ -22,23 +34,6 @@ interface Props {
     isVisible: boolean;
     hide: () => void;
 }
-
-const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
-    modalContent: {
-        backgroundColor,
-        justifyContent: "center",
-        alignItems: "stretch",
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
-});
 
 export default class Component extends React.Component<Props, State> {
 
@@ -119,21 +114,21 @@ export default class Component extends React.Component<Props, State> {
 
     showEmailError() {
         if (this.state.inputEmailError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputEmailError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputEmailError}</FormValidationMessage>;
         }
         return null;
     }
 
     showNameError() {
         if (this.state.inputNameError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputNameError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
         return null;
     }
 
     showGeneralError() {
         if (this.state.inputGeneralError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputGeneralError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
         return null;
     }
@@ -151,8 +146,8 @@ export default class Component extends React.Component<Props, State> {
                         defaultValue={authStore.profile.name}
                         placeholder={"Name"}
                         onChangeText={(value) => this.setState({ inputName: value })}
-                        underlineColorAndroid={textColor}
-                        selectionColor={inputTextColor} // cursor color
+                        underlineColorAndroid={theme.textColor}
+                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showNameError()}
 
@@ -161,14 +156,14 @@ export default class Component extends React.Component<Props, State> {
                         defaultValue={authStore.username}
                         placeholder={"Email"}
                         onChangeText={(value) => this.setState({ inputEmail: value })}
-                        underlineColorAndroid={textColor}
-                        selectionColor={inputTextColor} // cursor color
+                        underlineColorAndroid={theme.textColor}
+                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showEmailError()}
 
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"Update Profile"}
                         onPress={() => { this.patchProfile(); }}

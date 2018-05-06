@@ -9,36 +9,24 @@ import ResetPwdModal from "./modals/ResetPwdModal";
 import DeleteUserModal from "./modals/DeleteUserModal";
 import UpdateProfileModal from "./modals/UpdateProfileModal";
 import LogoutModal from "./modals/LogoutModal";
-
-const backgroundColor = "#333333";
-const textColor = "white";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
-const underlayColor = "#202020";
-
-interface State {
-    isProfileModalVisible: boolean;
-    isResetPwdModalVisible: boolean;
-    isLogoutModalVisible: boolean;
-    isDeleteUserModalVisible: boolean;
-}
+import { theme } from "../../shared/styles";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: backgroundColor,
+        backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     headerContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listContainer: {
         flexGrow: 7,
-        backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listElement: {
-        backgroundColor,
+        backgroundColor: theme.backgroundColor,
         paddingTop: 12,
         paddingBottom: 12,
         borderTopWidth: 1,
@@ -46,6 +34,13 @@ const styles = StyleSheet.create({
         marginLeft: 0,
     }
 });
+
+interface State {
+    isProfileModalVisible: boolean;
+    isResetPwdModalVisible: boolean;
+    isLogoutModalVisible: boolean;
+    isDeleteUserModalVisible: boolean;
+}
 
 export default class Component extends React.Component<null, State> {
 
@@ -82,7 +77,7 @@ export default class Component extends React.Component<null, State> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={backgroundColor}
+                        backgroundColor={theme.backgroundColor}
                         leftComponent={{
                             icon: "arrow-back",
                             color: "#fff",
@@ -97,8 +92,8 @@ export default class Component extends React.Component<null, State> {
                 <ScrollView style={styles.listContainer}>
                     <View style={{ paddingTop: 30 }}>
                         <Text style={{
-                            backgroundColor,
-                            color: textColor,
+                            backgroundColor: theme.backgroundColor,
+                            color: theme.textColor,
                             fontSize: 25,
                             paddingTop: 5,
                             paddingBottom: 10,
@@ -107,8 +102,8 @@ export default class Component extends React.Component<null, State> {
                             {authStore.profile.name}
                         </Text>
                         <Text style={{
-                            backgroundColor,
-                            color: textColor,
+                            backgroundColor: theme.backgroundColor,
+                            color: theme.textColor,
                             fontSize: 18,
                             paddingTop: 5,
                             paddingBottom: 10,
@@ -121,50 +116,50 @@ export default class Component extends React.Component<null, State> {
                         <ListItem
                             style={styles.listElement}
                             title={"Update Profile"}
-                            titleStyle={{ color: textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showProfileModal()}
                             hideChevron={true}
-                            underlayColor={underlayColor}
+                            underlayColor={theme.underlayColor}
                         />
                         <ListItem
                             style={styles.listElement}
                             title={"Change Password"}
-                            titleStyle={{ color: textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showResetPwdModal()}
                             hideChevron={true}
-                            underlayColor={underlayColor}
+                            underlayColor={theme.underlayColor}
                         />
                         <ListItem
                             style={styles.listElement}
                             title={"Privacy"}
-                            titleStyle={{ color: textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => Linking.openURL("https://www.yokubo.org/views/v1/privacy")}
                             hideChevron={true}
-                            underlayColor={underlayColor}
+                            underlayColor={theme.underlayColor}
                         />
                         <ListItem
                             style={styles.listElement}
                             title={"Impress"}
-                            titleStyle={{ color: textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => Linking.openURL("https://www.yokubo.org/views/v1/impress")}
                             hideChevron={true}
-                            underlayColor={underlayColor}
+                            underlayColor={theme.underlayColor}
                         />
                         <ListItem
                             style={styles.listElement}
                             title={"Logout"}
-                            titleStyle={{ color: textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showLogoutModal()}
                             hideChevron={true}
-                            underlayColor={underlayColor}
+                            underlayColor={theme.underlayColor}
                         />
                         <ListItem
                             style={styles.listElement}
                             title={"Delete User"}
-                            titleStyle={{ color: textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showDeleteUserModal()}
                             hideChevron={true}
-                            underlayColor={underlayColor}
+                            underlayColor={theme.underlayColor}
                         />
                     </List>
                 </ScrollView>

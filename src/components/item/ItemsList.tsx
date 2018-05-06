@@ -8,33 +8,21 @@ import * as _ from "lodash";
 import moment from "moment";
 
 import { IFullTask } from "../../state/taskStore";
-
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
-
-interface State {
-    task: IFullTask;
-}
-
-interface Props {
-    task: IFullTask;
-}
+import { theme } from "../../shared/styles";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor,
+        backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     formContainer: {
         flex: 2,
         justifyContent: "space-around",
-        backgroundColor,
+        backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     listContainer: {
         flexGrow: 9,
-        backgroundColor,
+        backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     tagContainer: {
         flexDirection: "row",
@@ -53,18 +41,25 @@ const styles = StyleSheet.create({
         borderRadius: 3
     },
     listElement: {
-        backgroundColor,
+        backgroundColor: theme.backgroundColor,
         paddingTop: 5,
         paddingBottom: 10,
     },
     listText: {
         // ...material.body1, 
-        color: inputTextColor,
+        color: theme.inputTextColor,
         fontSize: 14,
         marginLeft: 10
     }
 });
 
+interface State {
+    task: IFullTask;
+}
+
+interface Props {
+    task: IFullTask;
+}
 @observer
 export default class Component extends React.Component<Props, State> {
 
@@ -95,7 +90,9 @@ export default class Component extends React.Component<Props, State> {
     renderMetrices(entry) {
         const metrices = entry.metricQuantities.map(metric => {
             return (
-                <Text style={styles.listText} key={metric.uid}>{metric.metric.name}: {metric.quantity} {metric.metric.unit}</Text>
+                <Text style={styles.listText} key={metric.uid}>
+                    {metric.metric.name}: {metric.quantity} {metric.metric.unit}
+                </Text>
             );
         });
 
@@ -200,7 +197,7 @@ export default class Component extends React.Component<Props, State> {
                                 <ListItem
                                     style={styles.listElement}
                                     title={item.name}
-                                    titleStyle={{ color: textColor, fontSize: 18, fontWeight: "bold" }}
+                                    titleStyle={{ color: theme.textColor, fontSize: 18, fontWeight: "bold" }}
                                     subtitle={this.renderMetrices(item)}
                                     rightIcon={{ icon: "delete" }}
                                     onPressRightIcon={() => this.handleOnEditItemClick(item)}

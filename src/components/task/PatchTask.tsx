@@ -11,13 +11,55 @@ import taskStore from "../../state/taskStore";
 import { IFullTask } from "../../state/taskStore";
 import DeleteTask from "../task/DeleteTask";
 import { uploadImageAsync } from "../../shared/uploadImage";
-
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
+import { theme } from "../../shared/styles";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
+
+const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: theme.backgroundColor,
+        alignItems: "stretch",
+    } as ViewStyle,
+    headerContainer: {
+        flex: 1,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor
+    } as ViewStyle,
+    formContainer: {
+        flex: 2,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor
+    } as ViewStyle,
+    imageContainer: {
+        backgroundColor: theme.backgroundColor,
+        alignItems: "center",
+        marginBottom: 20
+    } as ViewStyle,
+    inputStyle: {
+        color: theme.inputTextColor,
+        fontSize: 20,
+        marginRight: 100,
+    },
+    modalInputStyle: {
+        color: theme.inputTextColor,
+        fontSize: 20,
+        marginBottom: 10
+    },
+    modalContent: {
+        backgroundColor: theme.backgroundColor,
+        justifyContent: "center",
+        alignItems: "stretch",
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    imageStyle: {
+        width: 150,
+        height: 150,
+    }
+});
 
 interface State {
     name: string;
@@ -36,52 +78,6 @@ interface State {
 interface Props {
     task: IFullTask;
 }
-
-const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        backgroundColor: backgroundColor,
-        alignItems: "stretch",
-    } as ViewStyle,
-    headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
-        backgroundColor
-    } as ViewStyle,
-    formContainer: {
-        flex: 2,
-        justifyContent: "space-around",
-        backgroundColor
-    } as ViewStyle,
-    imageContainer: {
-        backgroundColor: backgroundColor,
-        alignItems: "center",
-        marginBottom: 20
-    } as ViewStyle,
-    inputStyle: {
-        color: inputTextColor,
-        fontSize: 20,
-        marginRight: 100,
-    },
-    modalInputStyle: {
-        color: inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
-    modalContent: {
-        backgroundColor,
-        justifyContent: "center",
-        alignItems: "stretch",
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
-    imageStyle: {
-        width: 150,
-        height: 150,
-    }
-});
 
 export default class Component extends React.Component<Props, State> {
 
@@ -181,7 +177,7 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={backgroundColor}
+                        backgroundColor={theme.backgroundColor}
                         leftComponent={{
                             icon: "arrow-back",
                             color: "#fff",
@@ -224,8 +220,8 @@ export default class Component extends React.Component<Props, State> {
                     inputStyle={styles.inputStyle}
                     defaultValue={this.state.name}
                     onChangeText={(value) => this.setState({ name: value })}
-                    underlineColorAndroid={textColor}
-                    selectionColor={inputTextColor} // cursor color
+                    underlineColorAndroid={theme.textColor}
+                    selectionColor={theme.inputTextColor} // cursor color
                 />
                 {this.showNameError()}
 
@@ -233,10 +229,10 @@ export default class Component extends React.Component<Props, State> {
                     marginTop: 15,
                     marginLeft: 15
                 }}>
-                    <Text style={{ color: inputTextColor, fontSize: 20 }}>Metrics:</Text>
+                    <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>Metrics:</Text>
                     {
                         !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
-                            color: inputTextColor,
+                            color: theme.inputTextColor,
                             fontSize: 20,
                         }}>
                             You haven't added any metrics yet.
@@ -244,12 +240,12 @@ export default class Component extends React.Component<Props, State> {
                     }
                     {this.state.metrics.map(field =>
                         <View key={field.name} style={{ flexDirection: "row", paddingTop: 15 }}>
-                            <Text style={{ color: textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
-                            <Text style={{ color: inputTextColor, fontSize: 20, paddingRight: 5 }}>{field.name}: {field.unit}</Text>
+                            <Text style={{ color: theme.textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
+                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>{field.name}: {field.unit}</Text>
                         </View>
                     )}
                     <Text
-                        style={{ color: textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
+                        style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                         onPress={this._showInputFieldsModal}
                     >
                         Add metric
@@ -265,19 +261,19 @@ export default class Component extends React.Component<Props, State> {
                             inputStyle={styles.modalInputStyle}
                             placeholder="Name"
                             onChangeText={(value) => this.tempMetricName = value}
-                            underlineColorAndroid={textColor}
-                            selectionColor={inputTextColor} // cursor color
+                            underlineColorAndroid={theme.textColor}
+                            selectionColor={theme.inputTextColor} // cursor color
                         />
                         <FormInput
                             inputStyle={styles.modalInputStyle}
                             placeholder="Unit"
                             onChangeText={(value) => this.tempMetricUnit = value}
-                            underlineColorAndroid={textColor}
-                            selectionColor={inputTextColor} // cursor color
+                            underlineColorAndroid={theme.textColor}
+                            selectionColor={theme.inputTextColor} // cursor color
                         />
                         <Button
                             raised
-                            buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                            buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
                             title={"ADD METRIC"}
                             onPress={() => { this.addMetric(); }}
@@ -287,7 +283,7 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.formContainer}>
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"UPDATE TASK"}
                         onPress={() => { this.updateTask(); }}

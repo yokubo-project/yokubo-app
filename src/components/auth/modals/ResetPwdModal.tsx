@@ -4,11 +4,24 @@ import { FormInput, Button, FormValidationMessage } from "react-native-elements"
 import Modal from "react-native-modal";
 
 import authStore from "../../../state/authStore";
+import { theme } from "../../../shared/styles";
 
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
+const styles = StyleSheet.create({
+    modalInputStyle: {
+        color: theme.inputTextColor,
+        fontSize: 20,
+        marginBottom: 10
+    },
+    modalContent: {
+        backgroundColor: theme.backgroundColor,
+        justifyContent: "center",
+        alignItems: "stretch",
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+});
 
 interface State {
     inputCurrentPwd: string;
@@ -22,23 +35,6 @@ interface Props {
     isVisible: boolean;
     hide: () => void;
 }
-
-const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
-    modalContent: {
-        backgroundColor,
-        justifyContent: "center",
-        alignItems: "stretch",
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
-});
 
 export default class Component extends React.Component<Props, State> {
 
@@ -109,21 +105,21 @@ export default class Component extends React.Component<Props, State> {
 
     showNewPwdError() {
         if (this.state.inputNewPwdError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputNewPwdError}</FormValidationMessage>;
+            return <FormValidationMessage> {this.state.inputNewPwdError}</FormValidationMessage>;
         }
         return null;
     }
 
     showCurrentPwdError() {
         if (this.state.inputCurrentPwdError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputCurrentPwdError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputCurrentPwdError}</FormValidationMessage>;
         }
         return null;
     }
 
     showGeneralError() {
         if (this.state.inputGeneralError) {
-            return <FormValidationMessage labelStyle={{ color: errorTextColor }}>{this.state.inputGeneralError}</FormValidationMessage>;
+            return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
         return null;
     }
@@ -140,8 +136,8 @@ export default class Component extends React.Component<Props, State> {
                         inputStyle={styles.modalInputStyle}
                         placeholder="Current Password"
                         onChangeText={(value) => this.setState({ inputCurrentPwd: value })}
-                        underlineColorAndroid={textColor}
-                        selectionColor={inputTextColor} // cursor color
+                        underlineColorAndroid={theme.textColor}
+                        selectionColor={theme.inputTextColor} // cursor color
                         secureTextEntry={true}
                     />
                     {this.showCurrentPwdError()}
@@ -150,15 +146,15 @@ export default class Component extends React.Component<Props, State> {
                         inputStyle={styles.modalInputStyle}
                         placeholder="New Password"
                         onChangeText={(value) => this.setState({ inputNewPwd: value })}
-                        underlineColorAndroid={textColor}
-                        selectionColor={inputTextColor} // cursor color
+                        underlineColorAndroid={theme.textColor}
+                        selectionColor={theme.inputTextColor} // cursor color
                         secureTextEntry={true}
                     />
                     {this.showNewPwdError()}
 
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"Reset Password"}
                         onPress={() => { this.resetPwd(); }}

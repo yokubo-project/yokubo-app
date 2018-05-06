@@ -4,11 +4,30 @@ import { StyleSheet, Text, View, ViewStyle, TextStyle } from "react-native";
 import * as moment from "moment";
 
 import { IFullTask } from "../../state/taskStore";
+import { theme } from "../../shared/styles";
 
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
+const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
+    formContainer: {
+        flex: 2,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
+    metricTextHeader: {
+        color: theme.textColor,
+        fontSize: 18,
+        fontWeight: "bold",
+        marginLeft: 15
+    },
+    metricText: {
+        color: theme.inputTextColor,
+        fontSize: 14,
+        marginLeft: 15
+    }
+});
 
 interface State {
     task: IFullTask;
@@ -17,29 +36,6 @@ interface State {
 interface Props {
     task: IFullTask;
 }
-
-const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        backgroundColor,
-    } as ViewStyle,
-    formContainer: {
-        flex: 2,
-        justifyContent: "space-around",
-        backgroundColor,
-    } as ViewStyle,
-    metricTextHeader: {
-        color: textColor,
-        fontSize: 18,
-        fontWeight: "bold",
-        marginLeft: 15
-    },
-    metricText: {
-        color: inputTextColor,
-        fontSize: 14,
-        marginLeft: 15
-    }
-});
 
 @observer
 export default class Component extends React.Component<Props, State> {

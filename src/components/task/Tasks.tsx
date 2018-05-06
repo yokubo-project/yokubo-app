@@ -7,31 +7,27 @@ import { Actions } from "react-native-router-flux";
 
 import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
-
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
+import { theme } from "../../shared/styles";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: backgroundColor,
+        backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     headerContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listContainer: {
         flexGrow: 7,
-        backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
         flex: 2,
         flexDirection: "row",
         justifyContent: "space-around",
-        backgroundColor: backgroundColor,
+        backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     formContainerXElement: {
         flexDirection: "row",
@@ -150,7 +146,7 @@ export default class Component extends React.Component<null, null> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={backgroundColor}
+                        backgroundColor={theme.backgroundColor}
                         leftComponent={{
                             icon: "account-circle",
                             color: "#fff",

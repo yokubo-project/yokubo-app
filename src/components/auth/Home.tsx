@@ -3,10 +3,7 @@ import { StyleSheet, Text, View, ViewStyle, TextStyle, Image } from "react-nativ
 import { Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
+import { theme } from "../../shared/styles";
 
 const LOGO = require("../../../assets/yokubo_logo.png");
 
@@ -14,7 +11,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor,
+        backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     logoContainer: {
         flex: 1,
@@ -32,7 +29,7 @@ const styles = StyleSheet.create({
     } as ViewStyle,
     quote: {
         flex: 1,
-        color: inputTextColor,
+        color: theme.inputTextColor,
         fontSize: 20,
         textAlign: "center",
     } as TextStyle,
@@ -58,19 +55,19 @@ export default class Component extends React.Component<null, null> {
                 <View style={styles.buttonContainer}>
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"SIGN UP"}
                         onPress={() => { Actions.signUp(); }}
                     />
                     <View style={{ flex: 1, flexDirection: "row", padding: 30, justifyContent: "center" }}>
                         <Text
-                            style={{ padding: 5, fontSize: 20, color: inputTextColor }}
+                            style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
                         >
                             Already a member?
                         </Text>
                         <Text
-                            style={{ padding: 5, fontSize: 20, color: textColor }}
+                            style={{ padding: 5, fontSize: 20, color: theme.textColor }}
                             onPress={() => { Actions.signIn(); }}
                         >
                             Sign In

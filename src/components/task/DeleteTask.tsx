@@ -6,24 +6,11 @@ import Modal from "react-native-modal";
 
 import taskStore from "../../state/taskStore";
 import { IFullTask } from "../../state/taskStore";
-
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
-
-interface State {
-}
-
-interface Props {
-    task: IFullTask;
-    visible: boolean;
-    hideVisibility: () => void;
-}
+import { theme } from "../../shared/styles";
 
 const styles = StyleSheet.create({
     mainContainer: {
-        backgroundColor: backgroundColor,
+        backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     inputStyle: {
         marginRight: 100,
@@ -35,7 +22,7 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     modalContent: {
-        backgroundColor,
+        backgroundColor: theme.backgroundColor,
         justifyContent: "center",
         alignItems: "stretch",
         paddingTop: 20,
@@ -45,11 +32,12 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class Component extends React.Component<Props, State> {
-
-    constructor(props) {
-        super(props);
-    }
+interface Props {
+    task: IFullTask;
+    visible: boolean;
+    hideVisibility: () => void;
+}
+export default class Component extends React.Component<Props, null> {
 
     async deleteTask() {
         taskStore.deleteTask(this.props.task.uid);
@@ -74,17 +62,17 @@ export default class Component extends React.Component<Props, State> {
                             flexWrap: "wrap"
                         }}>
                             <Text
-                                style={{ padding: 5, color: inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
+                                style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                             >
                                 Delete task
                             </Text>
                             <Text
-                                style={{ color: textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
+                                style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                             >
                                 {this.props.task.name}
                             </Text>
                             <Text
-                                style={{ padding: 5, color: inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
+                                style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                             >
                                 ?
                             </Text>
@@ -92,7 +80,7 @@ export default class Component extends React.Component<Props, State> {
 
                         <Button
                             raised
-                            buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                            buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
                             title={"DELETE"}
                             onPress={() => { this.deleteTask(); }}

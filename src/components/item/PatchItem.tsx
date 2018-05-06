@@ -7,11 +7,43 @@ import DatePicker from "react-native-datepicker";
 
 import taskStore from "../../state/taskStore";
 import { IItem } from "../../state/taskStore";
+import { theme } from "../../shared/styles";
 
-const backgroundColor = "#333333";
-const textColor = "#00F2D2";
-const errorTextColor = "#00F2D2";
-const inputTextColor = "#DDD";
+const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
+    headerContainer: {
+        flex: 1,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor
+    } as ViewStyle,
+    formContainer: {
+        flex: 2,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor
+    } as ViewStyle,
+    metricInputStyle: {
+        color: theme.inputTextColor,
+        fontSize: 20,
+        width: "100%", // combining width: 100% and minWidth: 50% results in FormInput taking up 50% of screen on vertical axis
+        minWidth: "50%",
+    },
+    inputStyle: {
+        color: theme.inputTextColor,
+        fontSize: 20,
+        width: "100%", // combining width: 100% and minWidth: 50% results in FormInput taking up 50% of screen on vertical axis
+        minWidth: "50%",
+    },
+    unitStyle: {
+        textAlign: "left",
+        color: theme.inputTextColor,
+        fontSize: 20,
+        marginLeft: 0,
+        paddingTop: 12,
+    }
+});
 
 interface State {
     name: string;
@@ -25,43 +57,6 @@ interface Props {
     taskUid: string;
     item: any; // TODO Typing
 }
-
-const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        backgroundColor: backgroundColor,
-    } as ViewStyle,
-    headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
-        backgroundColor
-    } as ViewStyle,
-    formContainer: {
-        flex: 2,
-        justifyContent: "space-around",
-        backgroundColor
-    } as ViewStyle,
-    metricInputStyle: {
-        color: inputTextColor,
-        fontSize: 20,
-        width: "100%", // combining width: 100% and minWidth: 50% results in FormInput taking up 50% of screen on vertical axis
-        minWidth: "50%",
-    },
-    inputStyle: {
-        color: inputTextColor,
-        fontSize: 20,
-        width: "100%", // combining width: 100% and minWidth: 50% results in FormInput taking up 50% of screen on vertical axis
-        minWidth: "50%",
-    },
-    unitStyle: {
-        textAlign: "left",
-        color: inputTextColor,
-        fontSize: 20,
-        marginLeft: 0,
-        paddingTop: 12,
-    }
-});
-
 @observer
 export default class Component extends React.Component<Props, State> {
 
@@ -126,8 +121,8 @@ export default class Component extends React.Component<Props, State> {
                                 defaultValue={metric.quantity.toString()}
                                 keyboardType="numeric"
                                 onChangeText={(e) => this.passMetricToState(metric.uid, e)}
-                                underlineColorAndroid={textColor}
-                                selectionColor={inputTextColor} // cursor color
+                                underlineColorAndroid={theme.textColor}
+                                selectionColor={theme.inputTextColor} // cursor color
                             />
                             <Text style={styles.unitStyle}>{metric.metric.unit}</Text>
                         </View>
@@ -143,7 +138,7 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={backgroundColor}
+                        backgroundColor={theme.backgroundColor}
                         leftComponent={{
                             icon: "arrow-back",
                             color: "#fff",
@@ -167,8 +162,8 @@ export default class Component extends React.Component<Props, State> {
                     inputStyle={styles.inputStyle}
                     defaultValue={this.state.name}
                     onChangeText={(value) => this.setState({ name: value })}
-                    underlineColorAndroid={textColor}
-                    selectionColor={inputTextColor} // cursor color
+                    underlineColorAndroid={theme.textColor}
+                    selectionColor={theme.inputTextColor} // cursor color
                 />
                 {this.showNameError()}
 
@@ -192,7 +187,7 @@ export default class Component extends React.Component<Props, State> {
                             position: "absolute",
                             left: 0,
                             marginLeft: 0,
-                            color: inputTextColor
+                            color: theme.inputTextColor
                         },
                         placeholderText: {
                             fontSize: 20,
@@ -205,7 +200,7 @@ export default class Component extends React.Component<Props, State> {
                 {/* Line: Because datepicker line is not customizable we draw a line manually */}
                 <View
                     style={{
-                        borderBottomColor: textColor,
+                        borderBottomColor: theme.textColor,
                         marginLeft: 20,
                         marginRight: 20,
                         borderBottomWidth: 1,
@@ -232,7 +227,7 @@ export default class Component extends React.Component<Props, State> {
                             position: "absolute",
                             left: 0,
                             marginLeft: 0,
-                            color: inputTextColor
+                            color: theme.inputTextColor
                         },
                         placeholderText: {
                             fontSize: 20,
@@ -245,7 +240,7 @@ export default class Component extends React.Component<Props, State> {
                 {/* Line: Because datepicker line is not customizable we draw a line manually */}
                 <View
                     style={{
-                        borderBottomColor: textColor,
+                        borderBottomColor: theme.textColor,
                         marginLeft: 20,
                         marginRight: 20,
                         borderBottomWidth: 1,
@@ -257,7 +252,7 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.formContainer}>
                     <Button
                         raised
-                        buttonStyle={{ backgroundColor, borderRadius: 0 }}
+                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={"UPDATE ITEM"}
                         onPress={() => { this.patchItem(); }}

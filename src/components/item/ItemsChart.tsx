@@ -5,16 +5,7 @@ import { VictoryChart, VictoryBar } from "victory-native";
 import moment from "moment";
 
 import { IFullTask } from "../../state/taskStore";
-
-const primaryColor1 = "green";
-
-interface State {
-    task: IFullTask;
-}
-
-interface Props {
-    task: IFullTask;
-}
+import { theme } from "../../shared/styles";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -28,6 +19,13 @@ const styles = StyleSheet.create({
     } as ViewStyle,
 });
 
+interface State {
+    task: IFullTask;
+}
+
+interface Props {
+    task: IFullTask;
+}
 @observer
 export default class Component extends React.Component<Props, State> {
 
@@ -69,8 +67,8 @@ export default class Component extends React.Component<Props, State> {
                     <VictoryBar
                         style={{
                             data: {
-                                fill: primaryColor1,
-                                stroke: primaryColor1,
+                                fill: theme.textColor,
+                                stroke: theme.textColor,
                                 fillOpacity: 0.7,
                                 strokeWidth: 3
                             }
