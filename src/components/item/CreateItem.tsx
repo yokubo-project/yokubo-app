@@ -47,10 +47,12 @@ const styles = StyleSheet.create({
 
 interface State {
     name: string;
-    nameError: string;
     fromDate: string;
     toDate: string;
     metrics: any;
+    inputNameError: string;
+    inputDateError: string;
+    inputGeneralError: string;
 }
 
 interface Props {
@@ -64,33 +66,92 @@ export default class Component extends React.Component<Props, State> {
 
         this.state = {
             name: "",
-            nameError: null,
             fromDate: null,
             toDate: null,
-            metrics: this.props.task.metrics
+            metrics: this.props.task.metrics,
+            inputNameError: null,
+            inputDateError: null,
+            inputGeneralError: null
         };
     }
 
     async createItem() {
-        const mymetrics = this.state.metrics.map(metric => {
+        const name = this.state.name;
+        const fromDate = this.state.fromDate;
+        const toDate = this.state.toDate;
+
+        if (name.length < 3) {
+            this.setState({
+                inputNameError: "Description must be at least 3 characters long",
+                inputDateError: null,
+                inputGeneralError: null
+            });
+            return;
+        } else if (fromDate === null || toDate === null || fromDate === toDate) {
+            this.setState({
+                inputNameError: null,
+                inputDateError: "Invalid date range provided. Make sure start date is before end date",
+                inputGeneralError: null
+            });
+            return;
+        }
+
+        const metrics = this.state.metrics.map(metric => {
             return {
                 TaskMetricUid: metric.uid,
                 quantity: metric.quantity
             };
         });
 
-        taskStore.createItem(this.props.task.uid, {
-            name: this.state.name,
+        await taskStore.createItem(this.props.task.uid, {
+            name,
             desc: "Desc",
-            period: [this.state.fromDate, this.state.toDate],
-            metrics: mymetrics
+            period: [fromDate, toDate],
+            metrics
         });
-        Actions.pop();
+        if (taskStore.error !== null) {
+            switch (taskStore.error) {
+                case "InvalidTimePeriod":
+                    this.setState({
+                        inputNameError: null,
+                        inputDateError: "Invalid date range provided. Make sure start date is before end date",
+                        inputGeneralError: null
+                    });
+                    break;
+                default:
+                    this.setState({
+                        inputNameError: null,
+                        inputDateError: null,
+                        inputGeneralError: "An unexpected error happened"
+                    });
+            }
+        } else {
+            this.setState({
+                inputNameError: null,
+                inputDateError: null,
+                inputGeneralError: null
+            });
+            Actions.pop();
+        }
     }
 
     showNameError() {
-        if (this.state.nameError) {
-            return <FormValidationMessage>{this.state.nameError}</FormValidationMessage>;
+        if (this.state.inputNameError) {
+            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showDateError() {
+        if (this.state.inputDateError) {
+            return <FormValidationMessage>{this.state.inputDateError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showGeneralError() {
+        if (this.state.inputGeneralError) {
+            return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
         return null;
     }
@@ -238,6 +299,7 @@ export default class Component extends React.Component<Props, State> {
                         borderBottomWidth: 1,
                     }}
                 />
+                {this.showDateError()}
 
                 {this.renderMetrices(this.props.task.metrics)}
 
@@ -250,6 +312,7 @@ export default class Component extends React.Component<Props, State> {
                         onPress={() => { this.createItem(); }}
                     />
                 </View>
+                {this.showGeneralError()}
             </View>
         );
     }

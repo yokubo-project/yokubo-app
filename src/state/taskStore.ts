@@ -2,6 +2,7 @@ import { observable, action } from "mobx";
 
 import { TaskAPI } from "../network/TaskAPI";
 import APIClient from "../network/APIClient";
+import { APIClientStatusCodeError } from "network-stapler";
 
 import authStore from "../state/authStore";
 
@@ -96,7 +97,7 @@ class Tasks {
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
-                this.wipe("Unknown");
+                this.setError("Unknown");
             });
     }
 
@@ -112,7 +113,7 @@ class Tasks {
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
-                this.wipe("Unknown");
+                this.setError("Unknown");
             });
     }
 
@@ -129,7 +130,7 @@ class Tasks {
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
-                this.wipe("Unknown");
+                this.setError("Unknown");
             });
     }
 
@@ -145,7 +146,7 @@ class Tasks {
             this.error = null;
             this.isLoading = false;
         } catch (error) {
-            this.wipe("Unknown");
+            this.setError("Unknown");
         }
     }
 
@@ -168,7 +169,15 @@ class Tasks {
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
-                this.wipe("Unknown");
+                if (error instanceof APIClientStatusCodeError) {
+                    if (error.statusCode === 400 && error.response.message === "InvalidTimePeriod") {
+                        this.setError("InvalidTimePeriod");
+                    } else {
+                        this.setError("Unknown");
+                    }
+                } else {
+                    this.setError("Unknown");
+                }
             });
     }
 
@@ -189,7 +198,15 @@ class Tasks {
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
-                this.wipe("Unknown");
+                if (error instanceof APIClientStatusCodeError) {
+                    if (error.statusCode === 400 && error.response.message === "InvalidTimePeriod") {
+                        this.setError("InvalidTimePeriod");
+                    } else {
+                        this.setError("Unknown");
+                    }
+                } else {
+                    this.setError("Unknown");
+                }
             });
     }
 
@@ -207,7 +224,7 @@ class Tasks {
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
-                this.wipe("Unknown");
+                this.setError("Unknown");
             });
     }
 
@@ -215,7 +232,7 @@ class Tasks {
         this.error = null;
     }
 
-    @action private wipe(error: TaskError) {
+    @action private setError(error: TaskError) {
         this.error = error;
         this.isLoading = false;
     }

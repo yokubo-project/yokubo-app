@@ -6,7 +6,6 @@
 # Make sorting scrollable horizontally or move to it's own menu
 # Implement patching of task metrics (add, change or remove metrics)
 # Test navigation (e.g. SignIn should not redirect to SignUp)
-# Show error when invalid time period was entered
 # Lock createTask or patchTask until image is uploaded
 # Scale image before uploading
 # Confirm modal when deleting item

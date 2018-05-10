@@ -199,8 +199,9 @@ export default class Component extends React.Component<Props, State> {
                                     title={item.name}
                                     titleStyle={{ color: theme.textColor, fontSize: 18, fontWeight: "bold" }}
                                     subtitle={this.renderMetrices(item)}
-                                    rightIcon={{ icon: "delete" }}
-                                    onPressRightIcon={() => this.handleOnEditItemClick(item)}
+                                    hideChevron={true}
+                                    underlayColor={theme.underlayColor}
+                                    onLongPress={() => this.handleOnEditItemClick(item)}
                                 />
                             )}
                         />
