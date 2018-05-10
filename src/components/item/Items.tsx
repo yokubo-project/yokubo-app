@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import { StyleSheet, View, Text, ViewStyle, TextStyle } from "react-native";
 import { Header, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import TabNavigator from "react-native-tab-navigator";
@@ -26,6 +26,20 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
+    welcomeScreenContainer: {
+        flexGrow: 1,
+        backgroundColor: theme.backgroundColor,
+        justifyContent: "center",
+        alignItems: "center"
+    } as ViewStyle,
+    welcomeScreen: {
+        flex: 1,
+        color: theme.textColor,
+        textAlign: "center",
+        paddingLeft: 20,
+        paddingRight: 20,
+        fontSize: 20
+    } as TextStyle,
 });
 
 interface State {
@@ -55,8 +69,65 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
+    renderTabNavigation() {
+        return (
+            <View style={styles.formContainer}>
+                <TabNavigator>
+                    <TabNavigator.Item
+                        titleStyle={{ fontWeight: "bold", fontSize: 10 }}
+                        selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
+                        selected={this.state.selectedTab === "itemList"}
+                        title={this.state.selectedTab === "itemList" ? "List" : null}
+                        renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="list" size={33} />}
+                        renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="list" size={30} />}
+                        onPress={() => this.changeTab("itemList")}>
+                        <ItemsList
+                            task={this.props.task}
+                        />
+                    </TabNavigator.Item>
+                    <TabNavigator.Item
+                        titleStyle={{ fontWeight: "bold", fontSize: 10 }}
+                        selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
+                        selected={this.state.selectedTab === "itemStats"}
+                        title={this.state.selectedTab === "itemStats" ? "Statistics" : null}
+                        renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
+                        renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="equalizer" size={30} />}
+                        onPress={() => this.changeTab("itemStats")}>
+                        <ItemsStats
+                            task={this.props.task}
+                        />
+                    </TabNavigator.Item>
+                    <TabNavigator.Item
+                        titleStyle={{ fontWeight: "bold", fontSize: 10 }}
+                        selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
+                        selected={this.state.selectedTab === "itemCharts"}
+                        title={this.state.selectedTab === "itemCharts" ? "Charts" : null}
+                        renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="dashboard" size={33} />}
+                        renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="dashboard" size={30} />}
+                        onPress={() => this.changeTab("itemCharts")}>
+                        <ItemsChart
+                            task={this.props.task}
+                        />
+                    </TabNavigator.Item>
+                </TabNavigator>
+            </View>
+        );
+    }
+
+    renderWelcomeScreen() {
+        return (
+            <View style={styles.welcomeScreenContainer}>
+                <Text style={styles.welcomeScreen}>
+                    {this.props.task.name} sounds like an awesome task! {"\n"}
+                    Add your first items to it by clicking on the + sign on the top right corner.
+                </Text>
+            </View>
+        );
+    }
+
     render() {
         const headerText = this.props.task.name.length > 20 ? `${this.props.task.name.slice(0, 20)}...` : this.props.task.name;
+        const content = this.props.task.items.length > 0 ? this.renderTabNavigation() : this.renderWelcomeScreen();
 
         return (
             <View style={styles.mainContainer}>
@@ -81,46 +152,8 @@ export default class Component extends React.Component<Props, State> {
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-                <View style={styles.formContainer}>
-                    <TabNavigator>
-                        <TabNavigator.Item
-                            titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
-                            selected={this.state.selectedTab === "itemList"}
-                            title={this.state.selectedTab === "itemList" ? "List" : null}
-                            renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="list" size={33} />}
-                            renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="list" size={30} />}
-                            onPress={() => this.changeTab("itemList")}>
-                            <ItemsList
-                                task={this.props.task}
-                            />
-                        </TabNavigator.Item>
-                        <TabNavigator.Item
-                            titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
-                            selected={this.state.selectedTab === "itemStats"}
-                            title={this.state.selectedTab === "itemStats" ? "Statistics" : null}
-                            renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
-                            renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="equalizer" size={30} />}
-                            onPress={() => this.changeTab("itemStats")}>
-                            <ItemsStats
-                                task={this.props.task}
-                            />
-                        </TabNavigator.Item>
-                        <TabNavigator.Item
-                            titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                            selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
-                            selected={this.state.selectedTab === "itemCharts"}
-                            title={this.state.selectedTab === "itemCharts" ? "Charts" : null}
-                            renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="dashboard" size={33} />}
-                            renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="dashboard" size={30} />}
-                            onPress={() => this.changeTab("itemCharts")}>
-                            <ItemsChart
-                                task={this.props.task}
-                            />
-                        </TabNavigator.Item>
-                    </TabNavigator>
-                </View>
+
+                {content}
             </View>
         );
     }

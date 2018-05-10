@@ -21,7 +21,13 @@ const styles = StyleSheet.create({
     } as ViewStyle,
     listContainer: {
         flexGrow: 7,
-        backgroundColor: theme.backgroundColor
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
+    welcomeScreenContainer: {
+        flexGrow: 1,
+        backgroundColor: theme.backgroundColor,
+        justifyContent: "center",
+        alignItems: "center"
     } as ViewStyle,
     formContainer: {
         flex: 2,
@@ -57,6 +63,14 @@ const styles = StyleSheet.create({
         margin: 10,
         height: 200,
     },
+    welcomeScreen: {
+        flex: 1,
+        color: theme.textColor,
+        textAlign: "center",
+        paddingLeft: 20,
+        paddingRight: 20,
+        fontSize: 20
+    } as TextStyle
 });
 
 @observer
@@ -136,11 +150,26 @@ export default class Component extends React.Component<null, null> {
             );
         });
 
-        return rows;
+        return (
+            <ScrollView style={styles.listContainer}>
+                {rows}
+            </ScrollView>
+        );
+    }
+
+    renderWelcomeScreen() {
+        return (
+            <View style={styles.welcomeScreenContainer}>
+                <Text style={styles.welcomeScreen}>
+                    Hi, {authStore.profile.name}! {"\n"}
+                    Click on the + sign on the top right corner to create your first task.
+                </Text>
+            </View>
+        );
     }
 
     render() {
-        const tasks = this.renderTasks(taskStore.tasks);
+        const content = taskStore.tasks.length > 0 ? this.renderTasks(taskStore.tasks) : this.renderWelcomeScreen();
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.headerContainer}>
@@ -164,9 +193,8 @@ export default class Component extends React.Component<null, null> {
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
-                <ScrollView style={styles.listContainer}>
-                    {tasks}
-                </ScrollView>
+
+                {content}
             </View>
         );
     }
