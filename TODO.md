@@ -10,3 +10,5 @@
 # Lock createTask or patchTask until image is uploaded
 # Scale image before uploading
 # Confirm modal when deleting item
+# Use loading indicator
+# Rename task to project and item to entry?

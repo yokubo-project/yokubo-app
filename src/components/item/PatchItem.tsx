@@ -8,6 +8,7 @@ import DatePicker from "react-native-datepicker";
 import taskStore from "../../state/taskStore";
 import { IItem } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
+import DeleteItemModal from "./modals/DeleteItemModal";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -51,6 +52,7 @@ interface State {
     fromDate: string;
     toDate: string;
     metrics: any;
+    isDeleteItemModalVisible: boolean;
 }
 
 interface Props {
@@ -68,7 +70,8 @@ export default class Component extends React.Component<Props, State> {
             nameError: null,
             fromDate: this.props.item.period[0],
             toDate: this.props.item.period[1],
-            metrics: this.props.item.metricQuantities
+            metrics: this.props.item.metricQuantities,
+            isDeleteItemModalVisible: false,
         };
     }
 
@@ -105,11 +108,6 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
-    handleOnDeleteItemClick(itemUid) {
-        taskStore.deleteItem(this.props.taskUid, itemUid);
-        Actions.pop();
-    }
-
     renderMetrices(metrices: any) {
         return (
             <View>
@@ -132,6 +130,13 @@ export default class Component extends React.Component<Props, State> {
         );
     }
 
+    _showDeleteItemModal = () => this.setState({
+        isDeleteItemModalVisible: true,
+    })
+    _hideDeleteItemModal = () => this.setState({
+        isDeleteItemModalVisible: false,
+    })
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -149,7 +154,7 @@ export default class Component extends React.Component<Props, State> {
                             icon: "delete",
                             color: "#fff",
                             underlayColor: "transparent",
-                            onPress: () => { this.handleOnDeleteItemClick(this.props.item.uid); }
+                            onPress: () => { this._showDeleteItemModal(); }
                         }}
                         centerComponent={{ text: "Update Item", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         statusBarProps={{ translucent: true }}
@@ -258,6 +263,14 @@ export default class Component extends React.Component<Props, State> {
                         onPress={() => { this.patchItem(); }}
                     />
                 </View>
+
+                <DeleteItemModal
+                    isVisible={this.state.isDeleteItemModalVisible}
+                    hide={() => this._hideDeleteItemModal()}
+                    taskUid={this.props.taskUid}
+                    item={this.props.item}
+                >
+                </DeleteItemModal>
             </View>
         );
     }
