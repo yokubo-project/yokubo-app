@@ -55,6 +55,9 @@ const styles = StyleSheet.create({
 
 interface State {
     task: IFullTask;
+    sortKey: string;
+    sortDirection: string;
+    previousItemLength: number;
 }
 
 interface Props {
@@ -68,23 +71,36 @@ export default class Component extends React.Component<Props, State> {
 
         this.state = {
             task: this.props.task,
+            sortKey: "createdAt",
+            sortDirection: "asc",
+            previousItemLength: this.props.task.items.length
         };
     }
 
-    componentWillReceiveProps(nextProps: Props) {
-        this.setState({
-            task: nextProps.task
-        });
+    componentWillReceiveProps(nextProps) {
+        this.resortEntries();
     }
 
     renderDate(duration) {
         return Math.floor(moment.duration(duration).asHours()) + moment.utc(duration).format("[h] mm[m] ss[s]");
     }
 
+    resortEntries() {
+        const task = this.state.task;
+
+        if (this.state.task.items.length > this.state.previousItemLength) {
+            task.items = _.orderBy(task.items, this.state.sortKey, this.state.sortDirection);
+            this.setState({
+                task,
+                previousItemLength: this.state.task.items.length,
+            });
+        }
+    }
+
     sortEntries(sortKey, sortDirection) {
         const task = this.state.task;
         task.items = _.orderBy(task.items, sortKey, sortDirection);
-        this.setState({ task });
+        this.setState({ task, sortKey: sortKey, sortDirection: sortDirection });
     }
 
     renderMetrices(entry) {
