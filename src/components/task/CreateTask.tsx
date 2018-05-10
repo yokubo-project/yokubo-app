@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
 interface State {
     name: string;
     imageUid: string;
-    nameError: string;
-    imageUidError: string;
+    inputNameError: string;
+    inputGeneralError: string;
     metrics: Array<{
         name: string;
         unit: string;
@@ -80,39 +80,57 @@ export default class Component extends React.Component<null, State> {
         super(props);
         this.state = {
             name: "",
-            imageUid: "",
+            imageUid: null,
             metrics: [],
-            nameError: null,
-            imageUidError: null,
+            inputNameError: null,
+            inputGeneralError: null,
             isInputFieldsModalVisible: false,
             image: null
         };
     }
 
     async createTask() {
-        console.log({
-            name: this.state.name,
-            imageUid: this.state.imageUid,
-            metrics: this.state.metrics
-        });
-        taskStore.createTask({
-            name: this.state.name,
-            imageUid: this.state.imageUid,
-            metrics: this.state.metrics
-        });
-        Actions.pop();
+        const name = this.state.name;
+        const imageUid = this.state.imageUid;
+        const metrics = this.state.metrics;
+
+        if (name.length < 3) {
+            this.setState({
+                inputNameError: "Name must be at least 3 characters long",
+                inputGeneralError: null
+            });
+            return;
+        }
+
+        await taskStore.createTask({ name, imageUid, metrics });
+
+        if (taskStore.error !== null) {
+            switch (taskStore.error) {
+                default:
+                    this.setState({
+                        inputNameError: null,
+                        inputGeneralError: "An unexpected error happened"
+                    });
+            }
+        } else {
+            this.setState({
+                inputNameError: null,
+                inputGeneralError: null
+            });
+            Actions.pop();
+        }
     }
 
     showNameError() {
-        if (this.state.nameError) {
-            return <FormValidationMessage>{this.state.nameError}</FormValidationMessage>;
+        if (this.state.inputNameError) {
+            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
         return null;
     }
 
-    showimageUidError() {
-        if (this.state.imageUidError) {
-            return <FormValidationMessage>{this.state.imageUidError}</FormValidationMessage>;
+    showGeneralError() {
+        if (this.state.inputGeneralError) {
+            return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
         return null;
     }
@@ -281,6 +299,7 @@ export default class Component extends React.Component<null, State> {
                         onPress={() => { this.createTask(); }}
                     />
                 </View>
+                {this.showGeneralError()}
             </View>
         );
     }
