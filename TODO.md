@@ -1,7 +1,6 @@
 # Create different environments and load them with provess.env
 # First release will be in english - move strings to one file
 # Add duration to sorting
-# Make sorting scrollable horizontally or move to it's own menu
 # Implement patching of task metrics (add, change or remove metrics)
 # Test navigation (e.g. SignIn should not redirect to SignUp)
 # Lock createTask or patchTask until image is uploaded

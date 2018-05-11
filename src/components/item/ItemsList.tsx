@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { StyleSheet, Text, View, ViewStyle, TextStyle, ScrollView, FlatList } from "react-native";
-import { List, ListItem } from "react-native-elements";
+import { Header, List, ListItem, Button, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import { material } from "react-native-typography";
 import * as _ from "lodash";
@@ -9,10 +9,16 @@ import moment from "moment";
 
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
+import SortItemsModal from "./modals/SortItemsModal";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
+    headerContainer: {
+        flex: 1,
+        justifyContent: "space-around",
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     formContainer: {
@@ -21,7 +27,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     listContainer: {
-        flexGrow: 9,
+        flexGrow: 6,
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     tagContainer: {
@@ -58,6 +64,7 @@ interface State {
     sortKey: string;
     sortDirection: string;
     previousItemLength: number;
+    isSortItemsModalVisible: boolean;
 }
 
 interface Props {
@@ -73,7 +80,8 @@ export default class Component extends React.Component<Props, State> {
             task: this.props.task,
             sortKey: "createdAt",
             sortDirection: "asc",
-            previousItemLength: this.props.task.items.length
+            previousItemLength: this.props.task.items.length,
+            isSortItemsModalVisible: false,
         };
     }
 
@@ -127,44 +135,6 @@ export default class Component extends React.Component<Props, State> {
         );
     }
 
-    renderMetricTags(metrics) {
-        const renderedMetricTagsAsc = metrics.map(metric => {
-            return (
-                <Text
-                    key={`${metric.uid}asc`}
-                    style={styles.tagElement}
-                    onPress={() => {
-                        this.sortEntries((item) => {
-                            const merticQuanitity = item.metricQuantities.filter((metricQuantity) => metricQuantity.metric.uid === metric.uid)[0];
-                            return merticQuanitity.quantity;
-                        }, "asc");
-                    }}
-                >
-                    {`${metric.name} `} &#8593;
-                </Text>
-            );
-        });
-        const renderedMetricTagsDesc = metrics.map(metric => {
-            return (
-                <Text
-                    key={`${metric.uid}desc`}
-                    style={styles.tagElement}
-                    onPress={() => {
-                        this.sortEntries((item) => {
-                            const merticQuanitity = item.metricQuantities.filter((metricQuantity) => metricQuantity.metric.uid === metric.uid)[0];
-                            return merticQuanitity.quantity;
-                        }, "desc");
-                    }}
-                >
-                    {`${metric.name} `} &#8595;
-                </Text>
-            );
-        });
-        const renderedMetricTags = renderedMetricTagsAsc.concat(renderedMetricTagsDesc);
-
-        return renderedMetricTags;
-    }
-
     handleOnEditItemClick(item) {
         Actions.patchItem({
             taskUid: this.state.task.uid,
@@ -172,40 +142,66 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
+    _showSortItemsModal = () => this.setState({
+        isSortItemsModalVisible: true,
+    })
+    _hideSortItemsModal = () => this.setState({
+        isSortItemsModalVisible: false,
+    })
+    _sortItemsAndHideSortItemsModal = (sortKey: string, sortDirection: string) => {
+        this.sortEntries(sortKey, sortDirection);
+        this.setState({
+            isSortItemsModalVisible: false
+        });
+    }
+
+    handleOnAddIconClick() {
+        Actions.createItem({
+            task: this.props.task,
+        });
+    }
+
     render() {
+        const headerText = this.props.task.name.length > 20 ? `${this.props.task.name.slice(0, 20)}...` : this.props.task.name;
+
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.formContainer}>
-                    <View style={styles.tagContainer}>
-                        <Text
-                            style={styles.tagElement}
-                            onPress={() => { this.sortEntries("name", "asc"); }}
-                        >
-                            {"Name"} &#8593;
-                        </Text>
-                        <Text
-                            style={styles.tagElement}
-                            onPress={() => { this.sortEntries("name", "desc"); }}
-                        >
-                            {"Name"} &#8595;
-                        </Text>
-                        <Text
-                            style={styles.tagElement}
-                            onPress={() => { this.sortEntries("createdAt", "asc"); }}
-                        >
-                            {"Datum"} &#8593;
-                        </Text>
-                        <Text
-                            style={styles.tagElement}
-                            onPress={() => { this.sortEntries("createdAt", "desc"); }}
-                        >
-                            {"Datum"} &#8595;
-                        </Text>
-                        {this.renderMetricTags(this.state.task.metrics)}
-                    </View>
+                <View style={styles.headerContainer}>
+                    <Header
+                        innerContainerStyles={{ flexDirection: "row" }}
+                        backgroundColor={theme.backgroundColor}
+                        leftComponent={{
+                            icon: "arrow-back",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { Actions.pop(); }
+                        }}
+                        centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        rightComponent={
+                            <View style={{ flex: 1, flexDirection: "row", marginTop: 23 }}>
+                                <Icon
+                                    name="sort"
+                                    color="#fff"
+                                    underlayColor="transparent"
+                                    style={{ marginRight: 16 }}
+                                    onPress={() => { this._showSortItemsModal(); }}
+                                />
+                                <Icon
+                                    name="add"
+                                    color="#fff"
+                                    underlayColor="transparent"
+                                    style={{ marginRight: 2 }}
+                                    onPress={() => { this.handleOnAddIconClick(); }}
+                                />
+                            </View>
+                        }
+                        statusBarProps={{ translucent: true }}
+                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
+                    />
                 </View>
+
                 <ScrollView style={styles.listContainer}>
-                    <List containerStyle={{ marginBottom: 20 }}>
+                    <List containaerStyle={{ marginBottom: 20 }}>
                         <FlatList
                             data={this.state.task.items}
                             keyExtractor={item => item.uid.toString()}
@@ -223,6 +219,13 @@ export default class Component extends React.Component<Props, State> {
                         />
                     </List>
                 </ScrollView>
+
+                <SortItemsModal
+                    isVisible={this.state.isSortItemsModalVisible}
+                    hide={() => this._hideSortItemsModal()}
+                    metrics={this.state.task.metrics}
+                    sortItemsAndHide={(sortKey, sortDirection) => this._sortItemsAndHideSortItemsModal(sortKey, sortDirection)}
+                />
             </View>
         );
     }
