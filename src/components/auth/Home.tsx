@@ -2,8 +2,10 @@ import React from "react";
 import { StyleSheet, Text, View, ViewStyle, TextStyle, Image } from "react-native";
 import { Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
+import { I18nextProvider, translate } from "react-i18next";
 
 import { theme } from "../../shared/styles";
+import i18n from "../../shared/i18n";
 
 const LOGO = require("../../../assets/yokubo_logo.png");
 
@@ -34,7 +36,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
     } as TextStyle,
 });
-
 export default class Component extends React.Component<null, null> {
 
     render() {
@@ -64,7 +65,7 @@ export default class Component extends React.Component<null, null> {
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
                         >
-                            Already a member?
+                            {i18n.t("home.alreadyRegistered")}
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
