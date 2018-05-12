@@ -53,7 +53,15 @@ export default class Component extends React.Component<Props, State> {
         this.setState({ selectedTab });
     }
 
+    handleOnAddIconClick() {
+        Actions.createItem({
+            task: this.props.task,
+        });
+    }
+
     renderTabNavigation() {
+        const headerText = this.props.task.name.length > 12 ? `${this.props.task.name.slice(0, 12)}...` : this.props.task.name;
+
         return (
             <TabNavigator>
                 <TabNavigator.Item
@@ -66,6 +74,8 @@ export default class Component extends React.Component<Props, State> {
                     onPress={() => this.changeTab("itemList")}>
                     <ItemsList
                         task={this.props.task}
+                        headerText={headerText}
+                        handleOnAddIconClick={() => this.handleOnAddIconClick()}
                     />
                 </TabNavigator.Item>
                 <TabNavigator.Item
@@ -78,6 +88,8 @@ export default class Component extends React.Component<Props, State> {
                     onPress={() => this.changeTab("itemStats")}>
                     <ItemsStats
                         task={this.props.task}
+                        headerText={headerText}
+                        handleOnAddIconClick={() => this.handleOnAddIconClick()}
                     />
                 </TabNavigator.Item>
                 <TabNavigator.Item
@@ -90,6 +102,8 @@ export default class Component extends React.Component<Props, State> {
                     onPress={() => this.changeTab("itemCharts")}>
                     <ItemsChart
                         task={this.props.task}
+                        headerText={headerText}
+                        handleOnAddIconClick={() => this.handleOnAddIconClick()}
                     />
                 </TabNavigator.Item>
             </TabNavigator>

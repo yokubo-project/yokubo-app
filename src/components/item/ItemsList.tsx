@@ -69,6 +69,8 @@ interface State {
 
 interface Props {
     task: IFullTask;
+    headerText: string;
+    handleOnAddIconClick: () => void;
 }
 @observer
 export default class Component extends React.Component<Props, State> {
@@ -155,15 +157,7 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
-    handleOnAddIconClick() {
-        Actions.createItem({
-            task: this.props.task,
-        });
-    }
-
     render() {
-        const headerText = this.props.task.name.length > 20 ? `${this.props.task.name.slice(0, 20)}...` : this.props.task.name;
-
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.headerContainer}>
@@ -176,7 +170,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         rightComponent={
                             <View style={{ flex: 1, flexDirection: "row", marginTop: 23 }}>
                                 <Icon
@@ -190,8 +184,7 @@ export default class Component extends React.Component<Props, State> {
                                     name="add"
                                     color="#fff"
                                     underlayColor="transparent"
-                                    style={{ marginRight: 2 }}
-                                    onPress={() => { this.handleOnAddIconClick(); }}
+                                    onPress={() => { this.props.handleOnAddIconClick(); }}
                                 />
                             </View>
                         }

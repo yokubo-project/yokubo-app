@@ -1,6 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { StyleSheet, View, ViewStyle } from "react-native";
+import { Header } from "react-native-elements";
+import { Actions } from "react-native-router-flux";
 import { VictoryChart, VictoryBar } from "victory-native";
 import moment from "moment";
 
@@ -17,6 +19,11 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: "#fff",
     } as ViewStyle,
+    headerContainer: {
+        flex: 1,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
 });
 
 interface State {
@@ -25,6 +32,8 @@ interface State {
 
 interface Props {
     task: IFullTask;
+    headerText: string;
+    handleOnAddIconClick: () => void;
 }
 @observer
 export default class Component extends React.Component<Props, State> {
@@ -61,29 +70,51 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <VictoryChart
-                    domainPadding={10}
-                >
-                    <VictoryBar
-                        style={{
-                            data: {
-                                fill: theme.textColor,
-                                stroke: theme.textColor,
-                                fillOpacity: 0.7,
-                                strokeWidth: 3
-                            }
+                <View style={styles.headerContainer}>
+                    <Header
+                        innerContainerStyles={{ flexDirection: "row" }}
+                        backgroundColor={theme.backgroundColor}
+                        leftComponent={{
+                            icon: "arrow-back",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { Actions.pop(); }
                         }}
-                        animate={{
-                            duration: 2000,
-                            onLoad: { duration: 1000 }
+                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        rightComponent={{
+                            icon: "add",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { this.props.handleOnAddIconClick(); }
                         }}
-                        data={this.renderEntryStatictics(this.state.task.items)}
-                        x="entity"
-                        y="value"
+                        statusBarProps={{ translucent: true }}
+                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
-                </VictoryChart>
-
-            </View>
+                </View>
+                <View style={styles.formContainer}>
+                    <VictoryChart
+                        domainPadding={10}
+                    >
+                        <VictoryBar
+                            style={{
+                                data: {
+                                    fill: theme.textColor,
+                                    stroke: theme.textColor,
+                                    fillOpacity: 0.7,
+                                    strokeWidth: 3
+                                }
+                            }}
+                            animate={{
+                                duration: 2000,
+                                onLoad: { duration: 1000 }
+                            }}
+                            data={this.renderEntryStatictics(this.state.task.items)}
+                            x="entity"
+                            y="value"
+                        />
+                    </VictoryChart>
+                </View >
+            </View >
         );
     }
 

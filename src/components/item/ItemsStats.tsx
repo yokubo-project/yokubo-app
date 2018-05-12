@@ -1,6 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { StyleSheet, Text, View, ViewStyle, TextStyle } from "react-native";
+import { Header } from "react-native-elements";
+import { Actions } from "react-native-router-flux";
 import * as moment from "moment";
 
 import { IFullTask } from "../../state/taskStore";
@@ -26,7 +28,12 @@ const styles = StyleSheet.create({
         color: theme.inputTextColor,
         fontSize: 14,
         marginLeft: 15
-    }
+    },
+    headerContainer: {
+        flex: 1,
+        justifyContent: "space-around",
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
 });
 
 interface State {
@@ -35,6 +42,8 @@ interface State {
 
 interface Props {
     task: IFullTask;
+    headerText: string;
+    handleOnAddIconClick: () => void;
 }
 
 @observer
@@ -126,6 +135,28 @@ export default class Component extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.mainContainer}>
+                <View style={styles.headerContainer}>
+                    <Header
+                        innerContainerStyles={{ flexDirection: "row" }}
+                        backgroundColor={theme.backgroundColor}
+                        leftComponent={{
+                            icon: "arrow-back",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { Actions.pop(); }
+                        }}
+                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        rightComponent={{
+                            icon: "add",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { this.props.handleOnAddIconClick(); }
+                        }}
+                        statusBarProps={{ translucent: true }}
+                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
+                    />
+                </View>
+
                 <View style={styles.formContainer}>
                     {this.renderEntryStatictics(this.state.task.items)}
                 </View>
