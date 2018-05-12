@@ -7,6 +7,7 @@ import * as moment from "moment";
 
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
+import { formatDuration } from "../../shared/helpers";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -61,12 +62,7 @@ export default class Component extends React.Component<Props, State> {
         const metrices = [];
         let timespan: any = null;
         entries.forEach(entry => {
-            // Calculate duration
-            const start = moment.utc(entry.period[0]);
-            const end = moment.utc(entry.period[1]);
-            const ms = end.diff(start);
-            const duration = moment.duration(ms);
-            const time = Math.floor(duration.asHours()) + moment.utc(ms).format(":mm:ss");
+            const ms = entry.duration * 1000;
 
             if (timespan !== null) {
                 timespan.totalValue += ms;

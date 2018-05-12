@@ -73,6 +73,7 @@ export interface IItem {
     name: string;
     desc: string;
     period: any; // TODO Range;
+    duration: number;
     metrics: string;
     createdAt: string;
 }

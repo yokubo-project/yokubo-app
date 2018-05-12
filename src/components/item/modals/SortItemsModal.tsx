@@ -42,7 +42,7 @@ interface Props {
 
 export default class Component extends React.Component<Props, State> {
 
-    sortEndtriesAndHide(sortKey, sortDirection) {
+    sortEntriesAndHide(sortKey, sortDirection) {
         this.props.sortItemsAndHide(sortKey, sortDirection);
     }
 
@@ -57,7 +57,7 @@ export default class Component extends React.Component<Props, State> {
                     key={`${metric.uid}asc`}
                     style={styles.textElement}
                     onPress={() => {
-                        this.sortEndtriesAndHide((item) => {
+                        this.sortEntriesAndHide((item) => {
                             const merticQuanitity = item.metricQuantities.filter((metricQuantity) => metricQuantity.metric.uid === metric.uid)[0];
                             return merticQuanitity.quantity;
                         }, "asc");
@@ -73,7 +73,7 @@ export default class Component extends React.Component<Props, State> {
                     key={`${metric.uid}desc`}
                     style={styles.textElement}
                     onPress={() => {
-                        this.sortEndtriesAndHide((item) => {
+                        this.sortEntriesAndHide((item) => {
                             const merticQuanitity = item.metricQuantities.filter((metricQuantity) => metricQuantity.metric.uid === metric.uid)[0];
                             return merticQuanitity.quantity;
                         }, "desc");
@@ -97,30 +97,42 @@ export default class Component extends React.Component<Props, State> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                <Text style={{textAlign: "left", paddingLeft: 20, color: theme.inputTextColor, fontSize: 20}}>Sort by:</Text>
+                    <Text style={{ textAlign: "left", paddingLeft: 20, color: theme.inputTextColor, fontSize: 20 }}>Sort by:</Text>
                     <Text
                         style={styles.textElement}
-                        onPress={() => { this.sortEndtriesAndHide("name", "asc"); }}
+                        onPress={() => { this.sortEntriesAndHide("name", "asc"); }}
                     >
                         {"\u2022"} {"Name"} &#8593;
                     </Text>
                     <Text
                         style={styles.textElement}
-                        onPress={() => { this.sortEndtriesAndHide("name", "desc"); }}
+                        onPress={() => { this.sortEntriesAndHide("name", "desc"); }}
                     >
                         {"\u2022"} {"Name"} &#8595;
                     </Text>
                     <Text
                         style={styles.textElement}
-                        onPress={() => { this.sortEndtriesAndHide("createdAt", "asc"); }}
+                        onPress={() => { this.sortEntriesAndHide("createdAt", "asc"); }}
                     >
                         {"\u2022"} {"Datum"} &#8593;
                     </Text>
                     <Text
                         style={styles.textElement}
-                        onPress={() => { this.sortEndtriesAndHide("createdAt", "desc"); }}
+                        onPress={() => { this.sortEntriesAndHide("createdAt", "desc"); }}
                     >
                         {"\u2022"} {"Datum"} &#8595;
+                    </Text>
+                    <Text
+                        style={styles.textElement}
+                        onPress={() => { this.sortEntriesAndHide("duration", "asc"); }}
+                    >
+                        {"\u2022"} {"Duration"} &#8593;
+                    </Text>
+                    <Text
+                        style={styles.textElement}
+                        onPress={() => { this.sortEntriesAndHide("duration", "desc"); }}
+                    >
+                        {"\u2022"} {"Duration"} &#8595;
                     </Text>
                     {this.renderMetricTags(this.props.metrics)}
                 </View>

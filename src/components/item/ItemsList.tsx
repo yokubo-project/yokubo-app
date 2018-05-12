@@ -10,6 +10,7 @@ import moment from "moment";
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
 import SortItemsModal from "./modals/SortItemsModal";
+import { formatDuration } from "../../shared/helpers";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -122,17 +123,11 @@ export default class Component extends React.Component<Props, State> {
             );
         });
 
-        const start = moment.utc(entry.period[0]);
-        const end = moment.utc(entry.period[1]);
-        const ms = end.diff(start);
-        const duration = moment.duration(ms);
-        const time = Math.floor(duration.asHours()) + moment.utc(ms).format("[h] mm[m] ss[s]");
-
         return (
             <View>
                 <Text style={styles.listText}>Datum: {moment(entry.createdAt).format("DD.MM.YYYY")}</Text>
                 {metrices}
-                <Text style={styles.listText}>Duration: {time}</Text>
+                <Text style={styles.listText}>Duration: {formatDuration(entry.duration)}</Text>
             </View>
         );
     }
