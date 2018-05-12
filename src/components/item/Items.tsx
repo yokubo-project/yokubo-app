@@ -7,7 +7,6 @@ import TabNavigator from "react-native-tab-navigator";
 
 import ItemsList from "./ItemsList";
 import ItemsStats from "./ItemsStats";
-import ItemsChart from "./ItemsChart";
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
 
@@ -87,20 +86,6 @@ export default class Component extends React.Component<Props, State> {
                     renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="equalizer" size={30} />}
                     onPress={() => this.changeTab("itemStats")}>
                     <ItemsStats
-                        task={this.props.task}
-                        headerText={headerText}
-                        handleOnAddIconClick={() => this.handleOnAddIconClick()}
-                    />
-                </TabNavigator.Item>
-                <TabNavigator.Item
-                    titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                    selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
-                    selected={this.state.selectedTab === "itemCharts"}
-                    title={this.state.selectedTab === "itemCharts" ? "Charts" : null}
-                    renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="dashboard" size={33} />}
-                    renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="dashboard" size={30} />}
-                    onPress={() => this.changeTab("itemCharts")}>
-                    <ItemsChart
                         task={this.props.task}
                         headerText={headerText}
                         handleOnAddIconClick={() => this.handleOnAddIconClick()}
