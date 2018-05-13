@@ -27,30 +27,17 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
-    listContainer: {
+    scrollViewContainer: {
         flexGrow: 6,
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
-    tagContainer: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-    },
-    tagElement: {
-        backgroundColor: "gray",
-        marginLeft: 10,
-        marginTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 5,
-        paddingBottom: 5,
-        borderRadius: 3
-    },
     listElement: {
         backgroundColor: theme.backgroundColor,
-        paddingTop: 5,
-        paddingBottom: 10,
+        paddingTop: 12,
+        paddingBottom: 12,
+        borderBottomWidth: 1,
+        borderColor: "gray",
+        marginLeft: 0,
     },
     listText: {
         // ...material.body1, 
@@ -188,8 +175,8 @@ export default class Component extends React.Component<Props, State> {
                     />
                 </View>
 
-                <ScrollView style={styles.listContainer}>
-                    <List containaerStyle={{ marginBottom: 20 }}>
+                <ScrollView style={styles.scrollViewContainer}>
+                    <List containerStyle={{ marginBottom: 20, borderTopWidth: 0, marginLeft: 0, paddingLeft: 0, marginTop: 0 }}>
                         <FlatList
                             data={this.state.task.items}
                             keyExtractor={item => item.uid.toString()}
