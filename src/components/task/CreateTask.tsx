@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, ViewStyle, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, ViewStyle, Text, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
@@ -10,6 +10,7 @@ import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import { theme } from "../../shared/styles";
+import LoadingIndicatorModal from "./modals/LoadingIndicatorModal";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
@@ -70,6 +71,8 @@ interface State {
     }>;
     isInputFieldsModalVisible: boolean;
     image: any;
+    isCreatingTaskModalVisible: boolean;
+    isPreparingImageModalVisible: boolean;
 }
 export default class Component extends React.Component<null, State> {
 
@@ -85,14 +88,16 @@ export default class Component extends React.Component<null, State> {
             inputNameError: null,
             inputGeneralError: null,
             isInputFieldsModalVisible: false,
-            image: null
+            image: null,
+            isCreatingTaskModalVisible: false,
+            isPreparingImageModalVisible: false
         };
     }
 
     async createTask() {
         const name = this.state.name;
-        const imageUid = this.state.imageUid;
         const metrics = this.state.metrics;
+        const imageUid = this.state.imageUid;
 
         if (name.length < 3) {
             this.setState({
@@ -102,6 +107,7 @@ export default class Component extends React.Component<null, State> {
             return;
         }
 
+        this.setState({ isCreatingTaskModalVisible: true });
         await taskStore.createTask({ name, imageUid, metrics });
 
         if (taskStore.error !== null) {
@@ -109,14 +115,11 @@ export default class Component extends React.Component<null, State> {
                 default:
                     this.setState({
                         inputNameError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: "An unexpected error happened",
+                        isCreatingTaskModalVisible: false
                     });
             }
         } else {
-            this.setState({
-                inputNameError: null,
-                inputGeneralError: null
-            });
             Actions.pop();
         }
     }
@@ -149,6 +152,8 @@ export default class Component extends React.Component<null, State> {
     }
 
     pickImage = async () => {
+        this.setState({ isPreparingImageModalVisible: true });
+
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
@@ -156,12 +161,16 @@ export default class Component extends React.Component<null, State> {
 
         try {
             if (!pickerResult.cancelled) {
-                this.setState({ image: pickerResult.uri });
                 const imageUid = await uploadImageAsync(pickerResult.uri);
-                this.setState({ imageUid: imageUid });
+                this.setState({
+                    image: pickerResult.uri,
+                    imageUid: imageUid,
+                    isPreparingImageModalVisible: false
+                });
             }
         } catch (e) {
             console.log("Error picking image: ", e);
+            this.setState({ isPreparingImageModalVisible: false });
         }
     }
 
@@ -177,7 +186,6 @@ export default class Component extends React.Component<null, State> {
             type: `image/${fileType}`,
         } as any);
 
-        // TODO: typing
         let options: any = {
             method: "POST",
             body: formData,
@@ -300,6 +308,15 @@ export default class Component extends React.Component<null, State> {
                     />
                 </View>
                 {this.showGeneralError()}
+
+                <LoadingIndicatorModal
+                    isVisible={this.state.isCreatingTaskModalVisible}
+                    loadingText={"Creating Task"}
+                />
+                <LoadingIndicatorModal
+                    isVisible={this.state.isPreparingImageModalVisible}
+                    loadingText={"Preparing Image"}
+                />
             </View>
         );
     }

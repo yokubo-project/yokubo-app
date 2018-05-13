@@ -12,6 +12,7 @@ import { IFullTask } from "../../state/taskStore";
 import DeleteTask from "../task/DeleteTask";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import { theme } from "../../shared/styles";
+import LoadingIndicatorModal from "./modals/LoadingIndicatorModal";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
@@ -72,7 +73,9 @@ interface State {
     }>;
     isInputFieldsModalVisible: boolean;
     image: any;
-    showDeleteModal: boolean;
+    isDeleteModalVisible: boolean;
+    isPatchingTaskModalVisible: boolean;
+    isPreparingImageModalVisible: boolean;
 }
 
 interface Props {
@@ -95,7 +98,9 @@ export default class Component extends React.Component<Props, State> {
             inputGeneralError: null,
             isInputFieldsModalVisible: false,
             image: this.props.task.image.thumbnail,
-            showDeleteModal: false
+            isDeleteModalVisible: false,
+            isPatchingTaskModalVisible: false,
+            isPreparingImageModalVisible: false
         };
     }
 
@@ -113,6 +118,7 @@ export default class Component extends React.Component<Props, State> {
         }
 
         // TODO: Patch metrics
+        this.setState({ isPatchingTaskModalVisible: true });
         await taskStore.patchTask(this.props.task.uid, { name, imageUid });
 
         if (taskStore.error !== null) {
@@ -120,14 +126,11 @@ export default class Component extends React.Component<Props, State> {
                 default:
                     this.setState({
                         inputNameError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: "An unexpected error happened",
+                        isPatchingTaskModalVisible: false
                     });
             }
         } else {
-            this.setState({
-                inputNameError: null,
-                inputGeneralError: null
-            });
             Actions.pop();
         }
     }
@@ -160,6 +163,8 @@ export default class Component extends React.Component<Props, State> {
     }
 
     _pickImage = async () => {
+        this.setState({ isPreparingImageModalVisible: true });
+
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
@@ -167,24 +172,28 @@ export default class Component extends React.Component<Props, State> {
 
         try {
             if (!pickerResult.cancelled) {
-                this.setState({ image: pickerResult.uri });
                 const imageUid = await uploadImageAsync(pickerResult.uri);
-                this.setState({ imageUid: imageUid });
+                this.setState({
+                    imageUid: imageUid,
+                    image: pickerResult.uri,
+                    isPreparingImageModalVisible: false
+                });
             }
         } catch (e) {
             console.log("Error picking image: ", e);
+            this.setState({ isPreparingImageModalVisible: false });
         }
     }
 
     hideVisibility() {
         this.setState({
-            showDeleteModal: false
+            isDeleteModalVisible: false
         });
     }
 
     showVisibility() {
         this.setState({
-            showDeleteModal: true
+            isDeleteModalVisible: true
         });
     }
 
@@ -195,7 +204,7 @@ export default class Component extends React.Component<Props, State> {
             <View style={styles.mainContainer}>
                 <DeleteTask
                     task={this.props.task}
-                    visible={this.state.showDeleteModal}
+                    visible={this.state.isDeleteModalVisible}
                     hideVisibility={() => this.hideVisibility()}
                 />
                 <View style={styles.headerContainer}>
@@ -309,6 +318,15 @@ export default class Component extends React.Component<Props, State> {
                     />
                 </View>
                 {this.showGeneralError()}
+
+                <LoadingIndicatorModal
+                    isVisible={this.state.isPatchingTaskModalVisible}
+                    loadingText={"Creating Task"}
+                />
+                <LoadingIndicatorModal
+                    isVisible={this.state.isPreparingImageModalVisible}
+                    loadingText={"Preparing Image"}
+                />
             </View>
         );
     }

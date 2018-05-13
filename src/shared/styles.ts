@@ -3,5 +3,6 @@ export const theme = {
     textColor: "white",
     errorTextColor: "#00F2D2",
     inputTextColor: "#DDD",
-    underlayColor: "#202020"
+    underlayColor: "#202020",
+    spinnerColor: "white"
 };

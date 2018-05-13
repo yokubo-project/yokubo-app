@@ -19,15 +19,8 @@ import PatchTask from "./src/components/task/PatchTask";
 import Items from "./src/components/item/Items";
 import CreateItem from "./src/components/item/CreateItem";
 import PatchItem from "./src/components/item/PatchItem";
+import { theme } from "./src/shared/styles";
 
-
-interface Props {
-}
-
-interface State {
-}
-
-const spinnerColor = "#00F2D2";
 
 const styles = StyleSheet.create({
     spinnerContainer: {
@@ -38,20 +31,20 @@ const styles = StyleSheet.create({
         backgroundColor: "#333333",
     },
     rehydrationText: {
-        color: "#00F2D2",
+        color: theme.textColor,
     }
 });
 
 const Spinner = () => {
     return (
         <View style={styles.spinnerContainer}>
-            <ActivityIndicator size="large" color={spinnerColor} />
-            <Text style={styles.rehydrationText}>Rehydration is taking place...</Text>
+            <ActivityIndicator size="large" color={theme.spinnerColor} />
+            <Text style={styles.rehydrationText}>Signing in...</Text>
         </View>
     );
 };
 
-class App extends React.Component<Props, State> {
+class App extends React.Component<null, null> {
 
     render() {
         return (
