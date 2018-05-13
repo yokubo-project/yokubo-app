@@ -26,6 +26,7 @@ export interface ITask {
 export interface IImage {
     uid: string;
     file: string;
+    thumbnail: string;
 }
 
 export interface IFullTask {

@@ -101,7 +101,6 @@ export default class Component extends React.Component<null, null> {
 
                 if (taskIndex < tasks.length) {
                     const task = tasks[taskIndex];
-
                     columns.push(
                         <TouchableOpacity
                             key={`column${columnIndex}`}
@@ -116,7 +115,7 @@ export default class Component extends React.Component<null, null> {
                         >
                             <Image
                                 key={`image${columnIndex}`}
-                                source={{ uri: task.image.file }}
+                                source={{ uri: task.image.thumbnail }}
                                 style={styles.formContainerImageElement}
                                 // @ts-ignore
                                 borderRadius={10}

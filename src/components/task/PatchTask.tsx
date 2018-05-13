@@ -94,7 +94,7 @@ export default class Component extends React.Component<Props, State> {
             inputNameError: null,
             inputGeneralError: null,
             isInputFieldsModalVisible: false,
-            image: this.props.task.image.file,
+            image: this.props.task.image.thumbnail,
             showDeleteModal: false
         };
     }
