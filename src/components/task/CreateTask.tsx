@@ -152,8 +152,6 @@ export default class Component extends React.Component<null, State> {
     }
 
     pickImage = async () => {
-        this.setState({ isPreparingImageModalVisible: true });
-
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
@@ -161,6 +159,7 @@ export default class Component extends React.Component<null, State> {
 
         try {
             if (!pickerResult.cancelled) {
+                this.setState({ isPreparingImageModalVisible: true });
                 const imageUid = await uploadImageAsync(pickerResult.uri);
                 this.setState({
                     image: pickerResult.uri,
