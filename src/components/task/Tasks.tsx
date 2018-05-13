@@ -73,15 +73,25 @@ const styles = StyleSheet.create({
     } as TextStyle
 });
 
+interface State {
+    loadedTasks: boolean;
+}
 @observer
-export default class Component extends React.Component<null, null> {
+export default class Component extends React.Component<null, State> {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            loadedTasks: false
+        };
     }
 
-    componentWillMount() {
-        taskStore.fetchTasks();
+    async componentDidMount() {
+        await taskStore.fetchTasks();
+        this.setState({
+            loadedTasks: true
+        });
     }
 
     handleOnCreateTaskClick() {
@@ -168,7 +178,16 @@ export default class Component extends React.Component<null, null> {
     }
 
     render() {
-        const content = taskStore.tasks.length > 0 ? this.renderTasks(taskStore.tasks) : this.renderWelcomeScreen();
+
+        let content;
+        if (!this.state.loadedTasks) {
+            content = null;
+        } else if (taskStore.tasks.length > 0) {
+            content = this.renderTasks(taskStore.tasks);
+        } else {
+            content = this.renderWelcomeScreen();
+        }
+
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.headerContainer}>
