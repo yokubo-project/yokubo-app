@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { StyleSheet, View, Text, ViewStyle, TextStyle } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, Header } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import TabNavigator from "react-native-tab-navigator";
 
@@ -13,6 +13,11 @@ import { theme } from "../../shared/styles";
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
+        backgroundColor: theme.backgroundColor,
+    } as ViewStyle,
+    headerContainer: {
+        flex: 1,
+        justifyContent: "space-around",
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     welcomeScreenContainer: {
@@ -58,62 +63,84 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
-    renderTabNavigation() {
-        const headerText = this.props.task.name.length > 12 ? `${this.props.task.name.slice(0, 12)}...` : this.props.task.name;
+    getHeaderText() {
+        return this.props.task.name.length > 12 ? `${this.props.task.name.slice(0, 12)}...` : this.props.task.name;
+    }
 
+    renderTabNavigation() {
         return (
-            <TabNavigator>
-                <TabNavigator.Item
-                    titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                    selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
-                    selected={this.state.selectedTab === "itemList"}
-                    title={this.state.selectedTab === "itemList" ? "List" : null}
-                    renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="list" size={33} />}
-                    renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="list" size={30} />}
-                    onPress={() => this.changeTab("itemList")}>
-                    <ItemsList
-                        task={this.props.task}
-                        headerText={headerText}
-                        handleOnAddIconClick={() => this.handleOnAddIconClick()}
-                    />
-                </TabNavigator.Item>
-                <TabNavigator.Item
-                    titleStyle={{ fontWeight: "bold", fontSize: 10 }}
-                    selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
-                    selected={this.state.selectedTab === "itemStats"}
-                    title={this.state.selectedTab === "itemStats" ? "Statistics" : null}
-                    renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
-                    renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="equalizer" size={30} />}
-                    onPress={() => this.changeTab("itemStats")}>
-                    <ItemsStats
-                        task={this.props.task}
-                        headerText={headerText}
-                        handleOnAddIconClick={() => this.handleOnAddIconClick()}
-                    />
-                </TabNavigator.Item>
-            </TabNavigator>
+            <View style={styles.mainContainer}>
+                <TabNavigator>
+                    <TabNavigator.Item
+                        titleStyle={{ fontWeight: "bold", fontSize: 10 }}
+                        selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
+                        selected={this.state.selectedTab === "itemList"}
+                        title={this.state.selectedTab === "itemList" ? "List" : null}
+                        renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="list" size={33} />}
+                        renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="list" size={30} />}
+                        onPress={() => this.changeTab("itemList")}>
+                        <ItemsList
+                            task={this.props.task}
+                            headerText={this.getHeaderText()}
+                            handleOnAddIconClick={() => this.handleOnAddIconClick()}
+                        />
+                    </TabNavigator.Item>
+                    <TabNavigator.Item
+                        titleStyle={{ fontWeight: "bold", fontSize: 10 }}
+                        selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
+                        selected={this.state.selectedTab === "itemStats"}
+                        title={this.state.selectedTab === "itemStats" ? "Statistics" : null}
+                        renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
+                        renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="equalizer" size={30} />}
+                        onPress={() => this.changeTab("itemStats")}>
+                        <ItemsStats
+                            task={this.props.task}
+                            headerText={this.getHeaderText()}
+                            handleOnAddIconClick={() => this.handleOnAddIconClick()}
+                        />
+                    </TabNavigator.Item>
+                </TabNavigator>
+            </View>
         );
     }
 
     renderWelcomeScreen() {
         return (
-            <View style={styles.welcomeScreenContainer}>
-                <Text style={styles.welcomeScreen}>
-                    {this.props.task.name} sounds like an awesome task! {"\n"}
-                    Add your first items to it by clicking on the + sign on the top right corner.
-                </Text>
+            <View style={styles.mainContainer}>
+                <View style={styles.headerContainer}>
+                    <Header
+                        innerContainerStyles={{ flexDirection: "row" }}
+                        backgroundColor={theme.backgroundColor}
+                        leftComponent={{
+                            icon: "arrow-back",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { Actions.pop(); }
+                        }}
+                        centerComponent={{ text: this.getHeaderText(), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        rightComponent={{
+                            icon: "add",
+                            color: "#fff",
+                            underlayColor: "transparent",
+                            onPress: () => { this.handleOnAddIconClick(); }
+                        }}
+                        statusBarProps={{ translucent: true }}
+                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
+                    />
+                </View>
+                <View style={styles.welcomeScreenContainer}>
+                    <Text style={styles.welcomeScreen}>
+                        {this.props.task.name} sounds like an awesome task! {"\n"}
+                        Add your first item to it by clicking on the + sign on the top right corner.
+                    </Text>
+                </View>
             </View>
         );
     }
 
     render() {
         const content = this.props.task.items.length > 0 ? this.renderTabNavigation() : this.renderWelcomeScreen();
-
-        return (
-            <View style={styles.mainContainer}>
-                {content}
-            </View>
-        );
+        return content;
     }
 
 }
