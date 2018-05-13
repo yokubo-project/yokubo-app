@@ -9,6 +9,7 @@ import taskStore from "../../state/taskStore";
 import { IItem } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
 import DeleteItemModal from "./modals/DeleteItemModal";
+import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -56,6 +57,7 @@ interface State {
     inputNameError: string;
     inputDateError: string;
     inputGeneralError: string;
+    isPatchingItemModalVisible: boolean;
 }
 
 interface Props {
@@ -77,7 +79,8 @@ export default class Component extends React.Component<Props, State> {
             isDeleteItemModalVisible: false,
             inputNameError: null,
             inputDateError: null,
-            inputGeneralError: null
+            inputGeneralError: null,
+            isPatchingItemModalVisible: false
         };
     }
 
@@ -109,6 +112,7 @@ export default class Component extends React.Component<Props, State> {
             };
         });
 
+        this.setState({ isPatchingItemModalVisible: true });
         await taskStore.patchItem(this.props.taskUid, this.props.item.uid, {
             name,
             period: [fromDate, toDate],
@@ -120,22 +124,19 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputDateError: "Invalid date range provided. Make sure start date is before end date",
-                        inputGeneralError: null
+                        inputGeneralError: null,
+                        isPatchingItemModalVisible: false
                     });
                     break;
                 default:
                     this.setState({
                         inputNameError: null,
                         inputDateError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: "An unexpected error happened",
+                        isPatchingItemModalVisible: false
                     });
             }
         } else {
-            this.setState({
-                inputNameError: null,
-                inputDateError: null,
-                inputGeneralError: null
-            });
             Actions.pop();
         }
     }
@@ -336,6 +337,11 @@ export default class Component extends React.Component<Props, State> {
                 >
                 </DeleteItemModal>
                 {this.showGeneralError()}
+
+                <LoadingIndicatorModal
+                    isVisible={this.state.isPatchingItemModalVisible}
+                    loadingText={"Updating item"}
+                />
             </View>
         );
     }

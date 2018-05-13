@@ -12,7 +12,7 @@ import { IFullTask } from "../../state/taskStore";
 import DeleteTask from "../task/DeleteTask";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import { theme } from "../../shared/styles";
-import LoadingIndicatorModal from "./modals/LoadingIndicatorModal";
+import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
@@ -321,7 +321,7 @@ export default class Component extends React.Component<Props, State> {
 
                 <LoadingIndicatorModal
                     isVisible={this.state.isPatchingTaskModalVisible}
-                    loadingText={"Creating Task"}
+                    loadingText={"Updating Task"}
                 />
                 <LoadingIndicatorModal
                     isVisible={this.state.isPreparingImageModalVisible}

@@ -8,6 +8,7 @@ import DatePicker from "react-native-datepicker";
 import taskStore from "../../state/taskStore";
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
+import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -53,6 +54,7 @@ interface State {
     inputNameError: string;
     inputDateError: string;
     inputGeneralError: string;
+    isCreatingItemModalVisible: boolean;
 }
 
 interface Props {
@@ -71,7 +73,8 @@ export default class Component extends React.Component<Props, State> {
             metrics: this.props.task.metrics,
             inputNameError: null,
             inputDateError: null,
-            inputGeneralError: null
+            inputGeneralError: null,
+            isCreatingItemModalVisible: false
         };
     }
 
@@ -103,6 +106,8 @@ export default class Component extends React.Component<Props, State> {
             };
         });
 
+
+        this.setState({ isCreatingItemModalVisible: true });
         await taskStore.createItem(this.props.task.uid, {
             name,
             desc: "Desc",
@@ -115,22 +120,19 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputDateError: "Invalid date range provided. Make sure start date is before end date",
-                        inputGeneralError: null
+                        inputGeneralError: null,
+                        isCreatingItemModalVisible: false
                     });
                     break;
                 default:
                     this.setState({
                         inputNameError: null,
                         inputDateError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: "An unexpected error happened",
+                        isCreatingItemModalVisible: false
                     });
             }
         } else {
-            this.setState({
-                inputNameError: null,
-                inputDateError: null,
-                inputGeneralError: null
-            });
             Actions.pop();
         }
     }
@@ -313,6 +315,11 @@ export default class Component extends React.Component<Props, State> {
                     />
                 </View>
                 {this.showGeneralError()}
+
+                <LoadingIndicatorModal
+                    isVisible={this.state.isCreatingItemModalVisible}
+                    loadingText={"Creating Item"}
+                />
             </View>
         );
     }

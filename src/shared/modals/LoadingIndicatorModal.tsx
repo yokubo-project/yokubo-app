@@ -4,9 +4,9 @@ import { FormInput, Button, FormValidationMessage } from "react-native-elements"
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 
-import authStore from "../../../state/authStore";
-import { theme } from "../../../shared/styles";
-import taskStore, { IItem } from "../../../state/taskStore";
+import authStore from "../../state/authStore";
+import { theme } from "../styles";
+import taskStore, { IItem } from "../../state/taskStore";
 
 const styles = StyleSheet.create({
     modalInputStyle: {

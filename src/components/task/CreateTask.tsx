@@ -10,7 +10,7 @@ import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import { theme } from "../../shared/styles";
-import LoadingIndicatorModal from "./modals/LoadingIndicatorModal";
+import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
