@@ -5,6 +5,7 @@ import { Actions } from "react-native-router-flux";
 
 import authStore from "../../state/authStore";
 import { theme } from "../../shared/styles";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -91,7 +92,7 @@ export default class Component extends React.Component<null, State> {
 
         if (email.length < 5) {
             this.setState({
-                inputEmailError: "Email must have at least 5 characters",
+                inputEmailError: i18n.t("signIn.emailToShort"),
                 inputPasswordError: null,
                 inputGeneralError: null
             });
@@ -99,7 +100,7 @@ export default class Component extends React.Component<null, State> {
         } else if (password.length < 6) {
             this.setState({
                 inputEmailError: null,
-                inputPasswordError: "Password must have at least 6 characters",
+                inputPasswordError: i18n.t("signIn.pwdToShort"),
                 inputGeneralError: null
             });
             return;
@@ -113,13 +114,13 @@ export default class Component extends React.Component<null, State> {
                     this.setState({
                         inputEmailError: null,
                         inputPasswordError: null,
-                        inputGeneralError: "This user is disabled"
+                        inputGeneralError: i18n.t("signIn.userDisabled"),
                     });
                     break;
                 case "InvalidLogin":
                     this.setState({
                         inputEmailError: null,
-                        inputPasswordError: "Invalid email or password",
+                        inputPasswordError: i18n.t("signIn.invalidLogin"),
                         inputGeneralError: null
                     });
                     break;
@@ -127,7 +128,7 @@ export default class Component extends React.Component<null, State> {
                     this.setState({
                         inputEmailError: null,
                         inputPasswordError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: i18n.t("signIn.unexpectedError"),
                     });
             }
         } else {
@@ -153,7 +154,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "Sign In", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: i18n.t("signIn.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -161,7 +162,7 @@ export default class Component extends React.Component<null, State> {
                 <View style={styles.formContainer}>
                     <FormInput
                         inputStyle={styles.inputStyle}
-                        placeholder="Email"
+                        placeholder={i18n.t("signIn.emailPlaceholder")}
                         onChangeText={(e) => this.parseEmail(e)}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -170,7 +171,7 @@ export default class Component extends React.Component<null, State> {
 
                     <FormInput
                         inputStyle={styles.inputStyle}
-                        placeholder="Password"
+                        placeholder={i18n.t("signIn.pwdPlaceholder")}
                         onChangeText={(e) => this.parsePassword(e)}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -183,33 +184,33 @@ export default class Component extends React.Component<null, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"SIGN IN"}
+                        title={i18n.t("signIn.signinButton")}
                         onPress={() => { this.processSignIn(); }}
                     />
                     <View style={{ flexDirection: "row", paddingTop: 30, justifyContent: "center" }}>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
                         >
-                            Not a member yet?
+                            {i18n.t("signIn.notAMember")}
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
                             onPress={() => { Actions.signUp(); }}
                         >
-                            Sign Up
+                            {i18n.t("signIn.signupLink")}
                         </Text>
                     </View>
                     <View style={{ flexDirection: "row", paddingTop: 15, justifyContent: "center" }}>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
                         >
-                            Forgot your password?
+                            {i18n.t("signIn.forgotPwd")}
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
                             onPress={() => { Actions.forgotPwd(); }}
                         >
-                            Help
+                            {i18n.t("signIn.forgotPwdLink")}
                         </Text>
                     </View>
                 </View>

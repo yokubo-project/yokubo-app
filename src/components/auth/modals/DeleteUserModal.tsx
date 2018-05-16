@@ -6,6 +6,7 @@ import Modal from "react-native-modal";
 
 import authStore from "../../../state/authStore";
 import { theme } from "../../../shared/styles";
+import i18n from "../../../shared/i18n";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -52,14 +53,14 @@ export default class Component extends React.Component<Props, State> {
             switch (authStore.error) {
                 case "PasswordsDontMatch":
                     this.setState({
-                        inputPwdError: "Wrong password",
+                        inputPwdError: i18n.t("deleteUser.wrongPwd"),
                         inputGeneralError: null
                     });
                     break;
                 default:
                     this.setState({
                         inputPwdError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: i18n.t("deleteUser.unexpectedError")
                     });
             }
         } else {
@@ -108,12 +109,11 @@ export default class Component extends React.Component<Props, State> {
                         textAlign: "center",
                         marginBottom: 20
                     }}>
-                        Please enter your current password in order to delete your user.
-                        Note that deleting your user is irreversibly and all data associated with your account will be lost.
+                        {i18n.t("deleteUser.deleteUserHint")}
                     </Text>
                     <FormInput
                         inputStyle={styles.modalInputStyle}
-                        placeholder="Current Password"
+                        placeholder={i18n.t("deleteUser.currentPwdPlaceholder")}
                         onChangeText={(value) => this.setState({ inputDeleteUserPwd: value })}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -125,7 +125,7 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"Delete User"}
+                        title={i18n.t("deleteUser.deleteUserButton")}
                         onPress={() => { this.deleteUser(); }}
                     />
                     {this.showGeneralError()}

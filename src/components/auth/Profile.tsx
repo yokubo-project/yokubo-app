@@ -10,6 +10,7 @@ import DeleteUserModal from "./modals/DeleteUserModal";
 import UpdateProfileModal from "./modals/UpdateProfileModal";
 import LogoutModal from "./modals/LogoutModal";
 import { theme } from "../../shared/styles";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -84,7 +85,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "Profile", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: i18n.t("profile.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -115,7 +116,7 @@ export default class Component extends React.Component<null, State> {
                     <List containerStyle={{ marginBottom: 20, borderTopWidth: 0, marginLeft: 0, paddingLeft: 0 }}>
                         <ListItem
                             style={styles.listElement}
-                            title={"Update Profile"}
+                            title={i18n.t("profile.updateProfile")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showProfileModal()}
                             hideChevron={true}
@@ -123,7 +124,7 @@ export default class Component extends React.Component<null, State> {
                         />
                         <ListItem
                             style={styles.listElement}
-                            title={"Change Password"}
+                            title={i18n.t("profile.changePassword")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showResetPwdModal()}
                             hideChevron={true}
@@ -131,7 +132,7 @@ export default class Component extends React.Component<null, State> {
                         />
                         <ListItem
                             style={styles.listElement}
-                            title={"Privacy"}
+                            title={i18n.t("profile.privacy")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => Linking.openURL("https://www.yokubo.org/views/v1/privacy")}
                             hideChevron={true}
@@ -139,7 +140,7 @@ export default class Component extends React.Component<null, State> {
                         />
                         <ListItem
                             style={styles.listElement}
-                            title={"Impress"}
+                            title={i18n.t("profile.impress")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => Linking.openURL("https://www.yokubo.org/views/v1/impress")}
                             hideChevron={true}
@@ -147,7 +148,7 @@ export default class Component extends React.Component<null, State> {
                         />
                         <ListItem
                             style={styles.listElement}
-                            title={"Logout"}
+                            title={i18n.t("profile.logout")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showLogoutModal()}
                             hideChevron={true}
@@ -155,7 +156,7 @@ export default class Component extends React.Component<null, State> {
                         />
                         <ListItem
                             style={styles.listElement}
-                            title={"Delete User"}
+                            title={i18n.t("profile.deleteUser")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showDeleteUserModal()}
                             hideChevron={true}

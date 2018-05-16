@@ -5,6 +5,7 @@ import Modal from "react-native-modal";
 
 import authStore from "../../../state/authStore";
 import { theme } from "../../../shared/styles";
+import i18n from "../../../shared/i18n";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -55,7 +56,7 @@ export default class Component extends React.Component<Props, State> {
 
         if (newPwd.length < 6) {
             this.setState({
-                inputNewPwdError: "Password must have at least 6 characters",
+                inputNewPwdError: i18n.t("resetPwd.pwdToShort"),
                 inputGeneralError: null
             });
             return;
@@ -67,13 +68,13 @@ export default class Component extends React.Component<Props, State> {
                 case "PasswordsDontMatch":
                     this.setState({
                         inputNewPwdError: null,
-                        inputCurrentPwdError: "The password entered does not match your curent password",
+                        inputCurrentPwdError: i18n.t("resetPwd.wrongPwd"),
                         inputGeneralError: null
                     });
                     break;
                 case "PasswordWeak":
                     this.setState({
-                        inputNewPwdError: "New password is to weak",
+                        inputNewPwdError: i18n.t("resetPwd.newPwdToWeak"),
                         inputCurrentPwdError: null,
                         inputGeneralError: null
                     });
@@ -82,7 +83,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNewPwdError: null,
                         inputCurrentPwdError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: i18n.t("resetPwd.unexpectedError"),
                     });
             }
         } else {
@@ -134,7 +135,7 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.modalContent}>
                     <FormInput
                         inputStyle={styles.modalInputStyle}
-                        placeholder="Current Password"
+                        placeholder={i18n.t("resetPwd.currentPwdPlaceholder")}
                         onChangeText={(value) => this.setState({ inputCurrentPwd: value })}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -144,7 +145,7 @@ export default class Component extends React.Component<Props, State> {
 
                     <FormInput
                         inputStyle={styles.modalInputStyle}
-                        placeholder="New Password"
+                        placeholder={i18n.t("resetPwd.newPwdPlaceholder")}
                         onChangeText={(value) => this.setState({ inputNewPwd: value })}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -156,7 +157,7 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"Reset Password"}
+                        title={i18n.t("resetPwd.resetPwdButton")}
                         onPress={() => { this.resetPwd(); }}
                     />
                     {this.showGeneralError()}

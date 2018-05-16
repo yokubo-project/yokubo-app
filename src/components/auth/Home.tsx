@@ -50,7 +50,7 @@ export default class Component extends React.Component<null, null> {
                     <Text
                         style={styles.quote}
                     >
-                        It's the challenge that makes the greatness.
+                        {i18n.t("home.quote")}
                     </Text>
                 </View>
                 <View style={styles.buttonContainer}>
@@ -58,7 +58,7 @@ export default class Component extends React.Component<null, null> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"SIGN UP"}
+                        title={i18n.t("home.signupButton")}
                         onPress={() => { Actions.signUp(); }}
                     />
                     <View style={{ flex: 1, flexDirection: "row", padding: 30, justifyContent: "center" }}>
@@ -71,7 +71,7 @@ export default class Component extends React.Component<null, null> {
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
                             onPress={() => { Actions.signIn(); }}
                         >
-                            Sign In
+                            {i18n.t("home.signinLink")}
                         </Text>
                     </View>
                 </View>

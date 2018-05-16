@@ -5,6 +5,7 @@ import { Actions } from "react-native-router-flux";
 
 import authStore from "../../state/authStore";
 import { theme } from "../../shared/styles";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -108,7 +109,7 @@ export default class Component extends React.Component<null, State> {
 
         if (name.length < 3) {
             this.setState({
-                inputNameError: "Name must have at least 3 characters",
+                inputNameError: i18n.t("signUp.nameToShort"),
                 inputEmailError: null,
                 inputPasswordError: null,
                 inputGeneralError: null
@@ -117,7 +118,7 @@ export default class Component extends React.Component<null, State> {
         } else if (email.length < 5) {
             this.setState({
                 inputNameError: null,
-                inputEmailError: "Email must have at least 5 characters",
+                inputEmailError: i18n.t("signUp.emailToShort"),
                 inputPasswordError: null,
                 inputGeneralError: null
             });
@@ -126,7 +127,7 @@ export default class Component extends React.Component<null, State> {
             this.setState({
                 inputNameError: null,
                 inputEmailError: null,
-                inputPasswordError: "Password must have at least 6 characters",
+                inputPasswordError: i18n.t("signUp.pwdToShort"),
                 inputGeneralError: null
             });
             return;
@@ -138,7 +139,7 @@ export default class Component extends React.Component<null, State> {
                 case "UserAlreadyExists":
                     this.setState({
                         inputNameError: null,
-                        inputEmailError: "Email already exists",
+                        inputEmailError: i18n.t("signUp.userAlreadyExists"),
                         inputPasswordError: null,
                         inputGeneralError: null
                     });
@@ -146,7 +147,7 @@ export default class Component extends React.Component<null, State> {
                 case "InvalidUsername":
                     this.setState({
                         inputNameError: null,
-                        inputEmailError: "Email is invalid",
+                        inputEmailError: i18n.t("signUp.invalidEmail"),
                         inputPasswordError: null,
                         inputGeneralError: null
                     });
@@ -155,7 +156,7 @@ export default class Component extends React.Component<null, State> {
                     this.setState({
                         inputNameError: null,
                         inputEmailError: null,
-                        inputPasswordError: "Password is to weak",
+                        inputPasswordError: i18n.t("signUp.pwdToWeak"),
                         inputGeneralError: null
                     });
                     break;
@@ -164,7 +165,7 @@ export default class Component extends React.Component<null, State> {
                         inputNameError: null,
                         inputEmailError: null,
                         inputPasswordError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: i18n.t("signUp.unexpectedError"),
                     });
             }
         } else {
@@ -191,7 +192,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "Sign up", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: i18n.t("signUp.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -199,7 +200,7 @@ export default class Component extends React.Component<null, State> {
                 <View style={styles.formContainer}>
                     <FormInput
                         inputStyle={styles.inputStyle}
-                        placeholder="Full Name"
+                        placeholder={i18n.t("signUp.namePlaceholder")}
                         onChangeText={(e) => this.parseName(e)}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -208,7 +209,7 @@ export default class Component extends React.Component<null, State> {
 
                     <FormInput
                         inputStyle={styles.inputStyle}
-                        placeholder="Email"
+                        placeholder={i18n.t("signUp.emailPlaceholder")}
                         onChangeText={(e) => this.parseEmail(e)}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -217,7 +218,7 @@ export default class Component extends React.Component<null, State> {
 
                     <FormInput
                         inputStyle={styles.inputStyle}
-                        placeholder="Password"
+                        placeholder={i18n.t("signUp.pwdPlaceholder")}
                         onChangeText={(e) => this.parsePassword(e)}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -230,20 +231,20 @@ export default class Component extends React.Component<null, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"SIGN UP"}
+                        title={i18n.t("signUp.signupButton")}
                         onPress={() => { this.processSignUp(); }}
                     />
                     <View style={{ flexDirection: "row", padding: 30, justifyContent: "center" }}>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
                         >
-                            Already a member?
+                            {i18n.t("signUp.alreadyRegistered")}
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
                             onPress={() => { Actions.signIn(); }}
                         >
-                            Sign In
+                            {i18n.t("signUp.signinLink")}
                         </Text>
                     </View>
                 </View>

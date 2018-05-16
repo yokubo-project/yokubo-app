@@ -5,6 +5,7 @@ import { Actions } from "react-native-router-flux";
 
 import authStore from "../../state/authStore";
 import { theme } from "../../shared/styles";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -73,7 +74,7 @@ export default class Component extends React.Component<null, State> {
 
         if (email.length < 5) {
             this.setState({
-                inputEmailError: "Email must have at least 5 characters",
+                inputEmailError: i18n.t("forgotPwd.emailToShort"),
                 inputGeneralError: null
             });
             return;
@@ -86,14 +87,14 @@ export default class Component extends React.Component<null, State> {
                 default:
                     this.setState({
                         inputEmailError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: i18n.t("forgotPwd.unexpectedError"),
                     });
             }
         } else {
             this.setState({
                 inputEmailError: null,
                 inputGeneralError: null,
-                emailHint: "An email with intructions to reset your password was sent to you. Please check your inbox."
+                emailHint: i18n.t("forgotPwd.emailHint"),
             });
         }
     }
@@ -111,7 +112,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "Reset Password", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: i18n.t("forgotPwd.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -119,7 +120,7 @@ export default class Component extends React.Component<null, State> {
                 <View style={styles.formContainer}>
                     <FormInput
                         inputStyle={styles.inputStyle}
-                        placeholder="Email"
+                        placeholder={i18n.t("forgotPwd.emailPlaceholder")}
                         onChangeText={(e) => this.parseEmail(e)}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -131,7 +132,7 @@ export default class Component extends React.Component<null, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"Reset Password"}
+                        title={i18n.t("forgotPwd.resetPwdButton")}
                         onPress={() => { this.processForgotPwd(); }}
                     />
 
@@ -153,13 +154,13 @@ export default class Component extends React.Component<null, State> {
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
                         >
-                            Bring me back to
+                            {i18n.t("forgotPwd.signinText")}
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
                             onPress={() => { Actions.signIn(); }}
                         >
-                            Sign In
+                            {i18n.t("forgotPwd.signinLink")}
                         </Text>
                     </View>
                 </View>

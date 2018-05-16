@@ -5,6 +5,7 @@ import Modal from "react-native-modal";
 
 import authStore from "../../../state/authStore";
 import { theme } from "../../../shared/styles";
+import i18n from "../../../shared/i18n";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -54,7 +55,7 @@ export default class Component extends React.Component<Props, State> {
 
         if (name.length < 3) {
             this.setState({
-                inputNameError: "Name must have at least 3 characters",
+                inputNameError: i18n.t("updateProfile.nameToShort"),
                 inputEmailError: null,
                 inputGeneralError: null
             });
@@ -62,7 +63,7 @@ export default class Component extends React.Component<Props, State> {
         } else if (email.length < 5) {
             this.setState({
                 inputNameError: null,
-                inputEmailError: "Email must have at least 5 characters",
+                inputEmailError: i18n.t("updateProfile.emailToShort"),
                 inputGeneralError: null
             });
             return;
@@ -74,14 +75,14 @@ export default class Component extends React.Component<Props, State> {
                 case "UserAlreadyExists":
                     this.setState({
                         inputNameError: null,
-                        inputEmailError: "Email already exists",
+                        inputEmailError: i18n.t("updateProfile.userAlreadyExists"),
                         inputGeneralError: null
                     });
                     break;
                 case "InvalidUsername":
                     this.setState({
                         inputNameError: null,
-                        inputEmailError: "Email already exists",
+                        inputEmailError: i18n.t("updateProfile.invalidEmail"),
                         inputGeneralError: null
                     });
                     break;
@@ -89,7 +90,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputEmailError: null,
-                        inputGeneralError: "An unexpected error happened"
+                        inputGeneralError: i18n.t("updateProfile.unexpectedError"),
                     });
             }
         } else {
@@ -144,7 +145,7 @@ export default class Component extends React.Component<Props, State> {
                     <FormInput
                         inputStyle={styles.modalInputStyle}
                         defaultValue={authStore.profile.name}
-                        placeholder={"Name"}
+                        placeholder={i18n.t("updateProfile.namePlaceholder")}
                         onChangeText={(value) => this.setState({ inputName: value })}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -154,7 +155,7 @@ export default class Component extends React.Component<Props, State> {
                     <FormInput
                         inputStyle={styles.modalInputStyle}
                         defaultValue={authStore.username}
-                        placeholder={"Email"}
+                        placeholder={i18n.t("updateProfile.emailPlaceholder")}
                         onChangeText={(value) => this.setState({ inputEmail: value })}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
@@ -165,7 +166,7 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"Update Profile"}
+                        title={i18n.t("updateProfile.updateProfileButton")}
                         onPress={() => { this.patchProfile(); }}
                     />
                     {this.showGeneralError()}

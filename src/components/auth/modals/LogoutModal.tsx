@@ -6,6 +6,7 @@ import Modal from "react-native-modal";
 
 import authStore from "../../../state/authStore";
 import { theme } from "../../../shared/styles";
+import i18n from "../../../shared/i18n";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -76,13 +77,13 @@ export default class Component extends React.Component<Props, State> {
                         textAlign: "center",
                         marginBottom: 20
                     }}>
-                        Are you sure you want to logut?
+                        {i18n.t("logout.logoutHint")}
                     </Text>
                     <Button
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"Yes, logout"}
+                        title={i18n.t("logout.logoutButton")}
                         onPress={() => { this.signOut(); }}
                     />
                     {this.showGeneralError()}
