@@ -8,6 +8,7 @@ const languageDetector = {
     detect: (cb) => {
         return Expo.Util.getCurrentLocaleAsync()
             .then(lng => { cb(lng.split("_")[0]); });
+
     },
     // tslint:disable-next-line:no-empty
     init: () => { },
@@ -16,22 +17,190 @@ const languageDetector = {
 };
 
 i18n
-    .use(languageDetector)
     .use(reactI18nextModule)
+    .use(languageDetector)
     .init({
-        fallbackLng: "de",
+        fallbackLng: "en",
         resources: {
             en: {
                 translation: {
                     home: {
-                        alreadyRegistered: "Already a member?"
+                        header: "Home",
+                        quote: "It's the challenge that makes the greatness.",
+                        alreadyRegistered: "Already a member?",
+                        signupButton: "SIGN UP",
+                        signinLink: "Sign In"
+                    },
+                    profile: {
+                        header: "Profile",
+                        updateProfile: "Update Profile",
+                        changePassword: "Change Password",
+                        privacy: "Privacy",
+                        impress: "Impress",
+                        logout: "Logout",
+                        deleteUser: "Delete User"
+                    },
+                    signIn: {
+                        header: "Sign In",
+                        emailPlaceholder: "Email",
+                        pwdPlaceholder: "Password",
+                        signinButton: "SIGN IN",
+                        notAMember: "Not a member yet?",
+                        signupLink: "Sign Up",
+                        forgotPwd: "Forgot your password?",
+                        forgotPwdLink: "Help",
+                        emailToShort: "Email must have at least 5 characters",
+                        pwdToShort: "Password must have at least 6 characters",
+                        userDisabled: "This user is disabled",
+                        invalidLogin: "Invalid email or password",
+                        unexpectedError: "An unexpected error happened"
+                    },
+                    signUp: {
+                        header: "Sign Up",
+                        namePlaceholder: "Full Name",
+                        emailPlaceholder: "Email",
+                        pwdPlaceholder: "Password",
+                        alreadyRegistered: "Already a member?",
+                        signupButton: "SIGN UP",
+                        signinLink: "Sign In",
+                        nameToShort: "Name must have at least 3 characters",
+                        emailToShort: "Email must have at least 5 characters",
+                        pwdToShort: "Password must have at least 6 characters",
+                        userAlreadyExists: "Email already exists",
+                        invalidEmail: "Email is invalid",
+                        pwdToWeak: "Password is to weak",
+                        unexpectedError: "An unexpected error happened"
+                    },
+                    forgotPwd: {
+                        header: "Reset Password",
+                        emailPlaceholder: "Email",
+                        resetPwdButton: "RESET PASSWORD",
+                        signinText: "Bring me back to",
+                        signinLink: "Sign In",
+                        emailToShort: "Email must have at least 5 characters",
+                        unexpectedError: "An unexpected error happened",
+                        emailHint: "An email with intructions to reset your password was sent to you. Please check your inbox."
+                    },
+                    deleteUser: {
+                        currentPwdPlaceholder: "Current Password",
+                        deleteUserHint: "Please enter your current password in order to delete your user. Note that deleting your user is irreversibly and all data associated with your account will be lost.",
+                        deleteUserButton: "DELETE USER",
+                        wrongPwd: "The password entered does not match your curent password",
+                        unexpectedError: "An unexpected error happened",
+                    },
+                    logout: {
+                        logoutHint: "Are you sure you want to logut?",
+                        logoutButton: "LOGOUT"
+                    },
+                    resetPwd: {
+                        currentPwdPlaceholder: "Current Password",
+                        newPwdPlaceholder: "New Password",
+                        resetPwdButton: "RESET",
+                        pwdToShort: "Password must have at least 6 characters",
+                        wrongPwd: "The password entered does not match your curent password",
+                        newPwdToWeak: "New password is to weak",
+                        unexpectedError: "An unexpected error happened",
+                    },
+                    updateProfile: {
+                        namePlaceholder: "Full Name",
+                        emailPlaceholder: "Email",
+                        updateProfileButton: "UPDATE",
+                        nameToShort: "Name must have at least 3 characters",
+                        emailToShort: "Email must have at least 5 characters",
+                        userAlreadyExists: "Email already exists",
+                        invalidEmail: "Email is invalid",
+                        unexpectedError: "An unexpected error happened"
                     }
                 }
             },
             de: {
                 translation: {
                     home: {
-                        alreadyRegistered: "Bereits registriert?"
+                        header: "Home",
+                        quote: "Man wächst mit seinen Aufgaben",
+                        alreadyRegistered: "Bereits registriert?",
+                        signupButton: "REGISTRIEREN",
+                        signinLink: "Anmelden"
+                    },
+                    profile: {
+                        header: "Profil",
+                        updateProfile: "Profil ändern",
+                        changePassword: "Passwort ändern",
+                        privacy: "Datenschutz",
+                        impress: "Impressum",
+                        logout: "Logout",
+                        deleteUser: "User löschen"
+                    },
+                    signIn: {
+                        header: "Anmelden",
+                        emailPlaceholder: "Email",
+                        pwdPlaceholder: "Passwort",
+                        signinButton: "ANMELDEN",
+                        notAMember: "Noch kein Mitglied?",
+                        signupLink: "Registrieren",
+                        forgotPwd: "Passwort vergessen?",
+                        forgotPwdLink: "Hilfe",
+                        emailToShort: "Email muss aus mindestens 5 Zeichen bestehen",
+                        pwdToShort: "Password muss aus mindestens 6 Zeichen bestehen",
+                        userDisabled: "Dieser User ist gesperrt",
+                        invalidLogin: "Unültige Email oder Passwort",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten"
+                    },
+                    signUp: {
+                        header: "Registrieren",
+                        namePlaceholder: "Dein Name",
+                        emailPlaceholder: "Email",
+                        pwdPlaceholder: "Passwort",
+                        alreadyRegistered: "Bereits registriert?",
+                        signupButton: "REGISTRIEREN",
+                        signinLink: "Anmelden",
+                        nameToShort: "Name muss aus mindestens 3 Zeichen bestehen",
+                        emailToShort: "Email muss aus mindestens 5 Zeichen bestehen",
+                        pwdToShort: "Password muss aus mindestens 6 Zeichen bestehen",
+                        userAlreadyExists: "Email bereits in Verwendung",
+                        invalidEmail: "Ungültige Email",
+                        pwdToWeak: "Zu schwaches Passwort",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten"
+                    },
+                    forgotPwd: {
+                        header: "Passwort zurücksetzen",
+                        emailPlaceholder: "Email",
+                        resetPwdButton: "NEUES PASSWORT",
+                        signinText: "Zurück zur",
+                        signinLink: "Anmeldung",
+                        emailToShort: "Email muss aus mindestens 5 Zeichen bestehen",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                        emailHint: "Dir wurde soeben eine Email zum zurücksetzen deines Passworts gesendet."
+                    },
+                    deleteUser: {
+                        currentPwdPlaceholder: "Aktuelles Passwort",
+                        deleteUserHint: "Bitte gib dein aktuelles Passwort ein um deinen User zu löschen. Bitte berücksichtige das dieser Vorgang nicht rückgängig gemacht werden kann und alle deine Daten gelöscht werden.",
+                        deleteUserButton: "LÖSCHEN",
+                        wrongPwd: "Das eingegebene Passwort stimmt nicht mit deinen aktuellen überein",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                    },
+                    logout: {
+                        logoutHint: "Bist du sicher, dass du dich ausloggen möchtest?",
+                        logoutButton: "LOGOUT"
+                    },
+                    resetPwd: {
+                        currentPwdPlaceholder: "Aktuelles Passwort",
+                        newPwdPlaceholder: "Neues Passwort",
+                        resetPwdButton: "RESET",
+                        pwdToShort: "Password muss aus mindestens 6 Zeichen bestehen",
+                        wrongPwd: "Das eingegebene Passwort stimmt nicht mit deinen aktuellen überein",
+                        newPwdToWeak: "Das neue Passwort ist zu schwach",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                    },
+                    updateProfile: {
+                        namePlaceholder: "Dein Name",
+                        emailPlaceholder: "Email",
+                        updateProfileButton: "UPDATE",
+                        nameToShort: "Name muss aus mindestens 3 Zeichen bestehen",
+                        emailToShort: "Email muss aus mindestens 5 Zeichen bestehen",
+                        userAlreadyExists: "Email bereits in Verwendung",
+                        invalidEmail: "Ungültige Email",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten"
                     }
                 }
             },
