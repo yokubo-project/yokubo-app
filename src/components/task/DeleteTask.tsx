@@ -7,6 +7,7 @@ import Modal from "react-native-modal";
 import taskStore from "../../state/taskStore";
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -64,17 +65,7 @@ export default class Component extends React.Component<Props, null> {
                             <Text
                                 style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                             >
-                                Delete task
-                            </Text>
-                            <Text
-                                style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
-                            >
-                                {this.props.task.name}
-                            </Text>
-                            <Text
-                                style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
-                            >
-                                ?
+                                {i18n.t("deleteTask.deleteHint", { taskName: this.props.task.name })}?
                             </Text>
                         </View>
 
@@ -82,7 +73,7 @@ export default class Component extends React.Component<Props, null> {
                             raised
                             buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
-                            title={"DELETE"}
+                            title={i18n.t("deleteTask.deleteButton")}
                             onPress={() => { this.deleteTask(); }}
                         />
                     </View>

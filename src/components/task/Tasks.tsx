@@ -8,6 +8,7 @@ import { Actions } from "react-native-router-flux";
 import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
 import { theme } from "../../shared/styles";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -170,8 +171,8 @@ export default class Component extends React.Component<null, State> {
         return (
             <View style={styles.welcomeScreenContainer}>
                 <Text style={styles.welcomeScreen}>
-                    Hi, {authStore.profile.name}! {"\n"}
-                    Click on the + sign on the top right corner to create your first task.
+                    {i18n.t("tasks.welcome", { username: authStore.profile.name })} {"\n"}
+                    {i18n.t("tasks.getStarted")}
                 </Text>
             </View>
         );
@@ -200,7 +201,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.profile(); }
                         }}
-                        centerComponent={{ text: "Tasks", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: i18n.t("tasks.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         rightComponent={{
                             icon: "add",
                             color: "#fff",

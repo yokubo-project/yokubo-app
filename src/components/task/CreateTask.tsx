@@ -11,6 +11,7 @@ import taskStore from "../../state/taskStore";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import { theme } from "../../shared/styles";
 import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
+import i18n from "../../shared/i18n";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
@@ -101,7 +102,7 @@ export default class Component extends React.Component<null, State> {
 
         if (name.length < 3) {
             this.setState({
-                inputNameError: "Name must be at least 3 characters long",
+                inputNameError: i18n.t("createTask.nameToShort"),
                 inputGeneralError: null
             });
             return;
@@ -115,7 +116,7 @@ export default class Component extends React.Component<null, State> {
                 default:
                     this.setState({
                         inputNameError: null,
-                        inputGeneralError: "An unexpected error happened",
+                        inputGeneralError: i18n.t("createTask.unexpectedError"),
                         isCreatingTaskModalVisible: false
                     });
             }
@@ -234,7 +235,7 @@ export default class Component extends React.Component<null, State> {
                 </View>
                 <FormInput
                     inputStyle={styles.inputStyle}
-                    placeholder="Name"
+                    placeholder={i18n.t("createTask.namePlaceholder")}
                     onChangeText={(value) => this.setState({ name: value })}
                     underlineColorAndroid={theme.textColor}
                     selectionColor={theme.inputTextColor} // cursor color
@@ -245,13 +246,13 @@ export default class Component extends React.Component<null, State> {
                     marginTop: 15,
                     marginLeft: 15
                 }}>
-                    <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>Metrics:</Text>
+                    <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("createTask.metrics")}</Text>
                     {
                         !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
                             color: theme.inputTextColor,
                             fontSize: 20,
                         }}>
-                            You haven't added any metrics yet.
+                            {i18n.t("createTask.noMetricsYet")}
                         </Text>
                     }
                     {this.state.metrics.map(field =>
@@ -264,7 +265,7 @@ export default class Component extends React.Component<null, State> {
                         style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                         onPress={this._showInputFieldsModal}
                     >
-                        Add metric
+                        {i18n.t("createTask.addMetric")}
                     </Text>
                 </View>
 
@@ -276,14 +277,14 @@ export default class Component extends React.Component<null, State> {
                     <View style={styles.modalContent}>
                         <FormInput
                             inputStyle={styles.modalInputStyle}
-                            placeholder="Name"
+                            placeholder={i18n.t("createTask.metricNamePlaceholder")}
                             onChangeText={(value) => this.tempMetricName = value}
                             underlineColorAndroid={theme.textColor}
                             selectionColor={theme.inputTextColor} // cursor color
                         />
                         <FormInput
                             inputStyle={styles.modalInputStyle}
-                            placeholder="Unit"
+                            placeholder={i18n.t("createTask.metricUnitPlaceholder")}
                             onChangeText={(value) => this.tempMetricUnit = value}
                             underlineColorAndroid={theme.textColor}
                             selectionColor={theme.inputTextColor} // cursor color
@@ -292,7 +293,7 @@ export default class Component extends React.Component<null, State> {
                             raised
                             buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
-                            title={"ADD METRIC"}
+                            title={i18n.t("createTask.addMetricButton")}
                             onPress={() => { this.addMetric(); }}
                         />
                     </View>
@@ -302,7 +303,7 @@ export default class Component extends React.Component<null, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"CREATE TASK"}
+                        title={i18n.t("createTask.createTaskButton")}
                         onPress={() => { this.createTask(); }}
                     />
                 </View>
@@ -310,11 +311,11 @@ export default class Component extends React.Component<null, State> {
 
                 <LoadingIndicatorModal
                     isVisible={this.state.isCreatingTaskModalVisible}
-                    loadingText={"Creating Task"}
+                    loadingText={i18n.t("createTask.loadingCreateTask")}
                 />
                 <LoadingIndicatorModal
                     isVisible={this.state.isPreparingImageModalVisible}
-                    loadingText={"Preparing Image"}
+                    loadingText={i18n.t("createTask.loadingPrepareImage")}
                 />
             </View>
         );

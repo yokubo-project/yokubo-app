@@ -157,6 +157,45 @@ i18n
                     items: {
                         welcome: "{{taskName}} sounds like an awesome task!",
                         getStarted: " Add your first item to it by clicking on the + sign on the top right corner."
+                    },
+                    createTask: {
+                        header: "New Task",
+                        nameToShort: "Name must be at least 3 characters long",
+                        unexpectedError: "An unexpected error happened",
+                        metrics: "Metrics",
+                        noMetricsYet: "You haven't added any metrics yet.",
+                        addMetric: "Add metric",
+                        namePlaceholder: "Name",
+                        metricNamePlaceholder: "Name",
+                        metricUnitPlaceholder: "Unit",
+                        addMetricButton: "ADD METRIC",
+                        createTaskButton: "CREATE TASK",
+                        loadingPrepareImage: "Preparing Image",
+                        loadingCreateTask: "Creating Task"
+                    },
+                    patchTask: {
+                        header: "Update {{taskName}}",
+                        nameToShort: "Name must be at least 3 characters long",
+                        unexpectedError: "An unexpected error happened",
+                        metrics: "Metrics",
+                        noMetricsYet: "You haven't added any metrics yet.",
+                        addMetric: "Add metric",
+                        namePlaceholder: "Name",
+                        metricNamePlaceholder: "Name",
+                        metricUnitPlaceholder: "Unit",
+                        addMetricButton: "ADD METRIC",
+                        updateTaskButton: "UPDATE TASK",
+                        loadingPrepareImage: "Preparing Image",
+                        loadingUpdatingTask: "Updating Task"
+                    },
+                    deleteTask: {
+                        deleteHint: "Delete Task {{taskName}}?",
+                        deleteTaskButton: "DELETE"
+                    },
+                    tasks: {
+                        header: "Tasks",
+                        welcome: "Hi, {{username}}!",
+                        getStarted: "Click on the + sign on the top right corner to create your first task."
                     }
                 }
             },
@@ -294,7 +333,46 @@ i18n
                     },
                     items: {
                         welcome: "{{taskName}} hört sich nach einen tollen Task an!",
-                        getStarted: " Füge dein erstes Item hinzu, indem du auf den + Button oben rechts klickst."
+                        getStarted: "Füge dein erstes Item hinzu, indem du auf den + Button oben rechts klickst."
+                    },
+                    createTask: {
+                        header: "Neuer Task",
+                        nameToShort: "Name muss aus mindestens 3 Zeichen bestehen",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                        metrics: "Metriken",
+                        noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",
+                        addMetric: "Metrik hinzufügen",
+                        namePlaceholder: "Name",
+                        metricNamePlaceholder: "Name",
+                        metricUnitPlaceholder: "Einheit",
+                        addMetricButton: "HINZUFÜGEN",
+                        createTaskButton: "HINZUFÜGEM",
+                        loadingPrepareImage: "Bild wird hinzugefügt",
+                        loadingCreateTask: "Task wird angelegt"
+                    },
+                    patchTask: {
+                        header: "Update {{taskName}}",
+                        nameToShort: "Name muss aus mindestens 3 Zeichen bestehen",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                        metrics: "Metriken",
+                        noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",
+                        addMetric: "Metrik hinzufügen",
+                        namePlaceholder: "Name",
+                        metricNamePlaceholder: "Name",
+                        metricUnitPlaceholder: "Einheit",
+                        addMetricButton: "HINZUFÜGEN",
+                        updateTaskButton: "ÄNDERN",
+                        loadingPrepareImage: "Bild wird hinzugefügt",
+                        loadingUpdatingTask: "Task wird geändert"
+                    },
+                    deleteTask: {
+                        deleteHint: "Task {{taskName}} löschen?",
+                        deleteTaskButton: "LÖSCHEN"
+                    },
+                    tasks: {
+                        header: "Tasks",
+                        welcome: "Hi, {{username}}!",
+                        getStarted: "Füge deinen ersten Task hinzu, indem du auf den + Button oben rechts klickst."
                     }
                 }
             },

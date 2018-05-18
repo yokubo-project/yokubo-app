@@ -13,6 +13,7 @@ import DeleteTask from "../task/DeleteTask";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import { theme } from "../../shared/styles";
 import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
+import i18n from "../../shared/i18n";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
@@ -111,7 +112,7 @@ export default class Component extends React.Component<Props, State> {
 
         if (name.length < 3) {
             this.setState({
-                inputNameError: "Name must be at least 3 characters long",
+                inputNameError: i18n.t("patchTask.nameToShort"),
                 inputGeneralError: null
             });
             return;
@@ -126,7 +127,7 @@ export default class Component extends React.Component<Props, State> {
                 default:
                     this.setState({
                         inputNameError: null,
-                        inputGeneralError: "An unexpected error happened",
+                        inputGeneralError: i18n.t("patchTask.unexpectedError"),
                         isPatchingTaskModalVisible: false
                     });
             }
@@ -197,7 +198,7 @@ export default class Component extends React.Component<Props, State> {
     }
 
     render() {
-        const headerText = this.props.task.name.length > 15 ? `Update ${this.props.task.name.slice(0, 15)}...` : `Update ${this.props.task.name}`;
+        const taskName = this.props.task.name.length > 15 ? `${this.props.task.name.slice(0, 15)}...` : `${this.props.task.name}`;
 
         return (
             <View style={styles.mainContainer}>
@@ -216,7 +217,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: i18n.t("patchTask.header", { taskName }), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         rightComponent={{
                             icon: "delete",
                             color: "#fff",
@@ -256,13 +257,13 @@ export default class Component extends React.Component<Props, State> {
                     marginTop: 15,
                     marginLeft: 15
                 }}>
-                    <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>Metrics:</Text>
+                    <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
                     {
                         !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
                             color: theme.inputTextColor,
                             fontSize: 20,
                         }}>
-                            You haven't added any metrics yet.
+                            {i18n.t("patchTask.noMetricsYet")}
                         </Text>
                     }
                     {this.state.metrics.map(field =>
@@ -275,7 +276,7 @@ export default class Component extends React.Component<Props, State> {
                         style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                         onPress={this._showInputFieldsModal}
                     >
-                        Add metric
+                        {i18n.t("patchTask.addMetric")}
                     </Text>
                 </View>
                 <Modal
@@ -286,14 +287,14 @@ export default class Component extends React.Component<Props, State> {
                     <View style={styles.modalContent}>
                         <FormInput
                             inputStyle={styles.modalInputStyle}
-                            placeholder="Name"
+                            placeholder={i18n.t("patchTask.metricNamePlaceholder")}
                             onChangeText={(value) => this.tempMetricName = value}
                             underlineColorAndroid={theme.textColor}
                             selectionColor={theme.inputTextColor} // cursor color
                         />
                         <FormInput
                             inputStyle={styles.modalInputStyle}
-                            placeholder="Unit"
+                            placeholder={i18n.t("patchTask.metricUnitPlaceholder")}
                             onChangeText={(value) => this.tempMetricUnit = value}
                             underlineColorAndroid={theme.textColor}
                             selectionColor={theme.inputTextColor} // cursor color
@@ -302,7 +303,7 @@ export default class Component extends React.Component<Props, State> {
                             raised
                             buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
-                            title={"ADD METRIC"}
+                            title={i18n.t("patchTask.addMetricButton")}
                             onPress={() => { this.addMetric(); }}
                         />
                     </View>
@@ -312,7 +313,7 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"UPDATE TASK"}
+                        title={i18n.t("patchTask.updateTaskButton")}
                         onPress={() => { this.updateTask(); }}
                     />
                 </View>
@@ -320,11 +321,11 @@ export default class Component extends React.Component<Props, State> {
 
                 <LoadingIndicatorModal
                     isVisible={this.state.isPatchingTaskModalVisible}
-                    loadingText={"Updating Task"}
+                    loadingText={i18n.t("patchTask.loadingUpdatingTask")}
                 />
                 <LoadingIndicatorModal
                     isVisible={this.state.isPreparingImageModalVisible}
-                    loadingText={"Preparing Image"}
+                    loadingText={i18n.t("patchTask.loadingPrepareImage")}
                 />
             </View>
         );
