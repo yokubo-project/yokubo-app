@@ -7,6 +7,7 @@ import Modal from "react-native-modal";
 import authStore from "../../../state/authStore";
 import { theme } from "../../../shared/styles";
 import taskStore, { IItem } from "../../../state/taskStore";
+import i18n from "../../../shared/i18n";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -102,37 +103,37 @@ export default class Component extends React.Component<Props, State> {
                         style={styles.textElement}
                         onPress={() => { this.sortEntriesAndHide("name", "asc"); }}
                     >
-                        {"\u2022"} {"Name"} &#8593;
+                        {"\u2022"} {i18n.t("sortItems.sortByName")} &#8593;
                     </Text>
                     <Text
                         style={styles.textElement}
                         onPress={() => { this.sortEntriesAndHide("name", "desc"); }}
                     >
-                        {"\u2022"} {"Name"} &#8595;
+                        {"\u2022"} {i18n.t("sortItems.sortByName")} &#8595;
                     </Text>
                     <Text
                         style={styles.textElement}
                         onPress={() => { this.sortEntriesAndHide("createdAt", "asc"); }}
                     >
-                        {"\u2022"} {"Datum"} &#8593;
+                        {"\u2022"} {i18n.t("sortItems.sortByDate")} &#8593;
                     </Text>
                     <Text
                         style={styles.textElement}
                         onPress={() => { this.sortEntriesAndHide("createdAt", "desc"); }}
                     >
-                        {"\u2022"} {"Datum"} &#8595;
+                        {"\u2022"} {i18n.t("sortItems.sortByDate")} &#8595;
                     </Text>
                     <Text
                         style={styles.textElement}
                         onPress={() => { this.sortEntriesAndHide("duration", "asc"); }}
                     >
-                        {"\u2022"} {"Duration"} &#8593;
+                        {"\u2022"} {i18n.t("sortItems.sortByDuration")} &#8593;
                     </Text>
                     <Text
                         style={styles.textElement}
                         onPress={() => { this.sortEntriesAndHide("duration", "desc"); }}
                     >
-                        {"\u2022"} {"Duration"} &#8595;
+                        {"\u2022"} {i18n.t("sortItems.sortByDuration")} &#8595;
                     </Text>
                     {this.renderMetricTags(this.props.metrics)}
                 </View>

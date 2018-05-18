@@ -9,6 +9,7 @@ import ItemsList from "./ItemsList";
 import ItemsStats from "./ItemsStats";
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -130,8 +131,8 @@ export default class Component extends React.Component<Props, State> {
                 </View>
                 <View style={styles.welcomeScreenContainer}>
                     <Text style={styles.welcomeScreen}>
-                        {this.props.task.name} sounds like an awesome task! {"\n"}
-                        Add your first item to it by clicking on the + sign on the top right corner.
+                        {i18n.t("items.welcome", { taskName: this.props.task.name })} {"\n"}
+                        {i18n.t("items.getStarted")}
                     </Text>
                 </View>
             </View>

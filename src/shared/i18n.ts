@@ -110,6 +110,53 @@ i18n
                         userAlreadyExists: "Email already exists",
                         invalidEmail: "Email is invalid",
                         unexpectedError: "An unexpected error happened"
+                    },
+                    createItem: {
+                        header: "Add Item",
+                        createItemButton: "ADD ITEM",
+                        descToShort: "Description must be at least 3 characters long",
+                        invalidDateRange: "Invalid date range provided. Make sure start date is before end date",
+                        unexpectedError: "An unexpected error happened",
+                        loadingIndicator: "Creating Item",
+                        descPlaceholder: "Description",
+                        datePickerStartPlaceholder: "Start Date",
+                        datePickerEndPlaceholder: "End Date",
+                        datePickerConfirm: "Confirm",
+                        datePickerCancel: "Cancel",
+                    },
+                    patchItem: {
+                        header: "Update Item",
+                        descToShort: "Description must be at least 3 characters long",
+                        invalidDateRange: "Invalid date range provided. Make sure start date is before end date",
+                        unexpectedError: "An unexpected error happened",
+                        updateItemButton: "UPDATE ITEM",
+                        loadingIndicator: "Updating Item",
+                        datePickerConfirm: "Confirm",
+                        datePickerCancel: "Cancel",
+                    },
+                    sortItems: {
+                        sortByName: "Name",
+                        sortByDate: "Date",
+                        sortByDuration: "Duration"
+                    },
+                    deleteItem: {
+                        deleteButton: "DELETE",
+                        deleteHint: "Delete Item {{itemName}}?"
+                    },
+                    itemStats: {
+                        total: "Total",
+                        average: "Average",
+                        min: "Min",
+                        max: "Max",
+                        items: "Items"
+                    },
+                    itemList: {
+                        date: "Date",
+                        duration: "Duration"
+                    },
+                    items: {
+                        welcome: "{{taskName}} sounds like an awesome task!",
+                        getStarted: " Add your first item to it by clicking on the + sign on the top right corner."
                     }
                 }
             },
@@ -201,6 +248,53 @@ i18n
                         userAlreadyExists: "Email bereits in Verwendung",
                         invalidEmail: "Ungültige Email",
                         unexpectedError: "Ein unerwarteter Fehler ist aufgetreten"
+                    },
+                    createItem: {
+                        header: "Item hinzufügen",
+                        createItemButton: "HINZUFÜGEN",
+                        descToShort: "Beschreibung muss aus mindestens 3 Zeichen bestehen",
+                        invalidDateRange: "Ungültiger Zeitraum. Stell sicher dass das Start-Datum vor dem End-Datum liegt.",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                        loadingIndicator: "Item wird hinzugefügt",
+                        descPlaceholder: "Beschreibung",
+                        datePickerStartPlaceholder: "Start-Datum",
+                        datePickerEndPlaceholder: "End-Datum",
+                        datePickerConfirm: "Ok",
+                        datePickerCancel: "Abbrechen",
+                    },
+                    patchItem: {
+                        header: "Item ändern",
+                        descToShort: "Beschreibung muss aus mindestens 3 Zeichen bestehen",
+                        invalidDateRange: "Ungültiger Zeitraum. Stell sicher dass das Start-Datum vor dem End-Datum liegt.",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                        updateItemButton: "ÄNDERN",
+                        loadingIndicator: "Item wird hinzugefügt",
+                        datePickerConfirm: "Ok",
+                        datePickerCancel: "Abbrechen",
+                    },
+                    sortItems: {
+                        sortByName: "Name",
+                        sortByDate: "Datum",
+                        sortByDuration: "Dauer"
+                    },
+                    deleteItem: {
+                        deleteButton: "LÖSCHEN",
+                        deleteHint: "Item {{itemName}} löschen?"
+                    },
+                    itemStats: {
+                        total: "Gesamt",
+                        average: "Durchschnitt",
+                        min: "Min",
+                        max: "Max",
+                        items: "Items"
+                    },
+                    itemList: {
+                        date: "Datum",
+                        duration: "Dauer"
+                    },
+                    items: {
+                        welcome: "{{taskName}} hört sich nach einen tollen Task an!",
+                        getStarted: " Füge dein erstes Item hinzu, indem du auf den + Button oben rechts klickst."
                     }
                 }
             },

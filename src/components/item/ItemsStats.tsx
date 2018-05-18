@@ -8,6 +8,7 @@ import * as moment from "moment";
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
 import { formatDuration } from "../../shared/helpers";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -116,26 +117,26 @@ export default class Component extends React.Component<Props, State> {
         const renderedMetrices = metrices.map(metric => (
             <View key={metric.metricKey} style={styles.listElement}>
                 <Text style={styles.metricTextHeader}>{metric.metricName}</Text>
-                <Text style={styles.metricText}>Total: {metric.totalValue} {metric.metricUnit}</Text>
-                <Text style={styles.metricText}>Average: {(metric.totalValue / entries.length).toFixed(2)} {metric.metricUnit}</Text>
-                <Text style={styles.metricText}>Min:  {metric.minValue} {metric.metricUnit}</Text>
-                <Text style={styles.metricText}>Max:  {metric.maxValue} {metric.metricUnit}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {metric.totalValue} {metric.metricUnit}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.average")}: {(metric.totalValue / entries.length).toFixed(2)} {metric.metricUnit}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.min")}:  {metric.minValue} {metric.metricUnit}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.max")}:  {metric.maxValue} {metric.metricUnit}</Text>
             </View>
         ));
 
         renderedMetrices.unshift(
             <View key={"duration"} style={styles.listElement}>
                 <Text style={styles.metricTextHeader}>{timespan.metricName}</Text>
-                <Text style={styles.metricText}>Total: {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}</Text>
-                <Text style={styles.metricText}>Average: {Math.floor(moment.duration(timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length).format("[h] mm[m] ss[s]")}</Text>
-                <Text style={styles.metricText}>Min:  {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}</Text>
-                <Text style={styles.metricText}>Max:  {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.average")}: {Math.floor(moment.duration(timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length).format("[h] mm[m] ss[s]")}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.min")}:  {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.max")}:  {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}</Text>
             </View>);
 
         renderedMetrices.unshift(
             <View key={"count"} style={styles.listElement}>
-                <Text style={styles.metricTextHeader}>Einheiten</Text>
-                <Text style={styles.metricText}>Total: {entries.length}</Text>
+                <Text style={styles.metricTextHeader}>{i18n.t("itemStats.items")}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {entries.length}</Text>
             </View>);
 
         return renderedMetrices;

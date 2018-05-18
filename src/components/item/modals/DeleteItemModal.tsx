@@ -7,6 +7,7 @@ import Modal from "react-native-modal";
 import authStore from "../../../state/authStore";
 import { theme } from "../../../shared/styles";
 import taskStore, { IItem } from "../../../state/taskStore";
+import i18n from "../../../shared/i18n";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -100,25 +101,15 @@ export default class Component extends React.Component<Props, State> {
                         <Text
                             style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                         >
-                            Delete item
-                            </Text>
-                        <Text
-                            style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
-                        >
-                            {this.props.item.name}
+                            {i18n.t("deleteItem.deleteHint", { itemName: this.props.item.name })}
                         </Text>
-                        <Text
-                            style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
-                        >
-                            ?
-                            </Text>
                     </View>
 
                     <Button
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"DELETE"}
+                        title={i18n.t("deleteItem.deleteButton")}
                         onPress={() => { this.deleteItem(); }}
                     />
                 </View>

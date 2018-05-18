@@ -10,6 +10,7 @@ import { IItem } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
 import DeleteItemModal from "./modals/DeleteItemModal";
 import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -91,7 +92,7 @@ export default class Component extends React.Component<Props, State> {
 
         if (name.length < 3) {
             this.setState({
-                inputNameError: "Description must be at least 3 characters long",
+                inputNameError: i18n.t("patchItem.descToShort"),
                 inputDateError: null,
                 inputGeneralError: null
             });
@@ -99,7 +100,7 @@ export default class Component extends React.Component<Props, State> {
         } else if (fromDate === null || toDate === null || fromDate === toDate) {
             this.setState({
                 inputNameError: null,
-                inputDateError: "Invalid date range provided. Make sure start date is before end date",
+                inputDateError: i18n.t("patchItem.invalidDateRange"),
                 inputGeneralError: null
             });
             return;
@@ -123,7 +124,7 @@ export default class Component extends React.Component<Props, State> {
                 case "InvalidTimePeriod":
                     this.setState({
                         inputNameError: null,
-                        inputDateError: "Invalid date range provided. Make sure start date is before end date",
+                        inputDateError: i18n.t("patchItem.invalidDateRange"),
                         inputGeneralError: null,
                         isPatchingItemModalVisible: false
                     });
@@ -132,7 +133,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputDateError: null,
-                        inputGeneralError: "An unexpected error happened",
+                        inputGeneralError: i18n.t("patchItem.unexpectedError"),
                         isPatchingItemModalVisible: false
                     });
             }
@@ -220,7 +221,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { this._showDeleteItemModal(); }
                         }}
-                        centerComponent={{ text: "Update Item", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: i18n.t("patchItem.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -242,8 +243,8 @@ export default class Component extends React.Component<Props, State> {
                     date={this.state.fromDate}
                     mode="datetime"
                     format="YYYY-MM-DD HH:mm"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
+                    confirmBtnText={i18n.t("patchItem.datePickerConfirm")}
+                    cancelBtnText={i18n.t("patchItem.datePickerCancel")}
                     showIcon={false}
                     onDateChange={(date) => this.setState({ fromDate: date })}
                     customStyles={{
@@ -282,8 +283,8 @@ export default class Component extends React.Component<Props, State> {
                     date={this.state.toDate}
                     mode="datetime"
                     format="YYYY-MM-DD HH:mm"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
+                    confirmBtnText={i18n.t("patchItem.datePickerConfirm")}
+                    cancelBtnText={i18n.t("patchItem.datePickerCancel")}
                     showIcon={false}
                     onDateChange={(date) => this.setState({ toDate: date })}
                     customStyles={{
@@ -324,7 +325,7 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"UPDATE ITEM"}
+                        title={i18n.t("patchItem.updateItemButton")}
                         onPress={() => { this.patchItem(); }}
                     />
                 </View>
@@ -340,7 +341,7 @@ export default class Component extends React.Component<Props, State> {
 
                 <LoadingIndicatorModal
                     isVisible={this.state.isPatchingItemModalVisible}
-                    loadingText={"Updating item"}
+                    loadingText={i18n.t("patchItem.loadingIndicator")}
                 />
             </View>
         );

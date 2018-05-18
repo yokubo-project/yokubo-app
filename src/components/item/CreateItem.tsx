@@ -9,6 +9,7 @@ import taskStore from "../../state/taskStore";
 import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
 import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -85,7 +86,7 @@ export default class Component extends React.Component<Props, State> {
 
         if (name.length < 3) {
             this.setState({
-                inputNameError: "Description must be at least 3 characters long",
+                inputNameError: i18n.t("createItem.descToShort"),
                 inputDateError: null,
                 inputGeneralError: null
             });
@@ -93,7 +94,7 @@ export default class Component extends React.Component<Props, State> {
         } else if (fromDate === null || toDate === null || fromDate === toDate) {
             this.setState({
                 inputNameError: null,
-                inputDateError: "Invalid date range provided. Make sure start date is before end date",
+                inputDateError: i18n.t("createItem.invalidDateRange"),
                 inputGeneralError: null
             });
             return;
@@ -119,7 +120,7 @@ export default class Component extends React.Component<Props, State> {
                 case "InvalidTimePeriod":
                     this.setState({
                         inputNameError: null,
-                        inputDateError: "Invalid date range provided. Make sure start date is before end date",
+                        inputDateError: i18n.t("createItem.invalidDateRange"),
                         inputGeneralError: null,
                         isCreatingItemModalVisible: false
                     });
@@ -128,7 +129,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputDateError: null,
-                        inputGeneralError: "An unexpected error happened",
+                        inputGeneralError: i18n.t("createItem.unexpectedError"),
                         isCreatingItemModalVisible: false
                     });
             }
@@ -203,7 +204,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         }}
-                        centerComponent={{ text: "Add Item", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        centerComponent={{ text: i18n.t("createItem.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -212,7 +213,7 @@ export default class Component extends React.Component<Props, State> {
                 {/* Form input for name */}
                 <FormInput
                     inputStyle={styles.inputStyle}
-                    placeholder="Description"
+                    placeholder={i18n.t("createItem.descPlaceholder")}
                     onChangeText={(value) => this.setState({ name: value })}
                     underlineColorAndroid={theme.textColor}
                     selectionColor={theme.inputTextColor} // cursor color
@@ -224,10 +225,10 @@ export default class Component extends React.Component<Props, State> {
                     style={{ width: 300 }}
                     date={this.state.fromDate}
                     mode="datetime"
-                    placeholder="Start Date"
+                    placeholder={i18n.t("createItem.datePickerStartPlaceholder")}
                     format="YYYY-MM-DD HH:mm"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
+                    confirmBtnText={i18n.t("createItem.datePickerConfirm")}
+                    cancelBtnText={i18n.t("createItem.datePickerCancel")}
                     showIcon={false}
                     onDateChange={(date) => this.setState({ fromDate: date })}
                     customStyles={{
@@ -266,10 +267,10 @@ export default class Component extends React.Component<Props, State> {
                     style={{ width: 300 }}
                     date={this.state.toDate}
                     mode="datetime"
-                    placeholder="End Date"
+                    placeholder={i18n.t("createItem.datePickerEndPlaceholder")}
                     format="YYYY-MM-DD HH:mm"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
+                    confirmBtnText={i18n.t("createItem.datePickerCancel")}
+                    cancelBtnText={i18n.t("createItem.datePickerCancel")}
                     showIcon={false}
                     onDateChange={(date) => this.setState({ toDate: date })}
                     customStyles={{
@@ -310,7 +311,7 @@ export default class Component extends React.Component<Props, State> {
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={"ADD ITEM"}
+                        title={i18n.t("createItem.createItemButton")}
                         onPress={() => { this.createItem(); }}
                     />
                 </View>
@@ -318,7 +319,7 @@ export default class Component extends React.Component<Props, State> {
 
                 <LoadingIndicatorModal
                     isVisible={this.state.isCreatingItemModalVisible}
-                    loadingText={"Creating Item"}
+                    loadingText={i18n.t("createItem.loadingIndicator")}
                 />
             </View>
         );

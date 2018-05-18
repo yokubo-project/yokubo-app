@@ -11,6 +11,7 @@ import { IFullTask } from "../../state/taskStore";
 import { theme } from "../../shared/styles";
 import SortItemsModal from "./modals/SortItemsModal";
 import { formatDuration } from "../../shared/helpers";
+import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -112,9 +113,9 @@ export default class Component extends React.Component<Props, State> {
 
         return (
             <View>
-                <Text style={styles.listText}>Datum: {moment(entry.createdAt).format("DD.MM.YYYY")}</Text>
+                <Text style={styles.listText}>{i18n.t("itemStats.date")}: {moment(entry.createdAt).format("DD.MM.YYYY")}</Text>
                 {metrices}
-                <Text style={styles.listText}>Duration: {formatDuration(entry.duration)}</Text>
+                <Text style={styles.listText}>{i18n.t("itemStats.duration")}: {formatDuration(entry.duration)}</Text>
             </View>
         );
     }
