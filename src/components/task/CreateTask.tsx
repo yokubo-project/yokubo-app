@@ -258,7 +258,7 @@ export default class Component extends React.Component<null, State> {
                     {this.state.metrics.map(field =>
                         <View key={field.name} style={{ flexDirection: "row", paddingTop: 15 }}>
                             <Text style={{ color: theme.textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
-                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>{field.name}: {field.unit}</Text>
+                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>{field.name} ({field.unit})</Text>
                         </View>
                     )}
                     <Text

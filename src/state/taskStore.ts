@@ -15,6 +15,12 @@ export interface IPostTask {
 export interface IPatchTask {
     name?: string;
     imageUid?: string;
+    metrics?: Array<{
+        uid?: string;
+        name: string;
+        unit: string;
+        action: string;
+    }>;
 }
 
 export interface ITask {
