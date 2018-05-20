@@ -57,6 +57,7 @@ interface State {
     inputNameError: string;
     inputGeneralError: string;
     metrics: Array<{
+        uid: string;
         name: string;
         unit: string;
     }>;
@@ -145,9 +146,10 @@ export default class Component extends React.Component<Props, State> {
         return null;
     }
 
-    addMetric(name: string, unit: string) {
+    addMetric(uid: string, name: string, unit: string) {
         this.setState({
             metrics: this.state.metrics.concat({
+                uid,
                 name,
                 unit
             })
@@ -163,17 +165,25 @@ export default class Component extends React.Component<Props, State> {
     }
 
     patchMetric(metricToBePatched: IMetric) {
+        // update metric injected via props
         let metric = this.props.task.metrics.filter((metric: any) => metric.uid === metricToBePatched.uid)[0];
-        metric.name = metricToBePatched.name;
-        metric.unit = metricToBePatched.unit;
-        this.setState({
-            metricsToBePatched: this.state.metricsToBePatched.concat({
-                uid: metric.uid,
-                name: metric.name,
-                unit: metric.unit,
-                action: "patch"
-            })
-        });
+        if (metric) {
+            metric.name = metricToBePatched.name;
+            metric.unit = metricToBePatched.unit;
+            this.setState({
+                metricsToBePatched: this.state.metricsToBePatched.concat({
+                    uid: metric.uid,
+                    name: metric.name,
+                    unit: metric.unit,
+                    action: "patch"
+                })
+            });
+        } else {
+            // update metric just added via addMetric()
+            const metrics = this.state.metrics.filter(metric => metric.uid !== metricToBePatched.uid);
+            metrics.push(metricToBePatched);
+            this.setState({ metrics });
+        }
         this.hideUpdateMetricModal();
     }
 
@@ -285,7 +295,16 @@ export default class Component extends React.Component<Props, State> {
                     marginTop: 15,
                     marginLeft: 15
                 }}>
-                    <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
+                    <View style={{ flexDirection: "row" }}>
+                        <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
+                        <Icon
+                            name="add"
+                            color="#fff"
+                            underlayColor="transparent"
+                            style={{ marginLeft: 10, marginRight: 10, marginTop: 3 }}
+                            onPress={() => { this.showCreateMetricModal(); }}
+                        />
+                    </View>
                     {
                         !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
                             color: theme.inputTextColor,
@@ -315,18 +334,12 @@ export default class Component extends React.Component<Props, State> {
                             </View>
                         </View>
                     )}
-                    <Text
-                        style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
-                        onPress={this.showCreateMetricModal}
-                    >
-                        {i18n.t("patchTask.addMetric")}
-                    </Text>
                 </View>
 
                 <CreateMetricModal
                     isVisible={this.state.isCreateMetricModalVisible}
                     hide={() => this.hideCreateMetricModal()}
-                    addMetric={(name: string, unit: string) => this.addMetric(name, unit)}
+                    addMetric={(uid: string, name: string, unit: string) => this.addMetric(uid, name, unit)}
                 />
                 {this.state.metricToBePatched && <UpdateMetricModal
                     isVisible={this.state.isUpdateMetricModalVisible}

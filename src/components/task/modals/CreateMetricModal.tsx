@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextStyle } from "react-native";
 import { FormInput, Button, FormValidationMessage } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
+import * as uuid from "uuid";
 
 import authStore from "../../../state/authStore";
 import { theme } from "../../../shared/styles";
@@ -34,7 +35,7 @@ interface State {
 interface Props {
     isVisible: boolean;
     hide: () => void;
-    addMetric: (name: string, unit: string) => void;
+    addMetric: (uid: string, name: string, unit: string) => void;
 }
 
 export default class Component extends React.Component<Props, State> {
@@ -78,7 +79,7 @@ export default class Component extends React.Component<Props, State> {
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("patchTask.addMetricButton")}
-                        onPress={() => { this.props.addMetric(this.state.name, this.state.unit); }}
+                        onPress={() => { this.props.addMetric(uuid.v4(), this.state.name, this.state.unit); }}
                     />
                 </View>
             </Modal>

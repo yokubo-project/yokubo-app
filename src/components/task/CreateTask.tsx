@@ -1,17 +1,20 @@
 import React from "react";
 import { StyleSheet, View, ViewStyle, Text, Image, TouchableOpacity, ActivityIndicator } from "react-native";
-import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
+import { Header, FormInput, FormValidationMessage, Button, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
 import { ImagePicker, FileSystem } from "expo";
+import * as uuid from "uuid";
 
 import * as Config from "../../config";
 import authStore from "../../state/authStore";
-import taskStore from "../../state/taskStore";
+import taskStore, { IMetric } from "../../state/taskStore";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import { theme } from "../../shared/styles";
 import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 import i18n from "../../shared/i18n";
+import CreateMetricModal from "./modals/CreateMetricModal";
+import UpdateMetricModal from "./modals/UpdateMetricModal";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
@@ -67,13 +70,16 @@ interface State {
     inputNameError: string;
     inputGeneralError: string;
     metrics: Array<{
+        uid: string;
         name: string;
         unit: string;
     }>;
-    isInputFieldsModalVisible: boolean;
     image: any;
     isCreatingTaskModalVisible: boolean;
+    isCreateMetricModalVisible: boolean;
+    isUpdateMetricModalVisible: boolean;
     isPreparingImageModalVisible: boolean;
+    metricToBePatched: IMetric;
 }
 export default class Component extends React.Component<null, State> {
 
@@ -88,16 +94,18 @@ export default class Component extends React.Component<null, State> {
             metrics: [],
             inputNameError: null,
             inputGeneralError: null,
-            isInputFieldsModalVisible: false,
             image: null,
             isCreatingTaskModalVisible: false,
-            isPreparingImageModalVisible: false
+            isCreateMetricModalVisible: false,
+            isUpdateMetricModalVisible: false,
+            isPreparingImageModalVisible: false,
+            metricToBePatched: null
         };
     }
 
     async createTask() {
         const name = this.state.name;
-        const metrics = this.state.metrics;
+        const metrics = this.state.metrics.map(metric => { return { name: metric.name, unit: metric.unit }; });
         const imageUid = this.state.imageUid;
 
         if (name.length < 3) {
@@ -139,17 +147,38 @@ export default class Component extends React.Component<null, State> {
         return null;
     }
 
-    _showInputFieldsModal = () => this.setState({ isInputFieldsModalVisible: true });
-    _hideInputFieldsModal = () => this.setState({ isInputFieldsModalVisible: false });
+    showCreateMetricModal = () => this.setState({ isCreateMetricModalVisible: true });
+    hideCreateMetricModal = () => this.setState({ isCreateMetricModalVisible: false });
+    hideUpdateMetricModal() { this.setState({ isUpdateMetricModalVisible: false }); }
+    showUpdateMetricModal(metric) {
+        this.setState({
+            metricToBePatched: metric
+        });
+        this.setState({ isUpdateMetricModalVisible: true });
+    }
 
-    addMetric() {
+    addMetric(uid: string, name: string, unit: string) {
         this.setState({
             metrics: this.state.metrics.concat({
-                name: this.tempMetricName,
-                unit: this.tempMetricUnit,
+                uid: uuid.v4(),
+                name: name,
+                unit: unit,
             })
         });
-        this._hideInputFieldsModal();
+        this.hideCreateMetricModal();
+    }
+
+    patchMetric(metricToBePatched: IMetric) {
+        const metrics = this.state.metrics.filter(metric => metric.uid !== metricToBePatched.uid);
+        metrics.push(metricToBePatched);
+        this.setState({ metrics });
+        this.hideUpdateMetricModal();
+    }
+
+    deleteMetric(metricToBeDeleted) {
+        this.setState({
+            metrics: this.state.metrics.filter((metric: any) => metric.uid !== metricToBeDeleted.uid)
+        });
     }
 
     pickImage = async () => {
@@ -246,7 +275,16 @@ export default class Component extends React.Component<null, State> {
                     marginTop: 15,
                     marginLeft: 15
                 }}>
-                    <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("createTask.metrics")}</Text>
+                    <View style={{ flexDirection: "row" }}>
+                        <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
+                        <Icon
+                            name="add"
+                            color="#fff"
+                            underlayColor="transparent"
+                            style={{ marginLeft: 10, marginRight: 10, marginTop: 3 }}
+                            onPress={() => { this.showCreateMetricModal(); }}
+                        />
+                    </View>
                     {
                         !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
                             color: theme.inputTextColor,
@@ -255,49 +293,41 @@ export default class Component extends React.Component<null, State> {
                             {i18n.t("createTask.noMetricsYet")}
                         </Text>
                     }
-                    {this.state.metrics.map(field =>
-                        <View key={field.name} style={{ flexDirection: "row", paddingTop: 15 }}>
+                    {this.state.metrics.map(metric =>
+                        <View key={metric.name} style={{ flexDirection: "row", paddingTop: 15 }}>
                             <Text style={{ color: theme.textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
-                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>{field.name} ({field.unit})</Text>
+                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>{metric.name} ({metric.unit})</Text>
+                            <View style={{ flexDirection: "row", paddingTop: 15, position: "absolute", right: 10 }}>
+                                <Icon
+                                    name="create"
+                                    color="#fff"
+                                    underlayColor="transparent"
+                                    style={{ marginLeft: 10, marginRight: 10 }}
+                                    onPress={() => { this.showUpdateMetricModal(metric); }}
+                                />
+                                <Icon
+                                    name="delete"
+                                    color="#fff"
+                                    underlayColor="transparent"
+                                    onPress={() => { this.deleteMetric(metric); }}
+                                />
+                            </View>
                         </View>
                     )}
-                    <Text
-                        style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
-                        onPress={this._showInputFieldsModal}
-                    >
-                        {i18n.t("createTask.addMetric")}
-                    </Text>
                 </View>
 
-                <Modal
-                    isVisible={this.state.isInputFieldsModalVisible}
-                    onBackdropPress={this._hideInputFieldsModal}
-                    onBackButtonPress={this._hideInputFieldsModal}
-                >
-                    <View style={styles.modalContent}>
-                        <FormInput
-                            inputStyle={styles.modalInputStyle}
-                            placeholder={i18n.t("createTask.metricNamePlaceholder")}
-                            onChangeText={(value) => this.tempMetricName = value}
-                            underlineColorAndroid={theme.textColor}
-                            selectionColor={theme.inputTextColor} // cursor color
-                        />
-                        <FormInput
-                            inputStyle={styles.modalInputStyle}
-                            placeholder={i18n.t("createTask.metricUnitPlaceholder")}
-                            onChangeText={(value) => this.tempMetricUnit = value}
-                            underlineColorAndroid={theme.textColor}
-                            selectionColor={theme.inputTextColor} // cursor color
-                        />
-                        <Button
-                            raised
-                            buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                            textStyle={{ textAlign: "center", fontSize: 18 }}
-                            title={i18n.t("createTask.addMetricButton")}
-                            onPress={() => { this.addMetric(); }}
-                        />
-                    </View>
-                </Modal>
+                <CreateMetricModal
+                    isVisible={this.state.isCreateMetricModalVisible}
+                    hide={() => this.hideCreateMetricModal()}
+                    addMetric={(uid: string, name: string, unit: string) => this.addMetric(uid, name, unit)}
+                />
+                {this.state.metricToBePatched && <UpdateMetricModal
+                    isVisible={this.state.isUpdateMetricModalVisible}
+                    hide={() => this.hideUpdateMetricModal()}
+                    patchMetric={(metric: IMetric) => this.patchMetric(metric)}
+                    metric={this.state.metricToBePatched}
+                />}
+
                 <View style={styles.formContainer}>
                     <Button
                         raised

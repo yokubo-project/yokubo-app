@@ -43,6 +43,7 @@
     "react-native-tab-navigator": "^0.3.4",
     "react-native-typography": "^1.1.0",
     "tslint": "^5.7.0",
+    "uuid": "^3.2.1",
     "victory-native": "^0.15.0"
   }
 }
