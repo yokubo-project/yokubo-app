@@ -77,6 +77,7 @@ i18n
                         signinText: "Bring me back to",
                         signinLink: "Sign In",
                         emailToShort: "Email must have at least 5 characters",
+                        invalidEmail: "Email is invalid",
                         unexpectedError: "An unexpected error happened",
                         emailHint: "An email with intructions to reset your password was sent to you. Please check your inbox."
                     },
@@ -251,6 +252,7 @@ i18n
                         signinText: "Zurück zur",
                         signinLink: "Anmeldung",
                         emailToShort: "Email muss aus mindestens 5 Zeichen bestehen",
+                        invalidEmail: "Ungültige Email",
                         unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
                         emailHint: "Dir wurde soeben eine Email zum zurücksetzen deines Passworts gesendet."
                     },

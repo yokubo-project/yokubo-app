@@ -6,6 +6,7 @@ import { Actions } from "react-native-router-flux";
 import authStore from "../../state/authStore";
 import { theme } from "../../shared/styles";
 import i18n from "../../shared/i18n";
+import { validateEmail } from "../../shared/helpers";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -119,6 +120,14 @@ export default class Component extends React.Component<null, State> {
             this.setState({
                 inputNameError: null,
                 inputEmailError: i18n.t("signUp.emailToShort"),
+                inputPasswordError: null,
+                inputGeneralError: null
+            });
+            return;
+        } else if (!validateEmail(email)) {
+            this.setState({
+                inputNameError: null,
+                inputEmailError: i18n.t("signUp.invalidEmail"),
                 inputPasswordError: null,
                 inputGeneralError: null
             });
