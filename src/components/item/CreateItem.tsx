@@ -54,6 +54,7 @@ interface State {
     metrics: any;
     inputNameError: string;
     inputDateError: string;
+    inputMetricsError: string;
     inputGeneralError: string;
     isCreatingItemModalVisible: boolean;
 }
@@ -71,9 +72,10 @@ export default class Component extends React.Component<Props, State> {
             name: "",
             fromDate: null,
             toDate: null,
-            metrics: this.props.task.metrics,
+            metrics: JSON.parse(JSON.stringify(this.props.task.metrics)),
             inputNameError: null,
             inputDateError: null,
+            inputMetricsError: null,
             inputGeneralError: null,
             isCreatingItemModalVisible: false
         };
@@ -88,6 +90,7 @@ export default class Component extends React.Component<Props, State> {
             this.setState({
                 inputNameError: i18n.t("createItem.descToShort"),
                 inputDateError: null,
+                inputMetricsError: null,
                 inputGeneralError: null
             });
             return;
@@ -95,6 +98,15 @@ export default class Component extends React.Component<Props, State> {
             this.setState({
                 inputNameError: null,
                 inputDateError: i18n.t("createItem.invalidDateRange"),
+                inputMetricsError: null,
+                inputGeneralError: null
+            });
+            return;
+        } else if (this.state.metrics.some(metric => !metric.quantity ? true : false)) {
+            this.setState({
+                inputNameError: null,
+                inputDateError: null,
+                inputMetricsError: i18n.t("createItem.incompleteMetrics"),
                 inputGeneralError: null
             });
             return;
@@ -106,7 +118,6 @@ export default class Component extends React.Component<Props, State> {
                 quantity: metric.quantity
             };
         });
-
 
         this.setState({ isCreatingItemModalVisible: true });
         await taskStore.createItem(this.props.task.uid, {
@@ -122,6 +133,7 @@ export default class Component extends React.Component<Props, State> {
                         inputNameError: null,
                         inputDateError: i18n.t("createItem.invalidDateRange"),
                         inputGeneralError: null,
+                        inputMetricsError: null,
                         isCreatingItemModalVisible: false
                     });
                     break;
@@ -129,6 +141,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputDateError: null,
+                        inputMetricsError: null,
                         inputGeneralError: i18n.t("createItem.unexpectedError"),
                         isCreatingItemModalVisible: false
                     });
@@ -148,6 +161,13 @@ export default class Component extends React.Component<Props, State> {
     showDateError() {
         if (this.state.inputDateError) {
             return <FormValidationMessage>{this.state.inputDateError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showMetricsError() {
+        if (this.state.inputMetricsError) {
+            return <FormValidationMessage>{this.state.inputMetricsError}</FormValidationMessage>;
         }
         return null;
     }
@@ -305,6 +325,7 @@ export default class Component extends React.Component<Props, State> {
                 {this.showDateError()}
 
                 {this.renderMetrices(this.props.task.metrics)}
+                {this.showMetricsError()}
 
                 <View style={styles.formContainer}>
                     <Button

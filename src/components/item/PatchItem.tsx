@@ -57,6 +57,7 @@ interface State {
     isDeleteItemModalVisible: boolean;
     inputNameError: string;
     inputDateError: string;
+    inputMetricsError: string;
     inputGeneralError: string;
     isPatchingItemModalVisible: boolean;
 }
@@ -76,10 +77,11 @@ export default class Component extends React.Component<Props, State> {
             nameError: null,
             fromDate: this.props.item.period[0],
             toDate: this.props.item.period[1],
-            metrics: this.props.item.metricQuantities,
+            metrics: JSON.parse(JSON.stringify(this.props.item.metricQuantities)),
             isDeleteItemModalVisible: false,
             inputNameError: null,
             inputDateError: null,
+            inputMetricsError: null,
             inputGeneralError: null,
             isPatchingItemModalVisible: false
         };
@@ -94,6 +96,7 @@ export default class Component extends React.Component<Props, State> {
             this.setState({
                 inputNameError: i18n.t("patchItem.descToShort"),
                 inputDateError: null,
+                inputMetricsError: null,
                 inputGeneralError: null
             });
             return;
@@ -101,6 +104,15 @@ export default class Component extends React.Component<Props, State> {
             this.setState({
                 inputNameError: null,
                 inputDateError: i18n.t("patchItem.invalidDateRange"),
+                inputMetricsError: null,
+                inputGeneralError: null
+            });
+            return;
+        } else if (this.state.metrics.some(metric => !metric.quantity ? true : false)) {
+            this.setState({
+                inputNameError: null,
+                inputDateError: null,
+                inputMetricsError: i18n.t("patchItem.incompleteMetrics"),
                 inputGeneralError: null
             });
             return;
@@ -125,6 +137,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputDateError: i18n.t("patchItem.invalidDateRange"),
+                        inputMetricsError: null,
                         inputGeneralError: null,
                         isPatchingItemModalVisible: false
                     });
@@ -133,6 +146,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNameError: null,
                         inputDateError: null,
+                        inputMetricsError: null,
                         inputGeneralError: i18n.t("patchItem.unexpectedError"),
                         isPatchingItemModalVisible: false
                     });
@@ -152,6 +166,13 @@ export default class Component extends React.Component<Props, State> {
     showDateError() {
         if (this.state.inputDateError) {
             return <FormValidationMessage>{this.state.inputDateError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showMetricsError() {
+        if (this.state.inputMetricsError) {
+            return <FormValidationMessage>{this.state.inputMetricsError}</FormValidationMessage>;
         }
         return null;
     }
@@ -319,6 +340,7 @@ export default class Component extends React.Component<Props, State> {
                 {this.showDateError()}
 
                 {this.renderMetrices(this.state.metrics)}
+                {this.showMetricsError()}
 
                 <View style={styles.formContainer}>
                     <Button

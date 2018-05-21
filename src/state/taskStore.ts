@@ -165,6 +165,7 @@ class Tasks {
         const target = TaskAPI.postItem(authStore.credentials.accessToken, taskUid, item);
         return APIClient.requestType(target)
             .then(item => {
+                console.log("ITEM IS: ", item);
                 // Attach new item to task
                 this.tasks.forEach(task => {
                     if (task.uid === taskUid) {
