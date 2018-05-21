@@ -294,7 +294,7 @@ export default class Component extends React.Component<null, State> {
                         </Text>
                     }
                     {this.state.metrics.map(metric =>
-                        <View key={metric.name} style={{ flexDirection: "row", paddingTop: 15 }}>
+                        <View key={`${metric.name}${metric.unit}`} style={{ flexDirection: "row", paddingTop: 15 }}>
                             <Text style={{ color: theme.textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
                             <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>{metric.name} ({metric.unit})</Text>
                             <View style={{ flexDirection: "row", paddingTop: 15, position: "absolute", right: 10 }}>

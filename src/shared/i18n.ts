@@ -165,8 +165,6 @@ i18n
                         metrics: "Metrics",
                         noMetricsYet: "You haven't added any metrics yet.",
                         namePlaceholder: "Name",
-                        metricNamePlaceholder: "Name",
-                        metricUnitPlaceholder: "Unit",
                         addMetricButton: "ADD METRIC",
                         createTaskButton: "CREATE TASK",
                         loadingPrepareImage: "Preparing Image",
@@ -179,9 +177,6 @@ i18n
                         metrics: "Metrics",
                         noMetricsYet: "You haven't added any metrics yet.",
                         namePlaceholder: "Name",
-                        metricNamePlaceholder: "Name",
-                        metricUnitPlaceholder: "Unit",
-                        patchMetricButton: "UPDATE METRIC",
                         updateTaskButton: "UPDATE TASK",
                         loadingPrepareImage: "Preparing Image",
                         loadingUpdatingTask: "Updating Task"
@@ -194,6 +189,18 @@ i18n
                         header: "Tasks",
                         welcome: "Hi, {{username}}!",
                         getStarted: "Click on the + sign on the top right corner to create your first task."
+                    },
+                    patchMetric: {
+                        nameToShort: "Name must be at least 2 characters long",
+                        unitToShort: "Unit must be at least 1 characters long",
+                        patchMetricButton: "UPDATE METRIC",
+                    },
+                    addMetric: {
+                        nameToShort: "Name muss aus mindestens 2 Zeichen bestehen",
+                        unitToShort: "Einheit muss aus mindestens 1 Zeichen bestehen",
+                        metricNamePlaceholder: "Name",
+                        metricUnitPlaceholder: "Unit",
+                        addMetricButton: "HINZUFÜGEN",
                     }
                 }
             },
@@ -340,9 +347,6 @@ i18n
                         metrics: "Metriken",
                         noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",
                         namePlaceholder: "Name",
-                        metricNamePlaceholder: "Name",
-                        metricUnitPlaceholder: "Einheit",
-                        addMetricButton: "HINZUFÜGEN",
                         createTaskButton: "HINZUFÜGEM",
                         loadingPrepareImage: "Bild wird hinzugefügt",
                         loadingCreateTask: "Task wird angelegt"
@@ -354,9 +358,6 @@ i18n
                         metrics: "Metriken",
                         noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",
                         namePlaceholder: "Name",
-                        metricNamePlaceholder: "Name",
-                        metricUnitPlaceholder: "Einheit",
-                        addMetricButton: "HINZUFÜGEN",
                         updateTaskButton: "ÄNDERN",
                         loadingPrepareImage: "Bild wird hinzugefügt",
                         loadingUpdatingTask: "Task wird geändert"
@@ -369,6 +370,18 @@ i18n
                         header: "Tasks",
                         welcome: "Hi, {{username}}!",
                         getStarted: "Füge deinen ersten Task hinzu, indem du auf den + Button oben rechts klickst."
+                    },
+                    patchMetric: {
+                        nameToShort: "Name muss aus mindestens 2 Zeichen bestehen",
+                        unitToShort: "Einheit muss aus mindestens 1 Zeichen bestehen",
+                        patchMetricButton: "ÄNDERN",
+                    },
+                    addMetric: {
+                        nameToShort: "Name muss aus mindestens 2 Zeichen bestehen",
+                        unitToShort: "Einheit muss aus mindestens 1 Zeichen bestehen",
+                        metricNamePlaceholder: "Name",
+                        metricUnitPlaceholder: "Einheit",
+                        addMetricButton: "HINZUFÜGEN",
                     }
                 }
             },

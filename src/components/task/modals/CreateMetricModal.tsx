@@ -30,6 +30,8 @@ const styles = StyleSheet.create({
 interface State {
     name: string;
     unit: string;
+    inputNameError: string;
+    inputUnitError: string;
 }
 
 interface Props {
@@ -44,12 +46,57 @@ export default class Component extends React.Component<Props, State> {
         super(props);
         this.state = {
             name: "",
-            unit: ""
+            unit: "",
+            inputNameError: null,
+            inputUnitError: null,
         };
     }
 
     closeModal() {
+        this.setState({
+            name: "",
+            unit: "",
+            inputNameError: null,
+            inputUnitError: null
+        });
         this.props.hide();
+    }
+
+    addMetric() {
+        if (this.state.name.length < 2) {
+            this.setState({
+                inputNameError: i18n.t("addMetric.nameToShort"),
+                inputUnitError: null
+            });
+            return;
+        } else if (this.state.unit.length < 1) {
+            this.setState({
+                inputNameError: null,
+                inputUnitError: i18n.t("addMetric.unitToShort")
+            });
+            return;
+        }
+        this.setState({
+            name: "",
+            unit: "",
+            inputNameError: null,
+            inputUnitError: null
+        });
+        this.props.addMetric(uuid.v4(), this.state.name, this.state.unit);
+    }
+
+    showNameError() {
+        if (this.state.inputNameError) {
+            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showUnitError() {
+        if (this.state.inputUnitError) {
+            return <FormValidationMessage>{this.state.inputUnitError}</FormValidationMessage>;
+        }
+        return null;
     }
 
     render() {
@@ -62,24 +109,28 @@ export default class Component extends React.Component<Props, State> {
                 <View style={styles.modalContent}>
                     <FormInput
                         inputStyle={styles.modalInputStyle}
-                        placeholder={i18n.t("patchTask.metricNamePlaceholder")}
+                        placeholder={i18n.t("addMetric.metricNamePlaceholder")}
                         onChangeText={(value) => this.setState({ name: value })}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
                     />
+                    {this.showNameError()}
+
                     <FormInput
                         inputStyle={styles.modalInputStyle}
-                        placeholder={i18n.t("patchTask.metricUnitPlaceholder")}
+                        placeholder={i18n.t("addMetric.metricUnitPlaceholder")}
                         onChangeText={(value) => this.setState({ unit: value })}
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
                     />
+                    {this.showUnitError()}
+
                     <Button
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={i18n.t("patchTask.addMetricButton")}
-                        onPress={() => { this.props.addMetric(uuid.v4(), this.state.name, this.state.unit); }}
+                        title={i18n.t("addMetric.addMetricButton")}
+                        onPress={() => this.addMetric()}
                     />
                 </View>
             </Modal>

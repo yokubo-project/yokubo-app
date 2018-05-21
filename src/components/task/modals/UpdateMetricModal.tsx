@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
 interface State {
     name: string;
     unit: string;
+    inputNameError: string;
+    inputUnitError: string;
 }
 
 interface Props {
@@ -44,7 +46,9 @@ export default class Component extends React.Component<Props, State> {
         super(props);
         this.state = {
             name: this.props.metric.name,
-            unit: this.props.metric.unit
+            unit: this.props.metric.unit,
+            inputNameError: null,
+            inputUnitError: null,
         };
     }
 
@@ -58,7 +62,50 @@ export default class Component extends React.Component<Props, State> {
     }
 
     closeModal() {
+        this.setState({
+            inputNameError: null,
+            inputUnitError: null
+        });
         this.props.hide();
+    }
+
+    patchMetric() {
+        if (this.state.name.length < 2) {
+            this.setState({
+                inputNameError: i18n.t("patchMetric.nameToShort"),
+                inputUnitError: null
+            });
+            return;
+        } else if (this.state.unit.length < 1) {
+            this.setState({
+                inputNameError: null,
+                inputUnitError: i18n.t("patchMetric.unitToShort")
+            });
+            return;
+        }
+        this.setState({
+            inputNameError: null,
+            inputUnitError: null
+        });
+        this.props.patchMetric({
+            uid: this.props.metric.uid,
+            name: this.state.name,
+            unit: this.state.unit
+        });
+    }
+
+    showNameError() {
+        if (this.state.inputNameError) {
+            return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
+        }
+        return null;
+    }
+
+    showUnitError() {
+        if (this.state.inputUnitError) {
+            return <FormValidationMessage>{this.state.inputUnitError}</FormValidationMessage>;
+        }
+        return null;
     }
 
     render() {
@@ -76,6 +123,8 @@ export default class Component extends React.Component<Props, State> {
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
                     />
+                    {this.showNameError()}
+
                     <FormInput
                         inputStyle={styles.modalInputStyle}
                         defaultValue={this.state.unit}
@@ -83,18 +132,14 @@ export default class Component extends React.Component<Props, State> {
                         underlineColorAndroid={theme.textColor}
                         selectionColor={theme.inputTextColor} // cursor color
                     />
+                    {this.showUnitError()}
+
                     <Button
                         raised
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
-                        title={i18n.t("patchTask.patchMetricButton")}
-                        onPress={() => {
-                            this.props.patchMetric({
-                                uid: this.props.metric.uid,
-                                name: this.state.name,
-                                unit: this.state.unit
-                            });
-                        }}
+                        title={i18n.t("patchMetric.patchMetricButton")}
+                        onPress={() => this.patchMetric()}
                     />
                 </View>
             </Modal>
