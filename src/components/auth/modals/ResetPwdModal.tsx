@@ -57,6 +57,7 @@ export default class Component extends React.Component<Props, State> {
         if (newPwd.length < 6) {
             this.setState({
                 inputNewPwdError: i18n.t("resetPwd.pwdToShort"),
+                inputCurrentPwdError: null,
                 inputGeneralError: null
             });
             return;
@@ -99,6 +100,7 @@ export default class Component extends React.Component<Props, State> {
     closeModal() {
         this.setState({
             inputNewPwdError: null,
+            inputCurrentPwdError: null,
             inputGeneralError: null
         });
         this.props.hide();

@@ -88,6 +88,10 @@ export default class Component extends React.Component<null, State> {
         };
     }
 
+    componentWillMount() {
+        authStore.getProfile();
+    }
+
     async componentDidMount() {
         await taskStore.fetchTasks();
         this.setState({
@@ -171,7 +175,7 @@ export default class Component extends React.Component<null, State> {
         return (
             <View style={styles.welcomeScreenContainer}>
                 <Text style={styles.welcomeScreen}>
-                    {i18n.t("tasks.welcome", { username: authStore.profile.name })} {"\n"}
+                    {i18n.t("tasks.welcome", { username: authStore.profile ? authStore.profile.name : "" })} {"\n"}
                     {i18n.t("tasks.getStarted")}
                 </Text>
             </View>

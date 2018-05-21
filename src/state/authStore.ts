@@ -146,7 +146,7 @@ class Auth {
                 this.profile = profile;
                 this.username = profile.username;
             }).catch(error => {
-                this.wipe("Unknown");
+                this.setError("Unknown");
             });
     }
 
@@ -161,7 +161,7 @@ class Auth {
                 this.isLoading = false;
                 this.profile = profile;
             }).catch(error => {
-                this.wipe("Unknown");
+                this.setError("Unknown");
             });
     }
 
@@ -236,6 +236,8 @@ class Auth {
 
     @action private wipe(error: AuthError) {
         this.credentials = null;
+        this.username = null;
+        this.profile = null;
         this.error = error;
         this.isAuthenticated = false;
         this.isLoading = false;

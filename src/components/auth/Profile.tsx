@@ -55,10 +55,6 @@ export default class Component extends React.Component<null, State> {
         };
     }
 
-    componentWillMount() {
-        authStore.getProfile();
-    }
-
     _showDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: true });
     _hideDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: false });
     _showProfileModal = () => this.setState({ isProfileModalVisible: true });
@@ -140,9 +136,9 @@ export default class Component extends React.Component<null, State> {
                         />
                         <ListItem
                             style={styles.listElement}
-                            title={i18n.t("profile.impress")}
+                            title={i18n.t("profile.imprint")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
-                            onPress={() => Linking.openURL("https://www.yokubo.org/views/v1/impress")}
+                            onPress={() => Linking.openURL("https://www.yokubo.org/views/v1/imprint")}
                             hideChevron={true}
                             underlayColor={theme.underlayColor}
                         />

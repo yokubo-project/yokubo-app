@@ -25,7 +25,6 @@ i18n
             en: {
                 translation: {
                     home: {
-                        header: "Home",
                         quote: "It's the challenge that makes the greatness.",
                         alreadyRegistered: "Already a member?",
                         signupButton: "SIGN UP",
@@ -36,7 +35,7 @@ i18n
                         updateProfile: "Update Profile",
                         changePassword: "Change Password",
                         privacy: "Privacy",
-                        impress: "Impress",
+                        imprint: "Imprint",
                         logout: "Logout",
                         deleteUser: "Delete User"
                     },
@@ -85,7 +84,7 @@ i18n
                         currentPwdPlaceholder: "Current Password",
                         deleteUserHint: "Please enter your current password in order to delete your user. Note that deleting your user is irreversibly and all data associated with your account will be lost.",
                         deleteUserButton: "DELETE USER",
-                        wrongPwd: "The password entered does not match your curent password",
+                        wrongPwd: "The password entered does not match your current password",
                         unexpectedError: "An unexpected error happened",
                     },
                     logout: {
@@ -97,7 +96,7 @@ i18n
                         newPwdPlaceholder: "New Password",
                         resetPwdButton: "RESET",
                         pwdToShort: "Password must have at least 6 characters",
-                        wrongPwd: "The password entered does not match your curent password",
+                        wrongPwd: "The password entered does not match your current password",
                         newPwdToWeak: "New password is to weak",
                         unexpectedError: "An unexpected error happened",
                     },
@@ -202,7 +201,6 @@ i18n
             de: {
                 translation: {
                     home: {
-                        header: "Home",
                         quote: "Man wächst mit seinen Aufgaben",
                         alreadyRegistered: "Bereits registriert?",
                         signupButton: "REGISTRIEREN",
@@ -213,7 +211,7 @@ i18n
                         updateProfile: "Profil ändern",
                         changePassword: "Passwort ändern",
                         privacy: "Datenschutz",
-                        impress: "Impressum",
+                        imprint: "Impressum",
                         logout: "Logout",
                         deleteUser: "User löschen"
                     },
