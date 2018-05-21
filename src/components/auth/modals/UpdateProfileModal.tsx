@@ -50,17 +50,17 @@ export default class Component extends React.Component<Props, State> {
     }
 
     async patchProfile() {
-        const email = this.state.inputEmail !== "" ? this.state.inputEmail : authStore.username;
-        const name = this.state.inputName !== "" ? this.state.inputName : authStore.profile.name;
+        const email = this.state.inputEmail;
+        const name = this.state.inputName;
 
-        if (name.length < 3) {
+        if (name !== "" && name.length < 3) {
             this.setState({
                 inputNameError: i18n.t("updateProfile.nameToShort"),
                 inputEmailError: null,
                 inputGeneralError: null
             });
             return;
-        } else if (email.length < 5) {
+        } else if (email !== "" && email.length < 5) {
             this.setState({
                 inputNameError: null,
                 inputEmailError: i18n.t("updateProfile.emailToShort"),
@@ -69,7 +69,12 @@ export default class Component extends React.Component<Props, State> {
             return;
         }
 
-        await authStore.patchProfile(email, name);
+        // only patch properties that changed
+        const profile: { username?: string, name?: string } = {};
+        if (email !== authStore.profile.username && email !== "") { profile.username = email; }
+        if (name !== authStore.profile.name && name !== "") { profile.name = name; }
+
+        await authStore.patchProfile(profile);
         if (authStore.error !== null) {
             switch (authStore.error) {
                 case "UserAlreadyExists":

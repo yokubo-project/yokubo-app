@@ -87,13 +87,12 @@ export const AuthAPI = {
             }
         };
     },
-    patchProfile(username: string, name: string, accessToken: string): ITypedAPITarget<IProfile> {
+    patchProfile(profile: { username?: string, name?: string }, accessToken: string): ITypedAPITarget<IProfile> {
         return {
             url: "api/v1/auth/user",
             method: "PATCH",
             body: {
-                username,
-                name
+                ...profile
             },
             headers: {
                 "Authorization": `Bearer ${accessToken}`,

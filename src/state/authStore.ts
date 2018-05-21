@@ -134,11 +134,11 @@ class Auth {
             });
     }
 
-    @action patchProfile = async (username: string, name: string) => {
+    @action patchProfile = async (profile: { username?: string, name?: string }) => {
         if (this.isLoading) { return; }
         this.isLoading = true;
 
-        const target = AuthAPI.patchProfile(username, name, this.credentials.accessToken);
+        const target = AuthAPI.patchProfile(profile, this.credentials.accessToken);
         return APIClient.requestType(target)
             .then(profile => {
                 this.error = null;
@@ -146,7 +146,15 @@ class Auth {
                 this.profile = profile;
                 this.username = profile.username;
             }).catch(error => {
-                this.setError("Unknown");
+                if (error instanceof APIClientStatusCodeError) {
+                    if (error.statusCode === 400 && error.response.message === "UserAlreadyExists") {
+                        this.setError("UserAlreadyExists");
+                    } else {
+                        this.setError("Unknown");
+                    }
+                } else {
+                    this.setError("Unknown");
+                }
             });
     }
 
