@@ -180,7 +180,7 @@ i18n
                         namePlaceholder: "Name",
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Unit",
-                        addMetricButton: "ADD METRIC",
+                        patchMetricButton: "UPDATE METRIC",
                         updateTaskButton: "UPDATE TASK",
                         loadingPrepareImage: "Preparing Image",
                         loadingUpdatingTask: "Updating Task"
