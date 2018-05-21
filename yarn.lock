@@ -57,6 +57,10 @@
   version "0.9.46"
   resolved "https://registry.yarnpkg.com/@types/core-js/-/core-js-0.9.46.tgz#ea701ee34cbb6dfe6d100f1530319547c93c8d79"
 
+"@types/node@^10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.2.tgz#1b928a0baa408fc8ae3ac012cc81375addc147c6"
+
 "@types/react-native@^0.47.5":
   version "0.47.9"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.47.9.tgz#7e7f3d8d25c46e8b6e8ad3b11d0222de0722f820"
@@ -561,6 +565,12 @@ babel-plugin-external-helpers@^6.18.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-external-helpers/-/babel-plugin-external-helpers-6.22.0.tgz#2285f48b02bd5dede85175caf8c62e86adccefa1"
   dependencies:
     babel-runtime "^6.22.0"
+
+babel-plugin-inline-dotenv@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-inline-dotenv/-/babel-plugin-inline-dotenv-1.1.2.tgz#d9b43f48b1471506bdc5fe571a067472f16aedf6"
+  dependencies:
+    dotenv "^4.0.0"
 
 babel-plugin-istanbul@^4.0.0:
   version "4.1.5"
@@ -1809,6 +1819,10 @@ dot-case@^1.1.0:
   resolved "https://registry.yarnpkg.com/dot-case/-/dot-case-1.1.2.tgz#1e73826900de28d6de5480bc1de31d0842b06bec"
   dependencies:
     sentence-case "^1.1.2"
+
+dotenv@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
 
 duplexer2@0.0.2:
   version "0.0.2"

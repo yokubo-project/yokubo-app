@@ -1,4 +1,12 @@
-export const BASE_URL = "https://www.yokubo.org"; // TODO: Load from process.env
-// export const BASE_URL = "http://192.168.0.2:8080"; // TODO: Load from process.env
+export let BASE_URL;
+
+if (process.env.REACT_NATIVE_ENVIRONMENTT === "development") {
+    BASE_URL = process.env.DEVELOPMENT_BASE_URL;
+} else if (process.env.REACT_NATIVE_ENVIRONMENTT === "production") {
+    BASE_URL = process.env.PRODUCTION_BASE_URL;
+} else {
+    console.log("No environment found");
+    throw new Error("No environment found");
+}
 
 console.log(`config.BASE_URL: ${BASE_URL}`);

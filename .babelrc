@@ -1,8 +1,26 @@
 {
-  "presets": ["babel-preset-expo"],
+  "presets": [
+    "babel-preset-expo"
+  ],
   "env": {
     "development": {
-      "plugins": ["transform-react-jsx-source"]
-    }
+      "plugins": [
+        "transform-react-jsx-source",
+        [
+          "inline-dotenv",
+          {
+            "path": "./.env"
+          }
+        ]
+      ]
+    },
+    "plugins": [
+      [
+        "inline-dotenv",
+        {
+          "path": "./.env"
+        }
+      ]
+    ]
   }
 }

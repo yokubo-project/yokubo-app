@@ -11,6 +11,7 @@ import UpdateProfileModal from "./modals/UpdateProfileModal";
 import LogoutModal from "./modals/LogoutModal";
 import { theme } from "../../shared/styles";
 import i18n from "../../shared/i18n";
+import * as Config from "../../config";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -130,7 +131,7 @@ export default class Component extends React.Component<null, State> {
                             style={styles.listElement}
                             title={i18n.t("profile.privacy")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
-                            onPress={() => Linking.openURL("https://www.yokubo.org/views/v1/privacy")}
+                            onPress={() => Linking.openURL(`${Config.BASE_URL}/views/v1/privacy`)}
                             hideChevron={true}
                             underlayColor={theme.underlayColor}
                         />
@@ -138,7 +139,7 @@ export default class Component extends React.Component<null, State> {
                             style={styles.listElement}
                             title={i18n.t("profile.imprint")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
-                            onPress={() => Linking.openURL("https://www.yokubo.org/views/v1/imprint")}
+                            onPress={() => Linking.openURL(`${Config.BASE_URL}/views/v1/imprint`)}
                             hideChevron={true}
                             underlayColor={theme.underlayColor}
                         />

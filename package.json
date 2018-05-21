@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@types/node": "^10.1.2",
+    "babel-plugin-inline-dotenv": "^1.1.2",
     "jest-expo": "^24.0.0",
     "react-native-scripts": "1.1.0",
     "react-native-typescript-transformer": "^1.1.3",
@@ -12,13 +14,12 @@
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
     "lint": "tslint --type-check --project tsconfig.json -c tslint.json",
-    "start": "react-native-scripts start",
+    "start": "REACT_NATIVE_ENVIRONMENTT=development react-native-scripts start",
+    "start-prod": "REACT_NATIVE_ENVIRONMENTT=production react-native-scripts start",
     "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js --watch",
-    "start-ts": "react-native-scripts start",
-    "test-ts": "jest"
+    "android": "REACT_NATIVE_ENVIRONMENTT=production react-native-scripts android",
+    "ios": "REACT_NATIVE_ENVIRONMENTT=production react-native-scripts ios",
+    "test": "REACT_NATIVE_ENVIRONMENTT=development node node_modules/jest/bin/jest.js --watch"
   },
   "jest": {
     "preset": "jest-expo"
