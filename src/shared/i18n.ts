@@ -163,7 +163,6 @@ i18n
                         unexpectedError: "An unexpected error happened",
                         metrics: "Metrics",
                         noMetricsYet: "You haven't added any metrics yet.",
-                        addMetric: "Add metric",
                         namePlaceholder: "Name",
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Unit",
@@ -178,7 +177,6 @@ i18n
                         unexpectedError: "An unexpected error happened",
                         metrics: "Metrics",
                         noMetricsYet: "You haven't added any metrics yet.",
-                        addMetric: "Add metric",
                         namePlaceholder: "Name",
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Unit",
@@ -189,7 +187,7 @@ i18n
                     },
                     deleteTask: {
                         deleteHint: "Delete Task {{taskName}}?",
-                        deleteTaskButton: "DELETE"
+                        deleteButton: "DELETE"
                     },
                     tasks: {
                         header: "Tasks",
@@ -339,7 +337,6 @@ i18n
                         unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
                         metrics: "Metriken",
                         noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",
-                        addMetric: "Metrik hinzufügen",
                         namePlaceholder: "Name",
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Einheit",
@@ -354,7 +351,6 @@ i18n
                         unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
                         metrics: "Metriken",
                         noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",
-                        addMetric: "Metrik hinzufügen",
                         namePlaceholder: "Name",
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Einheit",
@@ -365,7 +361,7 @@ i18n
                     },
                     deleteTask: {
                         deleteHint: "Task {{taskName}} löschen?",
-                        deleteTaskButton: "LÖSCHEN"
+                        deleteButton: "LÖSCHEN"
                     },
                     tasks: {
                         header: "Tasks",

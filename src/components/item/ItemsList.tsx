@@ -113,9 +113,9 @@ export default class Component extends React.Component<Props, State> {
 
         return (
             <View>
-                <Text style={styles.listText}>{i18n.t("itemStats.date")}: {moment(entry.createdAt).format("DD.MM.YYYY")}</Text>
+                <Text style={styles.listText}>{i18n.t("itemList.date")}: {moment(entry.createdAt).format("DD.MM.YYYY")}</Text>
                 {metrices}
-                <Text style={styles.listText}>{i18n.t("itemStats.duration")}: {formatDuration(entry.duration)}</Text>
+                <Text style={styles.listText}>{i18n.t("itemList.duration")}: {formatDuration(entry.duration)}</Text>
             </View>
         );
     }
