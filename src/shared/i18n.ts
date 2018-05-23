@@ -203,6 +203,9 @@ i18n
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Unit",
                         addMetricButton: "HINZUFÜGEN",
+                    },
+                    metricInfo: {
+                        desc: "With metrics you can keep track of individual goals. The distance in kilometers of your runs or the calories burned through your workouts are great examples if you're into sports. Another example would be the count of words learned of a foreign language. The only limitation is that metrics have to be numeric, as those are then used by the app to calculates statistics and insights."
                     }
                 }
             },
@@ -386,6 +389,9 @@ i18n
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Einheit",
                         addMetricButton: "HINZUFÜGEN",
+                    },
+                    metricInfo: {
+                        desc: "Mit Metriken kannst du deine persönlichen Ziele verfolgen. Die Distanz in Kilometers oder die verbrannten Kalorien deiner Workouts sind zwei sportliche Beispiele. Ein weiteres wäre die Anzahl an neu gelernten Vokabeln einer Fremdsprache. Die einzige Limitation ist das Metriken nummerisch sein müssen, da diese für die Berechnung von Statistiken und Insights herangezogen werden."
                     }
                 }
             },

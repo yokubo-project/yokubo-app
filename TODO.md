@@ -1,1 +1,0 @@
-# add information box on metrics

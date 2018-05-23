@@ -15,6 +15,7 @@ import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 import i18n from "../../shared/i18n";
 import CreateMetricModal from "./modals/CreateMetricModal";
 import UpdateMetricModal from "./modals/UpdateMetricModal";
+import MetricInfoModal from "./modals/MetricInfoModal";
 
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
@@ -75,6 +76,7 @@ interface State {
         unit: string;
     }>;
     image: any;
+    isMetricInfoModalVisible: boolean;
     isCreatingTaskModalVisible: boolean;
     isCreateMetricModalVisible: boolean;
     isUpdateMetricModalVisible: boolean;
@@ -95,6 +97,7 @@ export default class Component extends React.Component<null, State> {
             inputNameError: null,
             inputGeneralError: null,
             image: null,
+            isMetricInfoModalVisible: false,
             isCreatingTaskModalVisible: false,
             isCreateMetricModalVisible: false,
             isUpdateMetricModalVisible: false,
@@ -147,6 +150,8 @@ export default class Component extends React.Component<null, State> {
         return null;
     }
 
+    showMetricInfoModal = () => this.setState({ isMetricInfoModalVisible: true });
+    hideMetricInfoModal = () => this.setState({ isMetricInfoModalVisible: false });
     showCreateMetricModal = () => this.setState({ isCreateMetricModalVisible: true });
     hideCreateMetricModal = () => this.setState({ isCreateMetricModalVisible: false });
     hideUpdateMetricModal() { this.setState({ isUpdateMetricModalVisible: false }); }
@@ -277,6 +282,13 @@ export default class Component extends React.Component<null, State> {
                 }}>
                     <View style={{ flexDirection: "row" }}>
                         <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
+                        {!this.state.metrics || this.state.metrics.length === 0 && <Icon
+                            name="info"
+                            color="#fff"
+                            underlayColor="transparent"
+                            style={{ marginLeft: 10, marginRight: 2, marginTop: 3 }}
+                            onPress={() => { this.showMetricInfoModal(); }}
+                        />}
                         <Icon
                             name="add"
                             color="#fff"
@@ -316,6 +328,10 @@ export default class Component extends React.Component<null, State> {
                     )}
                 </View>
 
+                <MetricInfoModal
+                    isVisible={this.state.isMetricInfoModalVisible}
+                    hide={() => this.hideMetricInfoModal()}
+                />
                 <CreateMetricModal
                     isVisible={this.state.isCreateMetricModalVisible}
                     hide={() => this.hideCreateMetricModal()}
