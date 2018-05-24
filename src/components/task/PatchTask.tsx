@@ -26,12 +26,11 @@ const styles = StyleSheet.create({
         alignItems: "stretch",
     } as ViewStyle,
     headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
+        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
-        flex: 2,
+        flex: 1,
         justifyContent: "space-around",
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
@@ -254,14 +253,14 @@ export default class Component extends React.Component<Props, State> {
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
-                        }}
-                        centerComponent={{ text: i18n.t("patchTask.header", { taskName }), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        } as any}
+                        centerComponent={{ text: i18n.t("patchTask.header", { taskName }), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
                         rightComponent={{
                             icon: "delete",
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { this.showDeleteModal(); }
-                        }}
+                        } as any}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -301,7 +300,7 @@ export default class Component extends React.Component<Props, State> {
                             name="add"
                             color="#fff"
                             underlayColor="transparent"
-                            style={{ marginLeft: 10, marginRight: 10, marginTop: 3 }}
+                            iconStyle={{ marginLeft: 10, marginRight: 10, marginTop: 3 }}
                             onPress={() => { this.showCreateMetricModal(); }}
                         />
                     </View>
@@ -322,7 +321,7 @@ export default class Component extends React.Component<Props, State> {
                                     name="create"
                                     color="#fff"
                                     underlayColor="transparent"
-                                    style={{ marginLeft: 10, marginRight: 10 }}
+                                    iconStyle={{ marginLeft: 10, marginRight: 10 }}
                                     onPress={() => { this.showUpdateMetricModal(metric); }}
                                 />
                                 <Icon

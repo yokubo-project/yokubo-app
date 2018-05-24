@@ -19,12 +19,11 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
+        height: 90,
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     formContainer: {
-        flex: 2,
+        flex: 1,
         justifyContent: "space-around",
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
@@ -36,6 +35,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor,
         paddingTop: 12,
         paddingBottom: 12,
+        borderTopWidth: 0,
         borderBottomWidth: 1,
         borderColor: "gray",
         marginLeft: 0,
@@ -152,15 +152,15 @@ export default class Component extends React.Component<Props, State> {
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
-                        }}
-                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        } as any}
+                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
                         rightComponent={
                             <View style={{ flex: 1, flexDirection: "row", marginTop: 23 }}>
                                 <Icon
                                     name="sort"
                                     color="#fff"
                                     underlayColor="transparent"
-                                    style={{ marginRight: 16 }}
+                                    iconStyle={{ marginRight: 16 }}
                                     onPress={() => { this._showSortItemsModal(); }}
                                 />
                                 <Icon
@@ -183,7 +183,7 @@ export default class Component extends React.Component<Props, State> {
                             keyExtractor={item => item.uid.toString()}
                             renderItem={({ item }) => (
                                 <ListItem
-                                    style={styles.listElement}
+                                    containerStyle={styles.listElement}
                                     title={item.name}
                                     titleStyle={{ color: theme.textColor, fontSize: 18, fontWeight: "bold" }}
                                     subtitle={this.renderMetrices(item)}

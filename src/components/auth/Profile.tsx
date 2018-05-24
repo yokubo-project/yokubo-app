@@ -19,12 +19,11 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
+        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listContainer: {
-        flexGrow: 7,
+        flexGrow: 1,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listElement: {
@@ -32,6 +31,7 @@ const styles = StyleSheet.create({
         paddingTop: 12,
         paddingBottom: 12,
         borderTopWidth: 1,
+        borderBottomWidth: 0,
         borderColor: "gray",
         marginLeft: 0,
     }
@@ -81,8 +81,8 @@ export default class Component extends React.Component<null, State> {
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
-                        }}
-                        centerComponent={{ text: i18n.t("profile.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        } as any}
+                        centerComponent={{ text: i18n.t("profile.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -112,7 +112,7 @@ export default class Component extends React.Component<null, State> {
                     </View>
                     <List containerStyle={{ marginBottom: 20, borderTopWidth: 0, marginLeft: 0, paddingLeft: 0 }}>
                         <ListItem
-                            style={styles.listElement}
+                            containerStyle={styles.listElement}
                             title={i18n.t("profile.updateProfile")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showProfileModal()}
@@ -120,7 +120,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor={theme.underlayColor}
                         />
                         <ListItem
-                            style={styles.listElement}
+                            containerStyle={styles.listElement}
                             title={i18n.t("profile.changePassword")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showResetPwdModal()}
@@ -128,7 +128,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor={theme.underlayColor}
                         />
                         <ListItem
-                            style={styles.listElement}
+                            containerStyle={styles.listElement}
                             title={i18n.t("profile.privacy")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => Linking.openURL(`${Config.BASE_URL}/views/v1/privacy`)}
@@ -136,7 +136,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor={theme.underlayColor}
                         />
                         <ListItem
-                            style={styles.listElement}
+                            containerStyle={styles.listElement}
                             title={i18n.t("profile.imprint")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => Linking.openURL(`${Config.BASE_URL}/views/v1/imprint`)}
@@ -144,7 +144,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor={theme.underlayColor}
                         />
                         <ListItem
-                            style={styles.listElement}
+                            containerStyle={styles.listElement}
                             title={i18n.t("profile.logout")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showLogoutModal()}
@@ -152,7 +152,7 @@ export default class Component extends React.Component<null, State> {
                             underlayColor={theme.underlayColor}
                         />
                         <ListItem
-                            style={styles.listElement}
+                            containerStyle={styles.listElement}
                             title={i18n.t("profile.deleteUser")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
                             onPress={() => this._showDeleteUserModal()}

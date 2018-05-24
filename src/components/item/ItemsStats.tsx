@@ -16,18 +16,18 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
+        height: 90,
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     scrollViewContainer: {
-        flexGrow: 6,
+        flexGrow: 1,
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     listElement: {
         backgroundColor: theme.backgroundColor,
         paddingTop: 12,
         paddingBottom: 12,
+        borderTopWidth: 0,
         borderBottomWidth: 1,
         borderColor: "gray",
         marginLeft: 0,
@@ -154,14 +154,14 @@ export default class Component extends React.Component<Props, State> {
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
-                        }}
-                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        } as any}
+                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
                         rightComponent={{
                             icon: "add",
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { this.props.handleOnAddIconClick(); }
-                        }}
+                        } as any}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />

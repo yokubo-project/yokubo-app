@@ -14,12 +14,11 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
+        height: 90,
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     formContainer: {
-        flex: 5,
+        flex: 1,
         justifyContent: "flex-start",
         backgroundColor: theme.backgroundColor,
         marginTop: 10
@@ -153,8 +152,8 @@ export default class Component extends React.Component<null, State> {
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
-                        }}
-                        centerComponent={{ text: i18n.t("signIn.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        } as any}
+                        centerComponent={{ text: i18n.t("signIn.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />

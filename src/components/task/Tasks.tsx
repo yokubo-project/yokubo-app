@@ -16,8 +16,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor,
     } as ViewStyle,
     headerContainer: {
-        flex: 1,
-        justifyContent: "space-around",
+        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listContainer: {
@@ -204,14 +203,14 @@ export default class Component extends React.Component<null, State> {
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { Actions.profile(); }
-                        }}
-                        centerComponent={{ text: i18n.t("tasks.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } }}
+                        } as any}
+                        centerComponent={{ text: i18n.t("tasks.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
                         rightComponent={{
                             icon: "add",
                             color: "#fff",
                             underlayColor: "transparent",
                             onPress: () => { this.handleOnCreateTaskClick(); }
-                        }}
+                        } as any}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
