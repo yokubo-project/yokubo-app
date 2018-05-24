@@ -1,12 +1,14 @@
 import i18n from "i18next";
 import { reactI18nextModule } from "react-i18next";
 import Expo from "expo";
+import { DangerZone } from "expo";
+const { Localization } = DangerZone;
 
 const languageDetector = {
     type: "languageDetector",
     async: true, // flags below detection to be async
     detect: (cb) => {
-        return Expo.Util.getCurrentLocaleAsync()
+        return Localization.getCurrentLocaleAsync()
             .then(lng => { cb(lng.split("_")[0]); });
 
     },

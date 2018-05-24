@@ -4,9 +4,9 @@
     "icon": "./assets/yokubo_app_logo.png",
     "version": "1.0.1",
     "slug": "yokubo",
-    "sdkVersion": "24.0.0",
+    "sdkVersion": "26.0.0",
     "splash": {
-      "image": "./assets/logo_yokubo.png",
+      "image": "./assets/yokubo_logo.png",
       "backgroundColor": "#333333",
       "resizeMode": "contain"
     },
