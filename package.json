@@ -26,6 +26,10 @@
   "jest": {
     "preset": "jest-expo"
   },
+  "resolutions": {
+    "mobx": "^4.3.0",
+    "mobx-react": "^5.1.2"
+  },
   "dependencies": {
     "auth-stapler": "^1.0.0",
     "expo": "^26.0.0",
