@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, ActivityIndicator, Text, View } from "react-native";
 import { Router, Stack, Scene, Actions } from "react-native-router-flux";
-import { Provider as MobxProvider, observer } from "mobx-react";
 
 import authStore from "./src/state/authStore";
 import taskStore from "./src/state/taskStore";
@@ -20,6 +19,7 @@ import Items from "./src/components/item/Items";
 import CreateItem from "./src/components/item/CreateItem";
 import PatchItem from "./src/components/item/PatchItem";
 import { theme } from "./src/shared/styles";
+import { observer } from "mobx-react";
 
 
 const styles = StyleSheet.create({
@@ -48,9 +48,7 @@ class App extends React.Component<null, null> {
 
     render() {
         return (
-            <MobxProvider authStore={authStore} taskStore={taskStore}>
-                <Routes />
-            </MobxProvider>
+            <Routes />
         );
     }
 

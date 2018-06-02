@@ -1,12 +1,14 @@
-export let BASE_URL;
+export let BASE_URL = "https://yokubo.org";
 
-if (process.env.REACT_NATIVE_ENVIRONMENTT === "development") {
-    BASE_URL = process.env.DEVELOPMENT_BASE_URL;
-} else if (process.env.REACT_NATIVE_ENVIRONMENTT === "production") {
-    BASE_URL = process.env.PRODUCTION_BASE_URL;
+if (process.env.REACT_NATIVE_ENVIRONMENT === "development") {
+    console.log(`Setting config.BASE_URL: http://192.168.0.2:8080`);
+    BASE_URL = "http://192.168.0.2:8080";
+} else if (process.env.REACT_NATIVE_ENVIRONMENT === "production") {
+    console.log(`Setting config.BASE_URL: https://yokubo.org`);
+    BASE_URL = "https://yokubo.org";
 } else {
     console.log("No environment found");
-    throw new Error("No environment found");
+    console.log(`Setting config.BASE_URL: https://yokubo.org`);
+    BASE_URL = "https://yokubo.org";
+    // throw new Error("No environment found");
 }
-
-console.log(`config.BASE_URL: ${BASE_URL}`);

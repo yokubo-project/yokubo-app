@@ -5,22 +5,8 @@
   "env": {
     "development": {
       "plugins": [
-        "transform-react-jsx-source",
-        [
-          "inline-dotenv",
-          {
-            "path": "./.env"
-          }
-        ]
+        "transform-react-jsx-source"
       ]
-    },
-    "plugins": [
-      [
-        "inline-dotenv",
-        {
-          "path": "./.env"
-        }
-      ]
-    ]
+    }
   }
 }
