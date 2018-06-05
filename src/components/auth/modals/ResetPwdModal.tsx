@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, TextStyle } from "react-native";
-import { FormInput, Button, FormValidationMessage } from "react-native-elements";
+import { StyleSheet, Text, TextStyle, View } from "react-native";
+import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
 
-import authStore from "../../../state/authStore";
-import { theme } from "../../../shared/styles";
 import i18n from "../../../shared/i18n";
+import { theme } from "../../../shared/styles";
+import authStore from "../../../state/authStore";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10
-    },
+    }
 });
 
-interface State {
+interface IState {
     inputCurrentPwd: string;
     inputNewPwd: string;
     inputNewPwdError: string;
@@ -32,14 +32,14 @@ interface State {
     inputGeneralError: string;
 }
 
-interface Props {
+interface IProps {
     isVisible: boolean;
-    hide: () => void;
+    hide(): void;
 }
 
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             inputCurrentPwd: "",
@@ -60,6 +60,7 @@ export default class Component extends React.Component<Props, State> {
                 inputCurrentPwdError: null,
                 inputGeneralError: null
             });
+
             return;
         }
 
@@ -84,7 +85,7 @@ export default class Component extends React.Component<Props, State> {
                     this.setState({
                         inputNewPwdError: null,
                         inputCurrentPwdError: null,
-                        inputGeneralError: i18n.t("resetPwd.unexpectedError"),
+                        inputGeneralError: i18n.t("resetPwd.unexpectedError")
                     });
             }
         } else {
@@ -110,6 +111,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputNewPwdError) {
             return <FormValidationMessage> {this.state.inputNewPwdError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -117,6 +119,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputCurrentPwdError) {
             return <FormValidationMessage>{this.state.inputCurrentPwdError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -124,6 +127,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -156,7 +160,7 @@ export default class Component extends React.Component<Props, State> {
                     {this.showNewPwdError()}
 
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("resetPwd.resetPwdButton")}

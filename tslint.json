@@ -1,60 +1,36 @@
 {
-    "rules": {
-      "class-name": true,
-      "curly": true,
-      "comment-format": [true,
-        "check-space"
-      ],
-      "eofline": true,
-      "forin": true,
-      "indent": [true, "spaces"],
-      "label-position": true,
-      "max-line-length": false,
-      "member-ordering": [true,
-        "public-before-private",
-        "static-before-instance",
-        "variables-before-functions"
-      ],
-      "no-arg": true,
-      "no-bitwise": true,
-      "no-console": [false,
-        "debug",
-        "info",
-        "time",
-        "timeEnd",
-        "trace"
-      ],
-      "no-construct": true,
-      "no-debugger": true,
-      "no-duplicate-variable": true,
-      "no-empty": true,
-      "no-eval": true,
-      "no-string-literal": true,
-      "no-switch-case-fall-through": true,
-      "trailing-comma": false,
-      "no-trailing-whitespace": false,
-      // "no-unused-expression": false, // Disabled for development
-      // "no-unused-variable": false, // Disabled for development
-      "no-use-before-declare": true,
-      "no-var-keyword": true,
-      "one-line": [true,
-        "check-open-brace",
-        "check-catch",
-        "check-else",
-        "check-whitespace"
-      ],
-      "quotemark": [true, "double"],
-      "radix": true,
-      "semicolon": true,
-      "triple-equals": [true, "allow-null-check"],
-      "variable-name": false,
-      "whitespace": [true,
-        "check-branch",
-        "check-decl",
-        "check-operator",
-        "check-separator",
-        "check-type"
-      ]
-    }
+  "extends": [
+    "tslint-react",
+    "tslint-microsoft-contrib"
+  ],
+  "rules": {
+    "await-promise": false,
+    "missing-jsdoc": false,
+    "no-default-export": false,
+    "export-name": false,
+    "import-name": false,
+    "no-any": false,
+    "quotemark": [
+      true,
+      "double"
+    ],
+    "member-access": [
+      true,
+      "no-public"
+    ],
+    "jsx-no-multiline-js": false,
+    "no-relative-imports": false,
+    "prefer-as-cast": false,
+    "prefer-type-cast": false,
+    "typedef": [
+      true,
+      "member-variable-declaration",
+      "parameter",
+      "property-declaration"
+    ],
+    "no-require-imports": false,
+    "react-this-binding-issue": false,
+    "jsx-no-lambda": false,
+    "no-object-literal-type-assertion": false
   }
-  
+}

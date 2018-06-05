@@ -1,9 +1,10 @@
-import { observable, action } from "mobx";
+import { action, observable } from "mobx";
 import { create, persist } from "mobx-persist";
 
-import { AuthAPI } from "../network/AuthAPI";
-import APIClient from "../network/APIClient";
+// tslint:disable-next-line:no-implicit-dependencies
 import { APIClientStatusCodeError } from "network-stapler";
+import APIClient from "../network/APIClient";
+import { AuthAPI } from "../network/AuthAPI";
 
 import * as config from "../config";
 import taskStore from "./taskStore";
@@ -32,7 +33,14 @@ export interface IProfile {
     username: string;
 }
 
-export type AuthError = "InvalidLogin" | "UserAlreadyExists" | "InvalidUsername" | "PasswordWeak" | "PasswordsDontMatch" | "UserDisabled" | "Unknown";
+export type AuthError =
+    "InvalidLogin" |
+    "UserAlreadyExists" |
+    "InvalidUsername" |
+    "PasswordWeak" |
+    "PasswordsDontMatch" |
+    "UserDisabled" |
+    "Unknown";
 
 class Auth {
 
@@ -50,6 +58,7 @@ class Auth {
         this.isLoading = true;
 
         const target = AuthAPI.loginWithPassword(username, password);
+
         return APIClient.requestType(target)
             .then(credentials => {
                 this.error = null;
@@ -75,6 +84,7 @@ class Auth {
         this.isLoading = true;
 
         const target = AuthAPI.register(username, password, name);
+
         return APIClient.requestType(target)
             .then(credentials => {
                 this.error = null;
@@ -102,6 +112,7 @@ class Auth {
         this.isLoading = true;
 
         const target = AuthAPI.deleteUser(currentPwd, this.credentials.accessToken);
+
         return APIClient.requestType(target)
             .then(profile => {
                 this.isLoading = false;
@@ -125,6 +136,7 @@ class Auth {
         this.isLoading = true;
 
         const target = AuthAPI.forgotPassword(username);
+
         return APIClient.requestType(target)
             .then(credentials => {
                 this.error = null;
@@ -134,17 +146,18 @@ class Auth {
             });
     }
 
-    @action patchProfile = async (profile: { username?: string, name?: string }) => {
+    @action patchProfile = async (profile: { username?: string; name?: string }) => {
         if (this.isLoading) { return; }
         this.isLoading = true;
 
         const target = AuthAPI.patchProfile(profile, this.credentials.accessToken);
+
         return APIClient.requestType(target)
-            .then(profile => {
+            .then(response => {
                 this.error = null;
                 this.isLoading = false;
-                this.profile = profile;
-                this.username = profile.username;
+                this.profile = response;
+                this.username = response.username;
             }).catch(error => {
                 if (error instanceof APIClientStatusCodeError) {
                     if (error.statusCode === 400 && error.response.message === "UserAlreadyExists") {
@@ -163,6 +176,7 @@ class Auth {
         this.isLoading = true;
 
         const target = AuthAPI.getProfile(this.credentials.accessToken);
+
         return APIClient.requestType(target)
             .then(profile => {
                 this.error = null;
@@ -178,6 +192,7 @@ class Auth {
         this.isLoading = true;
 
         const target = AuthAPI.resetPwd(currentPwd, newPwd, this.credentials.accessToken);
+
         return APIClient.requestType(target)
             .then(credentials => {
                 this.error = null;
@@ -212,7 +227,7 @@ class Auth {
 
         try {
             if (this.credentials === null) {
-                throw new Error(`No valid credentials are available`);
+                throw new Error("No valid credentials are available");
             }
 
             const res = await fetch(`${config.BASE_URL}/api/v1/auth/token`, {
@@ -263,7 +278,8 @@ auth = new Auth();
 
 // persist this mobx state through AsyncStorage
 const hydrate = create({
-    storage: require("AsyncStorage"),
+    // tslint:disable-next-line:no-implicit-dependencies
+    storage: require("AsyncStorage")
 });
 
 hydrate("auth", auth).then(() => {

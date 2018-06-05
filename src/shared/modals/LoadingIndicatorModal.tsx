@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, TextStyle, ActivityIndicator } from "react-native";
-import { FormInput, Button, FormValidationMessage } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { ActivityIndicator, StyleSheet, Text, TextStyle, View } from "react-native";
+import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
+import { Actions } from "react-native-router-flux";
 
 import authStore from "../../state/authStore";
-import { theme } from "../styles";
 import taskStore, { IItem } from "../../state/taskStore";
+import { theme } from "../styles";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -22,15 +22,15 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10
-    },
+    }
 });
 
-interface Props {
+interface IProps {
     isVisible: boolean;
     loadingText: string;
 }
 
-export default class Component extends React.Component<Props, null> {
+export default class Component extends React.Component<IProps, null> {
 
     render() {
         return (
@@ -38,14 +38,16 @@ export default class Component extends React.Component<Props, null> {
                 isVisible={this.props.isVisible}
             >
                 <View style={styles.modalContent}>
-                    <View style={{
-                        marginTop: 15,
-                        marginLeft: 15,
-                        marginBottom: 15,
-                        marginRight: 15,
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                    }}>
+                    <View
+                        style={{
+                            marginTop: 15,
+                            marginLeft: 15,
+                            marginBottom: 15,
+                            marginRight: 15,
+                            flexDirection: "row",
+                            flexWrap: "wrap"
+                        }}
+                    >
                         <ActivityIndicator size="large" color={theme.spinnerColor} />
                         <Text
                             style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 5, paddingLeft: 10 }}

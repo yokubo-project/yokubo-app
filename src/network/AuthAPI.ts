@@ -1,7 +1,9 @@
+// tslint:disable-next-line:no-implicit-dependencies
 import { ITypedAPITarget } from "network-stapler";
 
 import { ICredentials, IProfile } from "../state/authStore";
 
+// tslint:disable-next-line:variable-name
 export const AuthAPI = {
     refreshAccessToken(refreshtoken: string): ITypedAPITarget<ICredentials> {
         return {
@@ -33,7 +35,7 @@ export const AuthAPI = {
     register(
         username: string,
         password: string,
-        name: string,
+        name: string
     ): ITypedAPITarget<ICredentials> {
         return {
             url: "api/v1/auth/register",
@@ -65,7 +67,7 @@ export const AuthAPI = {
             url: "api/v1/auth/user",
             method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             body: {
                 currentPwd
@@ -80,14 +82,14 @@ export const AuthAPI = {
             url: "api/v1/auth/user",
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
                 return json as IProfile;
             }
         };
     },
-    patchProfile(profile: { username?: string, name?: string }, accessToken: string): ITypedAPITarget<IProfile> {
+    patchProfile(profile: { username?: string; name?: string }, accessToken: string): ITypedAPITarget<IProfile> {
         return {
             url: "api/v1/auth/user",
             method: "PATCH",
@@ -95,7 +97,7 @@ export const AuthAPI = {
                 ...profile
             },
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
                 return json as IProfile;
@@ -111,11 +113,11 @@ export const AuthAPI = {
                 newPwd
             },
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
                 return json as ICredentials;
             }
         };
-    },
+    }
 };

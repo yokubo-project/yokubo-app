@@ -1,26 +1,25 @@
 import React from "react";
-import { StyleSheet, ActivityIndicator, Text, View } from "react-native";
-import { Router, Stack, Scene, Actions } from "react-native-router-flux";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { Actions, Router, Scene, Stack } from "react-native-router-flux";
 
 import authStore from "./src/state/authStore";
 import taskStore from "./src/state/taskStore";
 
+import ForgotPwd from "./src/components/auth/ForgotPwd";
 import Home from "./src/components/auth/Home";
+import Profile from "./src/components/auth/Profile";
 import SignIn from "./src/components/auth/SignIn";
 import SignUp from "./src/components/auth/SignUp";
-import ForgotPwd from "./src/components/auth/ForgotPwd";
-import Profile from "./src/components/auth/Profile";
 
-import Tasks from "./src/components/task/Tasks";
 import CreateTask from "./src/components/task/CreateTask";
 import PatchTask from "./src/components/task/PatchTask";
+import Tasks from "./src/components/task/Tasks";
 
-import Items from "./src/components/item/Items";
+import { observer } from "mobx-react";
 import CreateItem from "./src/components/item/CreateItem";
+import Items from "./src/components/item/Items";
 import PatchItem from "./src/components/item/PatchItem";
 import { theme } from "./src/shared/styles";
-import { observer } from "mobx-react";
-
 
 const styles = StyleSheet.create({
     spinnerContainer: {
@@ -28,13 +27,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        backgroundColor: "#333333",
+        backgroundColor: "#333333"
     },
     rehydrationText: {
-        color: theme.textColor,
+        color: theme.textColor
     }
 });
 
+// tslint:disable-next-line:variable-name
 const Spinner = () => {
     return (
         <View style={styles.spinnerContainer}>
@@ -53,7 +53,6 @@ class App extends React.Component<null, null> {
     }
 
 }
-
 
 @observer
 class Routes extends React.Component<null, null> {

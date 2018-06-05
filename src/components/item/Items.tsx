@@ -1,24 +1,24 @@
-import React from "react";
 import { observer } from "mobx-react";
-import { StyleSheet, View, Text, ViewStyle, TextStyle } from "react-native";
-import { Icon, Header } from "react-native-elements";
+import React from "react";
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Header, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 import TabNavigator from "react-native-tab-navigator";
 
+import i18n from "../../shared/i18n";
+import { theme } from "../../shared/styles";
+import { IFullTask } from "../../state/taskStore";
 import ItemsList from "./ItemsList";
 import ItemsStats from "./ItemsStats";
-import { IFullTask } from "../../state/taskStore";
-import { theme } from "../../shared/styles";
-import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     headerContainer: {
         height: 90,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     welcomeScreenContainer: {
         flexGrow: 1,
@@ -33,33 +33,33 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
         fontSize: 20
-    } as TextStyle,
+    } as TextStyle
 });
 
-interface State {
+interface IState {
     selectedTab: string;
 }
 
-interface Props {
+interface IProps {
     task: IFullTask;
 }
 @observer
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
-            selectedTab: "itemList",
+            selectedTab: "itemList"
         };
     }
 
-    changeTab(selectedTab) {
+    changeTab(selectedTab: string) {
         this.setState({ selectedTab });
     }
 
     handleOnAddIconClick() {
         Actions.createItem({
-            task: this.props.task,
+            task: this.props.task
         });
     }
 
@@ -76,9 +76,19 @@ export default class Component extends React.Component<Props, State> {
                         selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
                         selected={this.state.selectedTab === "itemList"}
                         title={this.state.selectedTab === "itemList" ? "List" : null}
-                        renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="list" size={33} />}
+                        renderIcon={() => <Icon
+                            containerStyle={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                                marginTop: 12
+                            }}
+                            color={"#a9a9a9"}
+                            name="list"
+                            size={33}
+                        />}
                         renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="list" size={30} />}
-                        onPress={() => this.changeTab("itemList")}>
+                        onPress={() => this.changeTab("itemList")}
+                    >
                         <ItemsList
                             task={this.props.task}
                             headerText={this.getHeaderText()}
@@ -90,9 +100,19 @@ export default class Component extends React.Component<Props, State> {
                         selectedTitleStyle={{ marginTop: -1, marginBottom: 6, color: theme.backgroundColor }}
                         selected={this.state.selectedTab === "itemStats"}
                         title={this.state.selectedTab === "itemStats" ? "Statistics" : null}
-                        renderIcon={() => <Icon containerStyle={{ justifyContent: "center", alignItems: "center", marginTop: 12 }} color={"#a9a9a9"} name="equalizer" size={33} />}
+                        renderIcon={() => <Icon
+                            containerStyle={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                                marginTop: 12
+                            }}
+                            color={"#a9a9a9"}
+                            name="equalizer"
+                            size={33}
+                        />}
                         renderSelectedIcon={() => <Icon color={theme.backgroundColor} name="equalizer" size={30} />}
-                        onPress={() => this.changeTab("itemStats")}>
+                        onPress={() => this.changeTab("itemStats")}
+                    >
                         <ItemsStats
                             task={this.props.task}
                             headerText={this.getHeaderText()}
@@ -139,7 +159,9 @@ export default class Component extends React.Component<Props, State> {
     }
 
     render() {
+        // tslint:disable-next-line:no-unnecessary-local-variable
         const content = this.props.task.items.length > 0 ? this.renderTabNavigation() : this.renderWelcomeScreen();
+
         return content;
     }
 

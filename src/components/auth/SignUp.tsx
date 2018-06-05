@@ -1,22 +1,22 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
-import { Header, Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
-import authStore from "../../state/authStore";
-import { theme } from "../../shared/styles";
-import i18n from "../../shared/i18n";
 import { validateEmail } from "../../shared/helpers";
+import i18n from "../../shared/i18n";
+import { theme } from "../../shared/styles";
+import authStore from "../../state/authStore";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     headerContainer: {
         height: 90,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
         flex: 1,
@@ -30,7 +30,10 @@ const styles = StyleSheet.create({
         marginBottom: 10
     }
 });
-interface State {
+
+// tslint:disable-next-line:no-empty-interface
+interface IProps { }
+interface IState {
     inputName: string;
     inputEmail: string;
     inputPassword: string;
@@ -39,9 +42,9 @@ interface State {
     inputPasswordError: string;
     inputGeneralError: string;
 }
-export default class Component extends React.Component<null, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             inputName: "",
@@ -54,7 +57,6 @@ export default class Component extends React.Component<null, State> {
         };
     }
 
-
     parseName(value: any) {
         this.setState({
             inputName: value
@@ -65,9 +67,9 @@ export default class Component extends React.Component<null, State> {
         if (this.state.inputNameError) {
             return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
+
         return null;
     }
-
 
     parseEmail(value: any) {
         this.setState({
@@ -79,6 +81,7 @@ export default class Component extends React.Component<null, State> {
         if (this.state.inputEmailError) {
             return <FormValidationMessage>{this.state.inputEmailError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -92,6 +95,7 @@ export default class Component extends React.Component<null, State> {
         if (this.state.inputPasswordError) {
             return <FormValidationMessage>{this.state.inputPasswordError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -99,6 +103,7 @@ export default class Component extends React.Component<null, State> {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -114,6 +119,7 @@ export default class Component extends React.Component<null, State> {
                 inputPasswordError: null,
                 inputGeneralError: null
             });
+
             return;
         } else if (email.length < 5) {
             this.setState({
@@ -122,6 +128,7 @@ export default class Component extends React.Component<null, State> {
                 inputPasswordError: null,
                 inputGeneralError: null
             });
+
             return;
         } else if (!validateEmail(email)) {
             this.setState({
@@ -130,6 +137,7 @@ export default class Component extends React.Component<null, State> {
                 inputPasswordError: null,
                 inputGeneralError: null
             });
+
             return;
         } else if (password.length < 6) {
             this.setState({
@@ -138,6 +146,7 @@ export default class Component extends React.Component<null, State> {
                 inputPasswordError: i18n.t("signUp.pwdToShort"),
                 inputGeneralError: null
             });
+
             return;
         }
 
@@ -173,7 +182,7 @@ export default class Component extends React.Component<null, State> {
                         inputNameError: null,
                         inputEmailError: null,
                         inputPasswordError: null,
-                        inputGeneralError: i18n.t("signUp.unexpectedError"),
+                        inputGeneralError: i18n.t("signUp.unexpectedError")
                     });
             }
         } else {
@@ -200,7 +209,10 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         } as any}
-                        centerComponent={{ text: i18n.t("signUp.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
+                        centerComponent={{
+                            text: i18n.t("signUp.header"),
+                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
+                        } as any}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
@@ -236,7 +248,7 @@ export default class Component extends React.Component<null, State> {
                     {this.showGeneralError()}
 
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("signUp.signupButton")}

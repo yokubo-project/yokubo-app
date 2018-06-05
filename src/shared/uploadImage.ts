@@ -10,7 +10,7 @@ export async function uploadImageAsync(uri: string): Promise<string> {
     formData.append("photo", {
         uri,
         name: `photo.${fileType}`,
-        type: `image/${fileType}`,
+        type: `image/${fileType}`
     } as any);
 
     const options = {
@@ -19,8 +19,8 @@ export async function uploadImageAsync(uri: string): Promise<string> {
         headers: {
             Accept: "application/json",
             "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${authStore.credentials.accessToken}`,
-        },
+            Authorization: `Bearer ${authStore.credentials.accessToken}`
+        }
     };
 
     const results = await fetch(apiUrl, options);

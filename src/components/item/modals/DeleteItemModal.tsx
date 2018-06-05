@@ -1,13 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View, TextStyle } from "react-native";
-import { FormInput, Button, FormValidationMessage } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { StyleSheet, Text, TextStyle, View } from "react-native";
+import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
+import { Actions } from "react-native-router-flux";
 
-import authStore from "../../../state/authStore";
-import { theme } from "../../../shared/styles";
-import taskStore, { IItem } from "../../../state/taskStore";
 import i18n from "../../../shared/i18n";
+import { theme } from "../../../shared/styles";
+import authStore from "../../../state/authStore";
+import taskStore, { IItem } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -23,23 +23,23 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10
-    },
+    }
 });
 
-interface State {
+interface IState {
     inputGeneralError: string;
 }
 
-interface Props {
+interface IProps {
     isVisible: boolean;
-    hide: () => void;
     taskUid: string;
     item: IItem;
+    hide(): void;
 }
 
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             inputGeneralError: null
@@ -75,6 +75,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -90,14 +91,16 @@ export default class Component extends React.Component<Props, State> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <View style={{
-                        marginTop: 15,
-                        marginLeft: 15,
-                        marginBottom: 15,
-                        marginRight: 15,
-                        flexDirection: "row",
-                        flexWrap: "wrap"
-                    }}>
+                    <View
+                        style={{
+                            marginTop: 15,
+                            marginLeft: 15,
+                            marginBottom: 15,
+                            marginRight: 15,
+                            flexDirection: "row",
+                            flexWrap: "wrap"
+                        }}
+                    >
                         <Text
                             style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                         >
@@ -106,7 +109,7 @@ export default class Component extends React.Component<Props, State> {
                     </View>
 
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("deleteItem.deleteButton")}

@@ -1,28 +1,30 @@
+// tslint:disable-next-line:no-implicit-dependencies
 import { ITypedAPITarget } from "network-stapler";
 
 import {
-    ITask,
     IFullTask,
-    IPatchTask,
-    IPostTask,
-    IMetric,
-    IPatchMetric,
-    IPostMetric,
     IItem,
+    IMetric,
     IPatchItem,
-    IPostItem
+    IPatchMetric,
+    IPatchTask,
+    IPostItem,
+    IPostMetric,
+    IPostTask,
+    ITask
 } from "../state/taskStore";
 
+// tslint:disable-next-line:variable-name
 export const TaskAPI = {
-    getTasks(accessToken: string): ITypedAPITarget<Array<IFullTask>> {
+    getTasks(accessToken: string): ITypedAPITarget<IFullTask[]> {
         return {
             url: "api/v1/tasks",
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
-                return json as Array<IFullTask>;
+                return json as IFullTask[];
             }
         };
     },
@@ -31,7 +33,7 @@ export const TaskAPI = {
             url: "api/v1/tasks",
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             body: {
                 ...task
@@ -46,7 +48,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}`,
             method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
                 return json as ITask;
@@ -58,7 +60,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}`,
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
                 return json as IFullTask;
@@ -74,7 +76,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}`,
             method: "PATCH",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             body: {
                 ...task
@@ -89,7 +91,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}/items`,
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             body: {
                 ...item
@@ -104,7 +106,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}/items/${itemUid}`,
             method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
                 return json as ITask;
@@ -122,7 +124,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}/items/${itemUid}`,
             method: "PATCH",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             body: {
                 ...item
@@ -142,7 +144,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}/items`,
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             body: {
                 ...metric
@@ -157,7 +159,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}/metrics/${metricUid}`,
             method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
                 return json as IMetric;
@@ -175,7 +177,7 @@ export const TaskAPI = {
             url: `api/v1/tasks/${taskUid}/metrics/${metricUid}`,
             method: "PATCH",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                Authorization: `Bearer ${accessToken}`
             },
             body: {
                 ...metric
@@ -184,5 +186,5 @@ export const TaskAPI = {
                 return json as IFullTask;
             }
         };
-    },
+    }
 };

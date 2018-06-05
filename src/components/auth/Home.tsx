@@ -1,19 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, View, ViewStyle, TextStyle, Image } from "react-native";
+import { I18nextProvider, translate } from "react-i18next";
+import { Image, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Button } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
-import { I18nextProvider, translate } from "react-i18next";
 
-import { theme } from "../../shared/styles";
 import i18n from "../../shared/i18n";
+import { theme } from "../../shared/styles";
 
+// tslint:disable-next-line:no-var-requires
 const LOGO = require("../../../assets/yokubo_logo.png");
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     logoContainer: {
         flex: 1,
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     image: {
         width: undefined,
         height: undefined,
-        flex: 1,
+        flex: 1
     } as TextStyle,
     buttonContainer: {
         flex: 2
@@ -33,8 +34,8 @@ const styles = StyleSheet.create({
         flex: 1,
         color: theme.inputTextColor,
         fontSize: 20,
-        textAlign: "center",
-    } as TextStyle,
+        textAlign: "center"
+    } as TextStyle
 });
 export default class Component extends React.Component<null, null> {
 
@@ -55,7 +56,7 @@ export default class Component extends React.Component<null, null> {
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("home.signupButton")}

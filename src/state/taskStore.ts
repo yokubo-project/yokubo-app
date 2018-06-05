@@ -1,26 +1,27 @@
-import { observable, action } from "mobx";
+import { action, observable } from "mobx";
 
-import { TaskAPI } from "../network/TaskAPI";
-import APIClient from "../network/APIClient";
+// tslint:disable-next-line:no-implicit-dependencies
 import { APIClientStatusCodeError } from "network-stapler";
+import APIClient from "../network/APIClient";
+import { TaskAPI } from "../network/TaskAPI";
 
 import authStore from "../state/authStore";
 
 export interface IPostTask {
     name: string;
     imageUid: string;
-    metrics: Array<IPostMetric>;
+    metrics: IPostMetric[];
 }
 
 export interface IPatchTask {
     name?: string;
     imageUid?: string;
-    metrics?: Array<{
+    metrics?: {
         uid?: string;
         name: string;
         unit: string;
         action: string;
-    }>;
+    }[];
 }
 
 export interface ITask {
@@ -40,8 +41,8 @@ export interface IFullTask {
     name: string;
     createdAt: string;
     image: IImage;
-    metrics: Array<IMetric>;
-    items: Array<IItem>;
+    metrics: IMetric[];
+    items: IItem[];
 }
 
 export interface IPostMetric {
@@ -64,14 +65,14 @@ export interface IMetric {
 export interface IPostItem {
     name: string;
     desc: string;
-    period: any; // TODO Range;
+    period: string[];
     metrics: string;
 }
 
 export interface IPatchItem {
     name?: string;
     desc?: string;
-    period?: any; // TODO Range;
+    period?: string[];
     metrics?: string;
 }
 
@@ -79,7 +80,7 @@ export interface IItem {
     uid: string;
     name: string;
     desc: string;
-    period: any; // TODO Range;
+    period: string[];
     duration: number;
     metrics: string;
     createdAt: string;
@@ -98,10 +99,11 @@ class Tasks {
         this.isLoading = true;
 
         const target = TaskAPI.getTasks(authStore.credentials.accessToken);
+
         return APIClient.requestType(target)
-            .then(tasks => {
+            .then(response => {
                 // Initialize tasks
-                this.tasks = tasks;
+                this.tasks = response;
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
@@ -114,10 +116,11 @@ class Tasks {
         this.isLoading = true;
 
         const target = TaskAPI.postTask(authStore.credentials.accessToken, task);
+
         return APIClient.requestType(target)
-            .then(task => {
+            .then(response => {
                 // Attach new task to tasks
-                this.tasks.push(task);
+                this.tasks.push(response);
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
@@ -130,10 +133,11 @@ class Tasks {
         this.isLoading = true;
 
         const target = TaskAPI.patchTask(authStore.credentials.accessToken, taskUid, task);
+
         return APIClient.requestType(target)
             .then(response => {
                 // Replace old item with patched item
-                const foundIndex = this.tasks.findIndex(task => task.uid === response.uid);
+                const foundIndex = this.tasks.findIndex(e => e.uid === response.uid);
                 this.tasks[foundIndex] = response;
                 this.error = null;
                 this.isLoading = false;
@@ -163,15 +167,15 @@ class Tasks {
         this.isLoading = true;
 
         const target = TaskAPI.postItem(authStore.credentials.accessToken, taskUid, item);
+
         return APIClient.requestType(target)
-            .then(item => {
-                console.log("ITEM IS: ", item);
+            .then(response => {
                 // Attach new item to task
                 this.tasks.forEach(task => {
                     if (task.uid === taskUid) {
-                        // Workaround as mobx doest not recognize when array in deeply nested object is extended 
+                        // Workaround as mobx doest not recognize when array in deeply nested object is extended
                         const localTask = JSON.parse(JSON.stringify(task));
-                        localTask.items ? localTask.items.push(item) : [item];
+                        localTask.items ? localTask.items.push(response) : localTask.items = [response];
                         task.items = localTask.items;
                     }
                 });
@@ -195,12 +199,14 @@ class Tasks {
         this.isLoading = true;
 
         const target = TaskAPI.patchItem(authStore.credentials.accessToken, taskUid, itemUid, item);
+
         return APIClient.requestType(target)
-            .then(item => {
+            .then(response => {
                 // Replace old item with patched item
                 this.tasks.forEach(task => {
                     task.items ? task.items = task.items.map(taskItem => {
-                        return taskItem.uid === item.uid ? item : taskItem;
+                        return taskItem.uid === response.uid ? response : taskItem;
+                        // tslint:disable-next-line:no-unused-expression
                     }) : null;
                 });
 
@@ -224,10 +230,12 @@ class Tasks {
         this.isLoading = true;
 
         const target = TaskAPI.deleteItem(authStore.credentials.accessToken, taskUid, itemUid);
+
         return APIClient.requestType(target)
             .then(item => {
                 // Remove item from task
                 this.tasks.forEach(task => {
+                    // tslint:disable-next-line:no-unused-expression
                     task.items ? task.items = task.items.filter(taskItem => taskItem.uid !== item.uid) : null;
                 });
                 this.error = null;

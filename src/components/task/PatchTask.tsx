@@ -1,29 +1,29 @@
-import React from "react";
-import { StyleSheet, View, ViewStyle, Text, Image, TouchableOpacity } from "react-native";
-import { Header, FormInput, FormValidationMessage, Button, Icon } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
-import Modal from "react-native-modal";
 import { ImagePicker } from "expo";
+import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Button, FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
+import Modal from "react-native-modal";
+import { Actions } from "react-native-router-flux";
 
 import * as Config from "../../config";
-import authStore from "../../state/authStore";
-import taskStore, { IMetric } from "../../state/taskStore";
-import { IFullTask } from "../../state/taskStore";
-import DeleteTask from "../task/DeleteTask";
-import { uploadImageAsync } from "../../shared/uploadImage";
-import { theme } from "../../shared/styles";
-import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 import i18n from "../../shared/i18n";
+import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
+import { theme } from "../../shared/styles";
+import { uploadImageAsync } from "../../shared/uploadImage";
+import authStore from "../../state/authStore";
+import taskStore, { IFullTask, IMetric } from "../../state/taskStore";
+import DeleteTask from "../task/DeleteTask";
 import CreateMetricModal from "./modals/CreateMetricModal";
 import UpdateMetricModal from "./modals/UpdateMetricModal";
 
+// tslint:disable-next-line:no-var-requires
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: theme.backgroundColor,
-        alignItems: "stretch",
+        alignItems: "stretch"
     } as ViewStyle,
     headerContainer: {
         height: 90,
@@ -42,30 +42,30 @@ const styles = StyleSheet.create({
     inputStyle: {
         color: theme.inputTextColor,
         fontSize: 20,
-        marginRight: 100,
+        marginRight: 100
     },
     imageStyle: {
         width: 150,
-        height: 150,
+        height: 150
     }
 });
 
-interface State {
+interface IState {
     name: string;
     imageUid: string;
     inputNameError: string;
     inputGeneralError: string;
-    metrics: Array<{
+    metrics: {
         uid: string;
         name: string;
         unit: string;
-    }>;
-    metricsToBePatched: Array<{
+    }[];
+    metricsToBePatched: {
         uid?: string;
         name: string;
         unit: string;
         action: string;
-    }>;
+    }[];
     image: any;
     isDeleteModalVisible: boolean;
     isCreateMetricModalVisible: boolean;
@@ -75,13 +75,13 @@ interface State {
     metricToBePatched: IMetric;
 }
 
-interface Props {
+interface IProps {
     task: IFullTask;
 }
 
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -111,6 +111,7 @@ export default class Component extends React.Component<Props, State> {
                 inputNameError: i18n.t("patchTask.nameToShort"),
                 inputGeneralError: null
             });
+
             return;
         }
 
@@ -135,6 +136,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputNameError) {
             return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -142,6 +144,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -165,7 +168,7 @@ export default class Component extends React.Component<Props, State> {
 
     patchMetric(metricToBePatched: IMetric) {
         // update metric injected via props
-        let metric = this.props.task.metrics.filter((metric: any) => metric.uid === metricToBePatched.uid)[0];
+        const metric = this.props.task.metrics.filter(e => e.uid === metricToBePatched.uid)[0];
         if (metric) {
             metric.name = metricToBePatched.name;
             metric.unit = metricToBePatched.unit;
@@ -179,14 +182,14 @@ export default class Component extends React.Component<Props, State> {
             });
         } else {
             // update metric just added via addMetric()
-            const metrics = this.state.metrics.filter(metric => metric.uid !== metricToBePatched.uid);
+            const metrics = this.state.metrics.filter(e => e.uid !== metricToBePatched.uid);
             metrics.push(metricToBePatched);
             this.setState({ metrics });
         }
         this.hideUpdateMetricModal();
     }
 
-    deleteMetric(metricToBeDeleted) {
+    deleteMetric(metricToBeDeleted: any) {
         this.setState({
             metrics: this.state.metrics.filter((metric: any) => metric.uid !== metricToBeDeleted.uid)
         });
@@ -200,10 +203,10 @@ export default class Component extends React.Component<Props, State> {
         });
     }
 
-    _pickImage = async () => {
+    pickImage = async () => {
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: false
         });
 
         try {
@@ -217,6 +220,7 @@ export default class Component extends React.Component<Props, State> {
                 });
             }
         } catch (e) {
+            // tslint:disable-next-line:no-console
             console.log("Error picking image: ", e);
             this.setState({ isPreparingImageModalVisible: false });
         }
@@ -227,13 +231,14 @@ export default class Component extends React.Component<Props, State> {
     hideCreateMetricModal = () => this.setState({ isCreateMetricModalVisible: false });
     showCreateMetricModal = () => this.setState({ isCreateMetricModalVisible: true });
     hideUpdateMetricModal() { this.setState({ isUpdateMetricModalVisible: false }); }
-    showUpdateMetricModal(metric) {
+    showUpdateMetricModal(metric: any) {
         this.setState({
             metricToBePatched: metric
         });
         this.setState({ isUpdateMetricModalVisible: true });
     }
 
+    // tslint:disable-next-line:max-func-body-length
     render() {
         const taskName = this.props.task.name.length > 15 ? `${this.props.task.name.slice(0, 15)}...` : `${this.props.task.name}`;
 
@@ -254,6 +259,7 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         } as any}
+                        // tslint:disable-next-line:max-line-length
                         centerComponent={{ text: i18n.t("patchTask.header", { taskName }), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
                         rightComponent={{
                             icon: "delete",
@@ -270,7 +276,7 @@ export default class Component extends React.Component<Props, State> {
                 >
                     <TouchableOpacity
                         activeOpacity={0.9}
-                        onPress={this._pickImage}
+                        onPress={this.pickImage}
                     >
                         <Image
                             source={this.state.image ? { uri: this.state.image } : PLACEHOLDER_IMAGE}
@@ -290,10 +296,12 @@ export default class Component extends React.Component<Props, State> {
                 />
                 {this.showNameError()}
 
-                <View style={{
-                    marginTop: 15,
-                    marginLeft: 15
-                }}>
+                <View
+                    style={{
+                        marginTop: 15,
+                        marginLeft: 15
+                    }}
+                >
                     <View style={{ flexDirection: "row" }}>
                         <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
                         <Icon
@@ -305,17 +313,21 @@ export default class Component extends React.Component<Props, State> {
                         />
                     </View>
                     {
-                        !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
-                            color: theme.inputTextColor,
-                            fontSize: 20,
-                        }}>
+                        !this.state.metrics || this.state.metrics.length === 0 && <Text
+                            style={{
+                                color: theme.inputTextColor,
+                                fontSize: 20
+                            }}
+                        >
                             {i18n.t("patchTask.noMetricsYet")}
                         </Text>
                     }
                     {this.state.metrics.map(metric =>
                         <View key={`${metric.name}${metric.unit}`} style={{ flexDirection: "row", paddingTop: 15 }}>
                             <Text style={{ color: theme.textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
-                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>{metric.name} ({metric.unit})</Text>
+                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>
+                                {metric.name} ({metric.unit})
+                            </Text>
                             <View style={{ flexDirection: "row", paddingTop: 15, position: "absolute", right: 10 }}>
                                 <Icon
                                     name="create"
@@ -349,7 +361,7 @@ export default class Component extends React.Component<Props, State> {
 
                 <View style={styles.formContainer}>
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("patchTask.updateTaskButton")}

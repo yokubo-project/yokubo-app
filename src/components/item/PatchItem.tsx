@@ -1,21 +1,20 @@
-import React from "react";
 import { observer } from "mobx-react";
-import { StyleSheet, View, ViewStyle, Text } from "react-native";
-import { Header, FormInput, FormValidationMessage, Button } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import React from "react";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import DatePicker from "react-native-datepicker";
+import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
+import { Actions } from "react-native-router-flux";
 
-import taskStore from "../../state/taskStore";
-import { IItem } from "../../state/taskStore";
-import { theme } from "../../shared/styles";
-import DeleteItemModal from "./modals/DeleteItemModal";
-import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 import i18n from "../../shared/i18n";
+import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
+import { theme } from "../../shared/styles";
+import taskStore, { IItem } from "../../state/taskStore";
+import DeleteItemModal from "./modals/DeleteItemModal";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     headerContainer: {
         height: 90,
@@ -30,24 +29,24 @@ const styles = StyleSheet.create({
         color: theme.inputTextColor,
         fontSize: 20,
         width: "100%", // combining width: 100% and minWidth: 50% results in FormInput taking up 50% of screen on vertical axis
-        minWidth: "50%",
+        minWidth: "50%"
     },
     inputStyle: {
         color: theme.inputTextColor,
         fontSize: 20,
         width: "100%", // combining width: 100% and minWidth: 50% results in FormInput taking up 50% of screen on vertical axis
-        minWidth: "50%",
+        minWidth: "50%"
     },
     unitStyle: {
         textAlign: "left",
         color: theme.inputTextColor,
         fontSize: 20,
         marginLeft: 0,
-        paddingTop: 12,
+        paddingTop: 12
     }
 });
 
-interface State {
+interface IState {
     name: string;
     nameError: string;
     fromDate: string;
@@ -61,14 +60,14 @@ interface State {
     isPatchingItemModalVisible: boolean;
 }
 
-interface Props {
+interface IProps {
     taskUid: string;
-    item: any; // TODO Typing
+    item: any;
 }
 @observer
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -98,6 +97,7 @@ export default class Component extends React.Component<Props, State> {
                 inputMetricsError: null,
                 inputGeneralError: null
             });
+
             return;
         } else if (fromDate === null || toDate === null || fromDate === toDate) {
             this.setState({
@@ -106,6 +106,7 @@ export default class Component extends React.Component<Props, State> {
                 inputMetricsError: null,
                 inputGeneralError: null
             });
+
             return;
         } else if (this.state.metrics.some(metric => !metric.quantity ? true : false)) {
             this.setState({
@@ -114,6 +115,7 @@ export default class Component extends React.Component<Props, State> {
                 inputMetricsError: i18n.t("patchItem.incompleteMetrics"),
                 inputGeneralError: null
             });
+
             return;
         }
 
@@ -159,6 +161,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputNameError) {
             return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -166,6 +169,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputDateError) {
             return <FormValidationMessage>{this.state.inputDateError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -173,6 +177,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputMetricsError) {
             return <FormValidationMessage>{this.state.inputMetricsError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -180,10 +185,11 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
+
         return null;
     }
 
-    passMetricToState(metricUid, value) {
+    passMetricToState(metricUid: string, value: string) {
         const inputMetricEntries = this.state.metrics;
         const metricRes = inputMetricEntries.filter(metric => metric.uid === metricUid)[0];
         metricRes.quantity = value;
@@ -215,13 +221,14 @@ export default class Component extends React.Component<Props, State> {
         );
     }
 
-    _showDeleteItemModal = () => this.setState({
-        isDeleteItemModalVisible: true,
+    showDeleteItemModal = () => this.setState({
+        isDeleteItemModalVisible: true
     })
-    _hideDeleteItemModal = () => this.setState({
-        isDeleteItemModalVisible: false,
+    hideDeleteItemModal = () => this.setState({
+        isDeleteItemModalVisible: false
     })
 
+    // tslint:disable-next-line:max-func-body-length
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -235,19 +242,24 @@ export default class Component extends React.Component<Props, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         } as any}
-                        centerComponent={{ text: i18n.t("patchItem.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
+                        centerComponent={{
+                            text: i18n.t("patchItem.header"),
+                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
+                        } as any}
                         rightComponent={{
                             icon: "delete",
                             color: "#fff",
                             underlayColor: "transparent",
-                            onPress: () => { this._showDeleteItemModal(); }
+                            onPress: () => { this.showDeleteItemModal(); }
                         } as any}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
 
-                {/* Form input for name */}
+                {
+                    // Form input for name
+                }
                 <FormInput
                     inputStyle={styles.inputStyle}
                     defaultValue={this.state.name}
@@ -257,7 +269,9 @@ export default class Component extends React.Component<Props, State> {
                 />
                 {this.showNameError()}
 
-                {/* Form input for date */}
+                {
+                    // Form input for date
+                }
                 <DatePicker
                     style={{ width: 300 }}
                     date={this.state.fromDate}
@@ -270,7 +284,7 @@ export default class Component extends React.Component<Props, State> {
                     customStyles={{
                         dateInput: {
                             borderWidth: 0,
-                            marginLeft: 16,
+                            marginLeft: 16
                         },
                         dateText: {
                             fontSize: 20,
@@ -287,17 +301,21 @@ export default class Component extends React.Component<Props, State> {
                         }
                     }}
                 />
-                {/* Line: Because datepicker line is not customizable we draw a line manually */}
+                {
+                    // Line: Because datepicker line is not customizable we draw a line manually
+                }
                 <View
                     style={{
                         borderBottomColor: theme.textColor,
                         marginLeft: 20,
                         marginRight: 20,
-                        borderBottomWidth: 1,
+                        borderBottomWidth: 1
                     }}
                 />
 
-                {/* Form input for date */}
+                {
+                    // Form input for date
+                }
                 <DatePicker
                     style={{ width: 300 }}
                     date={this.state.toDate}
@@ -310,7 +328,7 @@ export default class Component extends React.Component<Props, State> {
                     customStyles={{
                         dateInput: {
                             borderWidth: 0,
-                            marginLeft: 16,
+                            marginLeft: 16
                         },
                         dateText: {
                             fontSize: 20,
@@ -327,13 +345,15 @@ export default class Component extends React.Component<Props, State> {
                         }
                     }}
                 />
-                {/* Line: Because datepicker line is not customizable we draw a line manually */}
+                {
+                    // Line: Because datepicker line is not customizable we draw a line manually
+                }
                 <View
                     style={{
                         borderBottomColor: theme.textColor,
                         marginLeft: 20,
                         marginRight: 20,
-                        borderBottomWidth: 1,
+                        borderBottomWidth: 1
                     }}
                 />
                 {this.showDateError()}
@@ -343,7 +363,7 @@ export default class Component extends React.Component<Props, State> {
 
                 <View style={styles.formContainer}>
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("patchItem.updateItemButton")}
@@ -353,11 +373,10 @@ export default class Component extends React.Component<Props, State> {
 
                 <DeleteItemModal
                     isVisible={this.state.isDeleteItemModalVisible}
-                    hide={() => this._hideDeleteItemModal()}
+                    hide={() => this.hideDeleteItemModal()}
                     taskUid={this.props.taskUid}
                     item={this.props.item}
-                >
-                </DeleteItemModal>
+                />
                 {this.showGeneralError()}
 
                 <LoadingIndicatorModal

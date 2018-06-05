@@ -1,13 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View, TextStyle } from "react-native";
-import { FormInput, Button, FormValidationMessage } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { StyleSheet, Text, TextStyle, View } from "react-native";
+import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
+import { Actions } from "react-native-router-flux";
 
-import authStore from "../../../state/authStore";
-import { theme } from "../../../shared/styles";
-import taskStore, { IMetric } from "../../../state/taskStore";
 import i18n from "../../../shared/i18n";
+import { theme } from "../../../shared/styles";
+import authStore from "../../../state/authStore";
+import taskStore, { IMetric } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
     modalContent: {
@@ -23,36 +23,36 @@ const styles = StyleSheet.create({
         color: theme.inputTextColor,
         fontSize: 20,
         marginBottom: 10
-    },
+    }
 });
 
-interface State {
+interface IState {
     name: string;
     unit: string;
     inputNameError: string;
     inputUnitError: string;
 }
 
-interface Props {
+interface IProps {
     isVisible: boolean;
-    hide: () => void;
-    patchMetric: (metric: { uid: string; name: string, unit: string }) => void;
     metric: IMetric;
+    hide(): void;
+    patchMetric(metric: { uid: string; name: string; unit: string }): void;
 }
 
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             name: this.props.metric.name,
             unit: this.props.metric.unit,
             inputNameError: null,
-            inputUnitError: null,
+            inputUnitError: null
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: IProps) {
         if (nextProps !== this.props) {
             this.setState({
                 name: nextProps.metric.name,
@@ -75,12 +75,14 @@ export default class Component extends React.Component<Props, State> {
                 inputNameError: i18n.t("patchMetric.nameToShort"),
                 inputUnitError: null
             });
+
             return;
         } else if (this.state.unit.length < 1) {
             this.setState({
                 inputNameError: null,
                 inputUnitError: i18n.t("patchMetric.unitToShort")
             });
+
             return;
         }
         this.setState({
@@ -98,6 +100,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputNameError) {
             return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -105,6 +108,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputUnitError) {
             return <FormValidationMessage>{this.state.inputUnitError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -135,7 +139,7 @@ export default class Component extends React.Component<Props, State> {
                     {this.showUnitError()}
 
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("patchMetric.patchMetricButton")}

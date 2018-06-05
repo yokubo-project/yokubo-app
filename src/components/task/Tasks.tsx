@@ -1,19 +1,19 @@
-import React from "react";
-import { observer } from "mobx-react";
-import { StyleSheet, Text, TextStyle, Image, View, ScrollView, ViewStyle, TouchableOpacity } from "react-native";
 import * as _ from "lodash";
+import { observer } from "mobx-react";
+import React from "react";
+import { Image, ScrollView, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Header, Icon } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
 
+import i18n from "../../shared/i18n";
+import { theme } from "../../shared/styles";
 import authStore from "../../state/authStore";
 import taskStore from "../../state/taskStore";
-import { theme } from "../../shared/styles";
-import i18n from "../../shared/i18n";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     headerContainer: {
         height: 90,
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     } as ViewStyle,
     listContainer: {
         flexGrow: 7,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     welcomeScreenContainer: {
         flexGrow: 1,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         flex: 2,
         flexDirection: "row",
         justifyContent: "space-around",
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainerXElement: {
         flexDirection: "row",
@@ -45,23 +45,23 @@ const styles = StyleSheet.create({
     formContainerTextElement: {
         fontSize: 20,
         textAlign: "center",
-        color: "white",
+        color: "white"
     } as TextStyle,
     formContainerTouchableElement: {
         margin: 10,
-        flex: 1,
+        flex: 1
     } as TextStyle,
     formContainerImageElement: {
         height: 200,
         // Center child
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "center"
     } as TextStyle,
     formContainerEmpty: {
         flex: 1,
         margin: 10,
-        height: 200,
+        height: 200
     },
     welcomeScreen: {
         flex: 1,
@@ -73,13 +73,15 @@ const styles = StyleSheet.create({
     } as TextStyle
 });
 
-interface State {
+// tslint:disable-next-line:no-empty-interface
+interface IProps { }
+interface IState {
     loadedTasks: boolean;
 }
 @observer
-export default class Component extends React.Component<null, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -102,15 +104,17 @@ export default class Component extends React.Component<null, State> {
         Actions.createTask();
     }
 
-    renderTasks(tasks) {
+    renderTasks(tasks: any) {
         let taskIndex = 0;
         const columnCount = 2;
         const rowCount = _.ceil(tasks.length / columnCount);
 
         const rows = [];
+        // tslint:disable-next-line:underscore-consistent-invocation
         _.range(rowCount).forEach((rowIndex) => {
 
             const columns = [];
+            // tslint:disable-next-line:underscore-consistent-invocation
             _.range(columnCount).forEach((columnIndex) => {
 
                 if (taskIndex < tasks.length) {
@@ -133,8 +137,7 @@ export default class Component extends React.Component<null, State> {
                                 style={styles.formContainerImageElement}
                                 // @ts-ignore
                                 borderRadius={10}
-                            >
-                            </Image>
+                            />
                             <View style={styles.formContainerXElement}>
                                 <Text
                                     key={`text${columnIndex}`}
@@ -150,10 +153,10 @@ export default class Component extends React.Component<null, State> {
                         <Text
                             key={`column${columnIndex}`}
                             style={styles.formContainerEmpty}
-                        >
-                        </Text>
+                        />
                     );
                 }
+                // tslint:disable-next-line:no-increment-decrement
                 ++taskIndex;
             });
             rows.push(
@@ -204,7 +207,10 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.profile(); }
                         } as any}
-                        centerComponent={{ text: i18n.t("tasks.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
+                        centerComponent={{
+                            text: i18n.t("tasks.header"),
+                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
+                        } as any}
                         rightComponent={{
                             icon: "add",
                             color: "#fff",

@@ -1,13 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View, TextStyle, ScrollView } from "react-native";
-import { FormInput, Button, FormValidationMessage } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { ScrollView, StyleSheet, Text, TextStyle, View } from "react-native";
+import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
+import { Actions } from "react-native-router-flux";
 
-import authStore from "../../../state/authStore";
-import { theme } from "../../../shared/styles";
-import taskStore, { IItem } from "../../../state/taskStore";
 import i18n from "../../../shared/i18n";
+import { theme } from "../../../shared/styles";
+import authStore from "../../../state/authStore";
+import taskStore, { IItem } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -30,20 +30,20 @@ const styles = StyleSheet.create({
     }
 });
 
-interface State {
+interface IState {
     inputGeneralError: string;
 }
 
-interface Props {
+interface IProps {
     isVisible: boolean;
-    hide: () => void;
-    sortItemsAndHide: (sortKey: string, sortDirection: string) => void;
     metrics: any;
+    hide(): void;
+    sortItemsAndHide(sortKey: string, sortDirection: string): void;
 }
 
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    sortEntriesAndHide(sortKey, sortDirection) {
+    sortEntriesAndHide(sortKey: any, sortDirection: string) {
         this.props.sortItemsAndHide(sortKey, sortDirection);
     }
 
@@ -51,7 +51,7 @@ export default class Component extends React.Component<Props, State> {
         this.props.hide();
     }
 
-    renderMetricTags(metrics) {
+    renderMetricTags(metrics: any) {
         const renderedMetricTagsAsc = metrics.map(metric => {
             return (
                 <Text
@@ -59,9 +59,12 @@ export default class Component extends React.Component<Props, State> {
                     style={styles.textElement}
                     onPress={() => {
                         this.sortEntriesAndHide((item) => {
-                            const merticQuanitity = item.metricQuantities.filter((metricQuantity) => metricQuantity.metric.uid === metric.uid)[0];
+                            const merticQuanitity = item.metricQuantities.filter(
+                                (metricQuantity) => metricQuantity.metric.uid === metric.uid
+                            )[0];
+
                             return merticQuanitity.quantity;
-                        }, "asc");
+                        },                      "asc");
                     }}
                 >
                     {"\u2022"} {`${metric.name} `} &#8593;
@@ -75,18 +78,21 @@ export default class Component extends React.Component<Props, State> {
                     style={styles.textElement}
                     onPress={() => {
                         this.sortEntriesAndHide((item) => {
-                            const merticQuanitity = item.metricQuantities.filter((metricQuantity) => metricQuantity.metric.uid === metric.uid)[0];
+                            const merticQuanitity = item.metricQuantities.filter(
+                                (metricQuantity) => metricQuantity.metric.uid === metric.uid
+                            )[0];
+
                             return merticQuanitity.quantity;
-                        }, "desc");
+                        },                      "desc");
                     }}
                 >
                     {"\u2022"} {`${metric.name} `} &#8595;
                 </Text>
             );
         });
-        const renderedMetricTags = renderedMetricTagsAsc.concat(renderedMetricTagsDesc);
 
-        return renderedMetricTags;
+        return renderedMetricTagsAsc.concat(renderedMetricTagsDesc);
+
     }
 
     render() {

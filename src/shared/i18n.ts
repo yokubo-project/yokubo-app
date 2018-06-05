@@ -1,7 +1,6 @@
+import Expo, { DangerZone } from "expo";
 import i18n from "i18next";
 import { reactI18nextModule } from "react-i18next";
-import Expo from "expo";
-import { DangerZone } from "expo";
 const { Localization } = DangerZone;
 
 const languageDetector = {
@@ -17,6 +16,8 @@ const languageDetector = {
     // tslint:disable-next-line:no-empty
     cacheUserLanguage: () => { }
 };
+
+// tslint:disable:max-line-length
 
 i18n
     .use(reactI18nextModule)
@@ -88,7 +89,7 @@ i18n
                         deleteUserHint: "Please enter your current password in order to delete your user. Note that deleting your user is irreversibly and all data associated with your account will be lost.",
                         deleteUserButton: "DELETE USER",
                         wrongPwd: "The password entered does not match your current password",
-                        unexpectedError: "An unexpected error happened",
+                        unexpectedError: "An unexpected error happened"
                     },
                     logout: {
                         logoutHint: "Are you sure you want to logut?",
@@ -101,7 +102,7 @@ i18n
                         pwdToShort: "Password must have at least 6 characters",
                         wrongPwd: "The password entered does not match your current password",
                         newPwdToWeak: "New password is to weak",
-                        unexpectedError: "An unexpected error happened",
+                        unexpectedError: "An unexpected error happened"
                     },
                     updateProfile: {
                         namePlaceholder: "Full Name",
@@ -125,7 +126,7 @@ i18n
                         datePickerStartPlaceholder: "Start Date",
                         datePickerEndPlaceholder: "End Date",
                         datePickerConfirm: "Confirm",
-                        datePickerCancel: "Cancel",
+                        datePickerCancel: "Cancel"
                     },
                     patchItem: {
                         header: "Update Item",
@@ -136,7 +137,7 @@ i18n
                         updateItemButton: "UPDATE ITEM",
                         loadingIndicator: "Updating Item",
                         datePickerConfirm: "Confirm",
-                        datePickerCancel: "Cancel",
+                        datePickerCancel: "Cancel"
                     },
                     sortItems: {
                         sortByName: "Name",
@@ -197,14 +198,14 @@ i18n
                     patchMetric: {
                         nameToShort: "Name must be at least 2 characters long",
                         unitToShort: "Unit must be at least 1 characters long",
-                        patchMetricButton: "UPDATE METRIC",
+                        patchMetricButton: "UPDATE METRIC"
                     },
                     addMetric: {
                         nameToShort: "Name muss aus mindestens 2 Zeichen bestehen",
                         unitToShort: "Einheit muss aus mindestens 1 Zeichen bestehen",
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Unit",
-                        addMetricButton: "HINZUFÜGEN",
+                        addMetricButton: "HINZUFÜGEN"
                     },
                     metricInfo: {
                         desc: "With metrics you can keep track of individual goals. The distance in kilometers of your runs or the calories burned through your workouts are great examples if you're into sports. Another example would be the count of words learned of a foreign language. The only limitation is that metrics have to be numeric, as those are then used by the app to calculates statistics and insights."
@@ -275,7 +276,7 @@ i18n
                         deleteUserHint: "Bitte gib dein aktuelles Passwort ein um deinen User zu löschen. Bitte berücksichtige das dieser Vorgang nicht rückgängig gemacht werden kann und alle deine Daten gelöscht werden.",
                         deleteUserButton: "LÖSCHEN",
                         wrongPwd: "Das eingegebene Passwort stimmt nicht mit deinen aktuellen überein",
-                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten"
                     },
                     logout: {
                         logoutHint: "Bist du sicher, dass du dich ausloggen möchtest?",
@@ -288,7 +289,7 @@ i18n
                         pwdToShort: "Password muss aus mindestens 6 Zeichen bestehen",
                         wrongPwd: "Das eingegebene Passwort stimmt nicht mit deinen aktuellen überein",
                         newPwdToWeak: "Das neue Passwort ist zu schwach",
-                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
+                        unexpectedError: "Ein unerwarteter Fehler ist aufgetreten"
                     },
                     updateProfile: {
                         namePlaceholder: "Dein Name",
@@ -312,7 +313,7 @@ i18n
                         datePickerStartPlaceholder: "Start-Datum",
                         datePickerEndPlaceholder: "End-Datum",
                         datePickerConfirm: "Ok",
-                        datePickerCancel: "Abbrechen",
+                        datePickerCancel: "Abbrechen"
                     },
                     patchItem: {
                         header: "Item ändern",
@@ -323,7 +324,7 @@ i18n
                         updateItemButton: "ÄNDERN",
                         loadingIndicator: "Item wird hinzugefügt",
                         datePickerConfirm: "Ok",
-                        datePickerCancel: "Abbrechen",
+                        datePickerCancel: "Abbrechen"
                     },
                     sortItems: {
                         sortByName: "Name",
@@ -383,14 +384,14 @@ i18n
                     patchMetric: {
                         nameToShort: "Name muss aus mindestens 2 Zeichen bestehen",
                         unitToShort: "Einheit muss aus mindestens 1 Zeichen bestehen",
-                        patchMetricButton: "ÄNDERN",
+                        patchMetricButton: "ÄNDERN"
                     },
                     addMetric: {
                         nameToShort: "Name muss aus mindestens 2 Zeichen bestehen",
                         unitToShort: "Einheit muss aus mindestens 1 Zeichen bestehen",
                         metricNamePlaceholder: "Name",
                         metricUnitPlaceholder: "Einheit",
-                        addMetricButton: "HINZUFÜGEN",
+                        addMetricButton: "HINZUFÜGEN"
                     },
                     metricInfo: {
                         desc: "Mit Metriken kannst du deine persönlichen Ziele verfolgen. Die Distanz in Kilometers oder die verbrannten Kalorien deiner Workouts sind zwei sportliche Beispiele. Ein weiteres wäre die Anzahl an neu gelernten Vokabeln einer Fremdsprache. Die einzige Limitation ist das Metriken nummerisch sein müssen, da diese für die Berechnung von Statistiken und Insights herangezogen werden."
@@ -402,7 +403,7 @@ i18n
             debug: true,
             // cache: {
             //   enabled: true
-            // },            
+            // },
             interpolation: {
                 escapeValue: false // not needed for react
             }

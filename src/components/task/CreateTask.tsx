@@ -1,29 +1,30 @@
+import { FileSystem, ImagePicker } from "expo";
 import React from "react";
-import { StyleSheet, View, ViewStyle, Text, Image, TouchableOpacity, ActivityIndicator } from "react-native";
-import { Header, FormInput, FormValidationMessage, Button, Icon } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Button, FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
 import Modal from "react-native-modal";
-import { ImagePicker, FileSystem } from "expo";
+import { Actions } from "react-native-router-flux";
 import * as uuid from "uuid";
 
 import * as Config from "../../config";
+import i18n from "../../shared/i18n";
+import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
+import { theme } from "../../shared/styles";
+import { uploadImageAsync } from "../../shared/uploadImage";
 import authStore from "../../state/authStore";
 import taskStore, { IMetric } from "../../state/taskStore";
-import { uploadImageAsync } from "../../shared/uploadImage";
-import { theme } from "../../shared/styles";
-import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
-import i18n from "../../shared/i18n";
 import CreateMetricModal from "./modals/CreateMetricModal";
-import UpdateMetricModal from "./modals/UpdateMetricModal";
 import MetricInfoModal from "./modals/MetricInfoModal";
+import UpdateMetricModal from "./modals/UpdateMetricModal";
 
+// tslint:disable-next-line:no-var-requires
 const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: theme.backgroundColor,
-        alignItems: "stretch",
+        alignItems: "stretch"
     } as ViewStyle,
     headerContainer: {
         height: 90,
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     inputStyle: {
         color: theme.inputTextColor,
         fontSize: 20,
-        marginRight: 100,
+        marginRight: 100
     },
     modalInputStyle: {
         color: theme.inputTextColor,
@@ -60,20 +61,22 @@ const styles = StyleSheet.create({
     },
     imageStyle: {
         width: 150,
-        height: 150,
+        height: 150
     }
 });
 
-interface State {
+// tslint:disable-next-line:no-empty-interface
+interface IProps { }
+interface IState {
     name: string;
     imageUid: string;
     inputNameError: string;
     inputGeneralError: string;
-    metrics: Array<{
+    metrics: {
         uid: string;
         name: string;
         unit: string;
-    }>;
+    }[];
     image: any;
     isMetricInfoModalVisible: boolean;
     isCreatingTaskModalVisible: boolean;
@@ -82,12 +85,12 @@ interface State {
     isPreparingImageModalVisible: boolean;
     metricToBePatched: IMetric;
 }
-export default class Component extends React.Component<null, State> {
+export default class Component extends React.Component<IProps, IState> {
 
     tempMetricName: string = "";
     tempMetricUnit: string = "";
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             name: "",
@@ -115,6 +118,7 @@ export default class Component extends React.Component<null, State> {
                 inputNameError: i18n.t("createTask.nameToShort"),
                 inputGeneralError: null
             });
+
             return;
         }
 
@@ -139,6 +143,7 @@ export default class Component extends React.Component<null, State> {
         if (this.state.inputNameError) {
             return <FormValidationMessage>{this.state.inputNameError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -146,6 +151,7 @@ export default class Component extends React.Component<null, State> {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -154,7 +160,7 @@ export default class Component extends React.Component<null, State> {
     showCreateMetricModal = () => this.setState({ isCreateMetricModalVisible: true });
     hideCreateMetricModal = () => this.setState({ isCreateMetricModalVisible: false });
     hideUpdateMetricModal() { this.setState({ isUpdateMetricModalVisible: false }); }
-    showUpdateMetricModal(metric) {
+    showUpdateMetricModal(metric: any) {
         this.setState({
             metricToBePatched: metric
         });
@@ -166,7 +172,7 @@ export default class Component extends React.Component<null, State> {
             metrics: this.state.metrics.concat({
                 uid: uuid.v4(),
                 name: name,
-                unit: unit,
+                unit: unit
             })
         });
         this.hideCreateMetricModal();
@@ -179,7 +185,7 @@ export default class Component extends React.Component<null, State> {
         this.hideUpdateMetricModal();
     }
 
-    deleteMetric(metricToBeDeleted) {
+    deleteMetric(metricToBeDeleted: any) {
         this.setState({
             metrics: this.state.metrics.filter((metric: any) => metric.uid !== metricToBeDeleted.uid)
         });
@@ -188,7 +194,7 @@ export default class Component extends React.Component<null, State> {
     pickImage = async () => {
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: false,
+            allowsEditing: false
         });
 
         try {
@@ -202,36 +208,38 @@ export default class Component extends React.Component<null, State> {
                 });
             }
         } catch (e) {
+            // tslint:disable-next-line:no-console
             console.log("Error picking image: ", e);
             this.setState({ isPreparingImageModalVisible: false });
         }
     }
 
-    uploadImageAsync = async (uri) => {
-        let apiUrl = `${Config.BASE_URL}/api/v1/images`;
-        let uriParts = uri.split(".");
-        let fileType = uriParts[uriParts.length - 1];
+    uploadImageAsync = async (uri: string) => {
+        const apiUrl = `${Config.BASE_URL}/api/v1/images`;
+        const uriParts = uri.split(".");
+        const fileType = uriParts[uriParts.length - 1];
 
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("photo", {
             uri,
             name: `photo.${fileType}`,
-            type: `image/${fileType}`,
+            type: `image/${fileType}`
         } as any);
 
-        let options: any = {
+        const options: any = {
             method: "POST",
             body: formData,
             headers: {
                 Accept: "application/json",
                 "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${authStore.credentials.accessToken}`,
-            },
+                Authorization: `Bearer ${authStore.credentials.accessToken}`
+            }
         };
 
         return fetch(apiUrl, options);
     }
 
+    // tslint:disable-next-line:max-func-body-length
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -273,10 +281,12 @@ export default class Component extends React.Component<null, State> {
                 />
                 {this.showNameError()}
 
-                <View style={{
-                    marginTop: 15,
-                    marginLeft: 15
-                }}>
+                <View
+                    style={{
+                        marginTop: 15,
+                        marginLeft: 15
+                    }}
+                >
                     <View style={{ flexDirection: "row" }}>
                         <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
                         {!this.state.metrics || this.state.metrics.length === 0 && <Icon
@@ -296,17 +306,21 @@ export default class Component extends React.Component<null, State> {
                         />
                     </View>
                     {
-                        !this.state.metrics || this.state.metrics.length === 0 && <Text style={{
-                            color: theme.inputTextColor,
-                            fontSize: 20,
-                        }}>
+                        !this.state.metrics || this.state.metrics.length === 0 && <Text
+                            style={{
+                                color: theme.inputTextColor,
+                                fontSize: 20
+                            }}
+                        >
                             {i18n.t("createTask.noMetricsYet")}
                         </Text>
                     }
                     {this.state.metrics.map(metric =>
                         <View key={`${metric.name}${metric.unit}`} style={{ flexDirection: "row", paddingTop: 15 }}>
                             <Text style={{ color: theme.textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
-                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>{metric.name} ({metric.unit})</Text>
+                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>
+                                {metric.name} ({metric.unit})
+                            </Text>
                             <View style={{ flexDirection: "row", paddingTop: 15, position: "absolute", right: 10 }}>
                                 <Icon
                                     name="create"
@@ -344,7 +358,7 @@ export default class Component extends React.Component<null, State> {
 
                 <View style={styles.formContainer}>
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("createTask.createTaskButton")}

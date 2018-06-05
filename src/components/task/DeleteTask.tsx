@@ -1,17 +1,16 @@
 import React from "react";
-import { StyleSheet, View, ViewStyle, Text } from "react-native";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Button } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
 import Modal from "react-native-modal";
+import { Actions } from "react-native-router-flux";
 
-import taskStore from "../../state/taskStore";
-import { IFullTask } from "../../state/taskStore";
-import { theme } from "../../shared/styles";
 import i18n from "../../shared/i18n";
+import { theme } from "../../shared/styles";
+import taskStore, { IFullTask } from "../../state/taskStore";
 
 const styles = StyleSheet.create({
     mainContainer: {
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     inputStyle: {
         marginRight: 100,
@@ -30,15 +29,15 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10
-    },
+    }
 });
 
-interface Props {
+interface IProps {
     task: IFullTask;
     visible: boolean;
-    hideVisibility: () => void;
+    hideVisibility(): void;
 }
-export default class Component extends React.Component<Props, null> {
+export default class Component extends React.Component<IProps, null> {
 
     async deleteTask() {
         taskStore.deleteTask(this.props.task.uid);
@@ -54,14 +53,16 @@ export default class Component extends React.Component<Props, null> {
                     onBackButtonPress={() => this.props.hideVisibility()}
                 >
                     <View style={styles.modalContent}>
-                        <View style={{
-                            marginTop: 15,
-                            marginLeft: 15,
-                            marginBottom: 15,
-                            marginRight: 15,
-                            flexDirection: "row",
-                            flexWrap: "wrap"
-                        }}>
+                        <View
+                            style={{
+                                marginTop: 15,
+                                marginLeft: 15,
+                                marginBottom: 15,
+                                marginRight: 15,
+                                flexDirection: "row",
+                                flexWrap: "wrap"
+                            }}
+                        >
                             <Text
                                 style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
                             >
@@ -70,7 +71,7 @@ export default class Component extends React.Component<Props, null> {
                         </View>
 
                         <Button
-                            raised
+                            raised={true}
                             buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
                             title={i18n.t("deleteTask.deleteButton")}

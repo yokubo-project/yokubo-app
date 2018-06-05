@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, TextStyle } from "react-native";
-import { FormInput, Button, FormValidationMessage } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { StyleSheet, Text, TextStyle, View } from "react-native";
+import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
+import { Actions } from "react-native-router-flux";
 
-import authStore from "../../../state/authStore";
-import { theme } from "../../../shared/styles";
 import i18n from "../../../shared/i18n";
+import { theme } from "../../../shared/styles";
+import authStore from "../../../state/authStore";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
@@ -22,23 +22,23 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10
-    },
+    }
 });
 
-interface State {
+interface IState {
     inputDeleteUserPwd: string;
     inputPwdError: string;
     inputGeneralError: string;
 }
 
-interface Props {
+interface IProps {
     isVisible: boolean;
-    hide: () => void;
+    hide(): void;
 }
 
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             inputDeleteUserPwd: "",
@@ -85,6 +85,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputPwdError) {
             return <FormValidationMessage>{this.state.inputPwdError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -92,6 +93,7 @@ export default class Component extends React.Component<Props, State> {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
         }
+
         return null;
     }
 
@@ -103,12 +105,14 @@ export default class Component extends React.Component<Props, State> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <Text style={{
-                        color: theme.inputTextColor,
-                        fontSize: 15,
-                        textAlign: "center",
-                        marginBottom: 20
-                    }}>
+                    <Text
+                        style={{
+                            color: theme.inputTextColor,
+                            fontSize: 15,
+                            textAlign: "center",
+                            marginBottom: 20
+                        }}
+                    >
                         {i18n.t("deleteUser.deleteUserHint")}
                     </Text>
                     <FormInput
@@ -122,7 +126,7 @@ export default class Component extends React.Component<Props, State> {
                     {this.showPwdError()}
 
                     <Button
-                        raised
+                        raised={true}
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("deleteUser.deleteUserButton")}

@@ -1,27 +1,27 @@
-import React from "react";
 import { observer } from "mobx-react";
-import { StyleSheet, Text, View, ViewStyle, TextStyle, ScrollView } from "react-native";
+import * as moment from "moment";
+import React from "react";
+import { ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Header, List } from "react-native-elements";
 import { Actions } from "react-native-router-flux";
-import * as moment from "moment";
 
-import { IFullTask } from "../../state/taskStore";
-import { theme } from "../../shared/styles";
 import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
+import { theme } from "../../shared/styles";
+import { IFullTask } from "../../state/taskStore";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     headerContainer: {
         height: 90,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     scrollViewContainer: {
         flexGrow: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listElement: {
         backgroundColor: theme.backgroundColor,
@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
         borderTopWidth: 0,
         borderBottomWidth: 1,
         borderColor: "gray",
-        marginLeft: 0,
+        marginLeft: 0
     },
     listText: {
-        // ...material.body1, 
+        // ...material.body1,
         color: theme.inputTextColor,
         fontSize: 14,
         marginLeft: 10
@@ -48,31 +48,31 @@ const styles = StyleSheet.create({
         color: theme.inputTextColor,
         fontSize: 14,
         marginLeft: 15
-    },
+    }
 });
 
-interface State {
+interface IState {
     task: IFullTask;
 }
 
-interface Props {
+interface IProps {
     task: IFullTask;
     headerText: string;
-    handleOnAddIconClick: () => void;
+    handleOnAddIconClick(): void;
 }
 
 @observer
-export default class Component extends React.Component<Props, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
-            task: this.props.task,
+            task: this.props.task
         };
     }
 
-    renderEntryStatictics(entries) {
+    renderEntryStatictics(entries: any) {
         const metrices = [];
         let timespan: any = null;
         entries.forEach(entry => {
@@ -98,8 +98,10 @@ export default class Component extends React.Component<Props, State> {
                     const metricObject = metrices.filter(metricOb => metricOb.metricName === metric.metric.name);
                     if (metricObject.length > 0) {
                         metricObject[0].totalValue += parseFloat(metric.quantity);
-                        metricObject[0].minValue = parseFloat(metric.quantity) < metricObject[0].minValue ? parseFloat(metric.quantity) : metricObject[0].minValue;
-                        metricObject[0].maxValue = parseFloat(metric.quantity) > metricObject[0].maxValue ? parseFloat(metric.quantity) : metricObject[0].maxValue;
+                        metricObject[0].minValue =
+                            parseFloat(metric.quantity) < metricObject[0].minValue ? parseFloat(metric.quantity) : metricObject[0].minValue;
+                        metricObject[0].maxValue =
+                            parseFloat(metric.quantity) > metricObject[0].maxValue ? parseFloat(metric.quantity) : metricObject[0].maxValue;
                     } else {
                         metrices.push({
                             metricKey: metric.uid,
@@ -107,7 +109,7 @@ export default class Component extends React.Component<Props, State> {
                             totalValue: parseFloat(metric.quantity),
                             metricUnit: metric.metric.unit,
                             minValue: parseFloat(metric.quantity),
-                            maxValue: parseFloat(metric.quantity),
+                            maxValue: parseFloat(metric.quantity)
                         });
                     }
                 });
@@ -118,7 +120,9 @@ export default class Component extends React.Component<Props, State> {
             <View key={metric.metricKey} style={styles.listElement}>
                 <Text style={styles.metricTextHeader}>{metric.metricName}</Text>
                 <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {metric.totalValue} {metric.metricUnit}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.average")}: {(metric.totalValue / entries.length).toFixed(2)} {metric.metricUnit}</Text>
+                <Text style={styles.metricText}>
+                    {i18n.t("itemStats.average")}: {(metric.totalValue / entries.length).toFixed(2)} {metric.metricUnit}
+                </Text>
                 <Text style={styles.metricText}>{i18n.t("itemStats.min")}:  {metric.minValue} {metric.metricUnit}</Text>
                 <Text style={styles.metricText}>{i18n.t("itemStats.max")}:  {metric.maxValue} {metric.metricUnit}</Text>
             </View>
@@ -127,10 +131,18 @@ export default class Component extends React.Component<Props, State> {
         renderedMetrices.unshift(
             <View key={"duration"} style={styles.listElement}>
                 <Text style={styles.metricTextHeader}>{timespan.metricName}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.average")}: {Math.floor(moment.duration(timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length).format("[h] mm[m] ss[s]")}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.min")}:  {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.max")}:  {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}</Text>
+                <Text style={styles.metricText}>
+                    {i18n.t("itemStats.total")}: {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}
+                </Text>
+                <Text style={styles.metricText}>
+                    {i18n.t("itemStats.average")}: {Math.floor(moment.duration(timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length).format("[h] mm[m] ss[s]")}
+                </Text>
+                <Text style={styles.metricText}>
+                    {i18n.t("itemStats.min")}: {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}
+                </Text>
+                <Text style={styles.metricText}>
+                    {i18n.t("itemStats.max")}: {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}
+                </Text>
             </View>);
 
         renderedMetrices.unshift(

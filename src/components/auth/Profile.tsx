@@ -1,22 +1,22 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView, ViewStyle, TextStyle, Image, FlatList, Linking } from "react-native";
-import { Header, List, ListItem, FormInput, Button, FormValidationMessage } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { FlatList, Image, Linking, ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Button, FormInput, FormValidationMessage, Header, List, ListItem } from "react-native-elements";
 import Modal from "react-native-modal";
+import { Actions } from "react-native-router-flux";
 
-import authStore from "../../state/authStore";
-import ResetPwdModal from "./modals/ResetPwdModal";
-import DeleteUserModal from "./modals/DeleteUserModal";
-import UpdateProfileModal from "./modals/UpdateProfileModal";
-import LogoutModal from "./modals/LogoutModal";
-import { theme } from "../../shared/styles";
-import i18n from "../../shared/i18n";
 import * as Config from "../../config";
+import i18n from "../../shared/i18n";
+import { theme } from "../../shared/styles";
+import authStore from "../../state/authStore";
+import DeleteUserModal from "./modals/DeleteUserModal";
+import LogoutModal from "./modals/LogoutModal";
+import ResetPwdModal from "./modals/ResetPwdModal";
+import UpdateProfileModal from "./modals/UpdateProfileModal";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     headerContainer: {
         height: 90,
@@ -33,38 +33,41 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderBottomWidth: 0,
         borderColor: "gray",
-        marginLeft: 0,
+        marginLeft: 0
     }
 });
 
-interface State {
+// tslint:disable-next-line:no-empty-interface
+interface IProps { }
+interface IState {
     isProfileModalVisible: boolean;
     isResetPwdModalVisible: boolean;
     isLogoutModalVisible: boolean;
     isDeleteUserModalVisible: boolean;
 }
 
-export default class Component extends React.Component<null, State> {
+export default class Component extends React.Component<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             isProfileModalVisible: false,
             isResetPwdModalVisible: false,
             isLogoutModalVisible: false,
-            isDeleteUserModalVisible: false,
+            isDeleteUserModalVisible: false
         };
     }
 
-    _showDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: true });
-    _hideDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: false });
-    _showProfileModal = () => this.setState({ isProfileModalVisible: true });
-    _hideProfileModal = () => this.setState({ isProfileModalVisible: false });
-    _showResetPwdModal = () => this.setState({ isResetPwdModalVisible: true });
-    _hideResetPwdModal = () => this.setState({ isResetPwdModalVisible: false });
-    _showLogoutModal = () => this.setState({ isLogoutModalVisible: true });
-    _hideLogoutModal = () => this.setState({ isLogoutModalVisible: false });
+    showDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: true });
+    hideDeleteUserModal = () => this.setState({ isDeleteUserModalVisible: false });
+    showProfileModal = () => this.setState({ isProfileModalVisible: true });
+    hideProfileModal = () => this.setState({ isProfileModalVisible: false });
+    showResetPwdModal = () => this.setState({ isResetPwdModalVisible: true });
+    hideResetPwdModal = () => this.setState({ isResetPwdModalVisible: false });
+    showLogoutModal = () => this.setState({ isLogoutModalVisible: true });
+    hideLogoutModal = () => this.setState({ isLogoutModalVisible: false });
 
+    // tslint:disable-next-line:max-func-body-length
     render() {
         if (authStore.profile === null) {
             return null;
@@ -82,31 +85,38 @@ export default class Component extends React.Component<null, State> {
                             underlayColor: "transparent",
                             onPress: () => { Actions.pop(); }
                         } as any}
-                        centerComponent={{ text: i18n.t("profile.header"), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
+                        centerComponent={{
+                            text: i18n.t("profile.header"),
+                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
+                        } as any}
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
                 </View>
                 <ScrollView style={styles.listContainer}>
                     <View style={{ paddingTop: 30 }}>
-                        <Text style={{
-                            backgroundColor: theme.backgroundColor,
-                            color: theme.textColor,
-                            fontSize: 25,
-                            paddingTop: 5,
-                            paddingBottom: 10,
-                            textAlign: "center"
-                        }}>
+                        <Text
+                            style={{
+                                backgroundColor: theme.backgroundColor,
+                                color: theme.textColor,
+                                fontSize: 25,
+                                paddingTop: 5,
+                                paddingBottom: 10,
+                                textAlign: "center"
+                            }}
+                        >
                             {authStore.profile.name}
                         </Text>
-                        <Text style={{
-                            backgroundColor: theme.backgroundColor,
-                            color: theme.textColor,
-                            fontSize: 18,
-                            paddingTop: 5,
-                            paddingBottom: 10,
-                            textAlign: "center"
-                        }}>
+                        <Text
+                            style={{
+                                backgroundColor: theme.backgroundColor,
+                                color: theme.textColor,
+                                fontSize: 18,
+                                paddingTop: 5,
+                                paddingBottom: 10,
+                                textAlign: "center"
+                            }}
+                        >
                             {authStore.username}
                         </Text>
                     </View>
@@ -115,7 +125,7 @@ export default class Component extends React.Component<null, State> {
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.updateProfile")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
-                            onPress={() => this._showProfileModal()}
+                            onPress={() => this.showProfileModal()}
                             hideChevron={true}
                             underlayColor={theme.underlayColor}
                         />
@@ -123,7 +133,7 @@ export default class Component extends React.Component<null, State> {
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.changePassword")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
-                            onPress={() => this._showResetPwdModal()}
+                            onPress={() => this.showResetPwdModal()}
                             hideChevron={true}
                             underlayColor={theme.underlayColor}
                         />
@@ -147,7 +157,7 @@ export default class Component extends React.Component<null, State> {
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.logout")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
-                            onPress={() => this._showLogoutModal()}
+                            onPress={() => this.showLogoutModal()}
                             hideChevron={true}
                             underlayColor={theme.underlayColor}
                         />
@@ -155,7 +165,7 @@ export default class Component extends React.Component<null, State> {
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.deleteUser")}
                             titleStyle={{ color: theme.textColor, fontSize: 18 }}
-                            onPress={() => this._showDeleteUserModal()}
+                            onPress={() => this.showDeleteUserModal()}
                             hideChevron={true}
                             underlayColor={theme.underlayColor}
                         />
@@ -164,19 +174,19 @@ export default class Component extends React.Component<null, State> {
 
                 <UpdateProfileModal
                     isVisible={this.state.isProfileModalVisible}
-                    hide={() => this._hideProfileModal()}
+                    hide={() => this.hideProfileModal()}
                 />
                 <ResetPwdModal
                     isVisible={this.state.isResetPwdModalVisible}
-                    hide={() => this._hideResetPwdModal()}
+                    hide={() => this.hideResetPwdModal()}
                 />
                 <LogoutModal
                     isVisible={this.state.isLogoutModalVisible}
-                    hide={() => this._hideLogoutModal()}
+                    hide={() => this.hideLogoutModal()}
                 />
                 <DeleteUserModal
                     isVisible={this.state.isDeleteUserModalVisible}
-                    hide={() => this._hideDeleteUserModal()}
+                    hide={() => this.hideDeleteUserModal()}
                 />
             </View>
         );
