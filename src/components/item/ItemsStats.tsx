@@ -132,16 +132,24 @@ export default class Component extends React.Component<IProps, IState> {
             <View key={"duration"} style={styles.listElement}>
                 <Text style={styles.metricTextHeader}>{timespan.metricName}</Text>
                 <Text style={styles.metricText}>
-                    {i18n.t("itemStats.total")}: {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}
+                    {i18n.t("itemStats.total")}:
+                    {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}
                 </Text>
                 <Text style={styles.metricText}>
-                    {i18n.t("itemStats.average")}: {Math.floor(moment.duration(timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length).format("[h] mm[m] ss[s]")}
+                    {i18n.t("itemStats.average")}:
+                    {
+                        Math.floor(moment.duration(
+                            timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length
+                            ).format("[h] mm[m] ss[s]")
+                    }
                 </Text>
                 <Text style={styles.metricText}>
-                    {i18n.t("itemStats.min")}: {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}
+                    {i18n.t("itemStats.min")}:
+                    {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}
                 </Text>
                 <Text style={styles.metricText}>
-                    {i18n.t("itemStats.max")}: {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}
+                    {i18n.t("itemStats.max")}:
+                    {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}
                 </Text>
             </View>);
 
