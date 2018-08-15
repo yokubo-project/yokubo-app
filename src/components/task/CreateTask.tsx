@@ -1,14 +1,12 @@
-import { FileSystem, ImagePicker } from "expo";
+import { ImagePicker } from "expo";
 import React from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Button, FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
-import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
 import * as uuid from "uuid";
 
 import * as Config from "../../config";
+import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
 import i18n from "../../shared/i18n";
-import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 import { theme } from "../../shared/styles";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import authStore from "../../state/authStore";
@@ -25,10 +23,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: theme.backgroundColor,
         alignItems: "stretch"
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
-        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
         flex: 1,
@@ -66,7 +60,9 @@ const styles = StyleSheet.create({
 });
 
 // tslint:disable-next-line:no-empty-interface
-interface IProps { }
+interface IProps {
+    navigation: any;
+}
 interface IState {
     name: string;
     imageUid: string;
@@ -85,7 +81,11 @@ interface IState {
     isPreparingImageModalVisible: boolean;
     metricToBePatched: IMetric;
 }
-export default class Component extends React.Component<IProps, IState> {
+export default class CreateTask extends React.Component<IProps, IState> {
+
+    static navigationOptions: any = {
+        title: "Create Task"
+    };
 
     tempMetricName: string = "";
     tempMetricUnit: string = "";
@@ -135,7 +135,7 @@ export default class Component extends React.Component<IProps, IState> {
                     });
             }
         } else {
-            Actions.pop();
+            this.props.navigation.goBack();
         }
     }
 
@@ -243,21 +243,6 @@ export default class Component extends React.Component<IProps, IState> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        centerComponent={{ text: "New Task", style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
                 <View style={styles.imageContainer}>
                     <TouchableOpacity
                         activeOpacity={0.9}

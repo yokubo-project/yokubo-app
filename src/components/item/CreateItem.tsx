@@ -3,20 +3,15 @@ import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
 
+import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
 import i18n from "../../shared/i18n";
-import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 import { theme } from "../../shared/styles";
 import taskStore, { IFullTask } from "../../state/taskStore";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
@@ -58,10 +53,15 @@ interface IState {
 }
 
 interface IProps {
+    navigation: any;
     task: IFullTask;
 }
 @observer
-export default class Component extends React.Component<IProps, IState> {
+export default class CreateItem extends React.Component<IProps, IState> {
+
+    static navigationOptions: any = {
+        title: "Create Item"
+    };
 
     constructor(props: IProps) {
         super(props);
@@ -70,7 +70,7 @@ export default class Component extends React.Component<IProps, IState> {
             name: "",
             fromDate: null,
             toDate: null,
-            metrics: JSON.parse(JSON.stringify(this.props.task.metrics)),
+            metrics: JSON.parse(JSON.stringify(this.props.navigation.state.params.task.metrics)),
             inputNameError: null,
             inputDateError: null,
             inputMetricsError: null,
@@ -121,7 +121,7 @@ export default class Component extends React.Component<IProps, IState> {
         });
 
         this.setState({ isCreatingItemModalVisible: true });
-        await taskStore.createItem(this.props.task.uid, {
+        await taskStore.createItem(this.props.navigation.state.params.task.uid, {
             name,
             desc: "Desc",
             period: [fromDate, toDate],
@@ -148,7 +148,7 @@ export default class Component extends React.Component<IProps, IState> {
                     });
             }
         } else {
-            Actions.pop();
+            this.props.navigation.goBack();
         }
     }
 
@@ -220,25 +220,6 @@ export default class Component extends React.Component<IProps, IState> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        centerComponent={{
-                            text: i18n.t("createItem.header"),
-                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
-                        } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
-
                 {
                     // Form input for name
                 }
@@ -344,7 +325,7 @@ export default class Component extends React.Component<IProps, IState> {
                 />
                 {this.showDateError()}
 
-                {this.renderMetrices(this.props.task.metrics)}
+                {this.renderMetrices(this.props.navigation.state.params.task.metrics)}
                 {this.showMetricsError()}
 
                 <View style={styles.formContainer}>

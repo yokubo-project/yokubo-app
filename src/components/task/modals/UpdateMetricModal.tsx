@@ -40,7 +40,7 @@ interface IProps {
     patchMetric(metric: { uid: string; name: string; unit: string }): void;
 }
 
-export default class Component extends React.Component<IProps, IState> {
+export default class UpdateMetricModal extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);

@@ -37,7 +37,7 @@ interface IProps {
     hide(): void;
 }
 
-export default class Component extends React.Component<IProps, IState> {
+export default class ResetPwdModal extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);

@@ -4,13 +4,15 @@ import moment from "moment";
 import React from "react";
 import { FlatList, ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Button, Header, Icon, List, ListItem } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
 import { material } from "react-native-typography";
+import { HeaderBackButton } from "react-navigation";
 
+import ModalButton from "../../shared/components/ModalButton";
+import NavigationButton from "../../shared/components/NavigationButton";
 import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
-import { IFullTask, IItem } from "../../state/taskStore";
+import taskStore, { IFullTask, IItem } from "../../state/taskStore";
 import SortItemsModal from "./modals/SortItemsModal";
 
 const styles = StyleSheet.create({
@@ -59,21 +61,69 @@ interface IState {
 interface IProps {
     task: IFullTask;
     headerText: string;
-    handleOnAddIconClick(): void;
+    navigation: any;
 }
 @observer
-export default class Component extends React.Component<IProps, IState> {
+export default class ItemsList extends React.Component<any, IState> {
 
+    static navigationOptions = ({ navigation }: any) => {
+        const taskName = navigation.getParam("taskName");
+        const task = navigation.getParam("task");
+
+        return {
+            headerLeft: (
+                <HeaderBackButton
+                    tintColor="white"
+                    onPress={() => { navigation.navigate("Tasks"); }}
+                />
+            ),
+            title: taskName,
+            headerRight: (
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                    <ModalButton
+                        navigation={navigation}
+                        getParameter="showSortItemsModal"
+                        ioniconName="md-reorder"
+                        ioniconColor="white"
+                    />
+                    <NavigationButton
+                        navigation={navigation}
+                        additionalProps={{ task }}
+                        navigateToScreen="CreateItem"
+                        ioniconName="md-add"
+                        ioniconColor="white"
+                    />
+                </View>
+            )
+        };
+    }
+
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
 
+        const activeTask = taskStore.getActiveTask();
         this.state = {
-            task: this.props.task,
+            task: activeTask,
             sortKey: "createdAt",
             sortDirection: "asc",
-            previousItemLength: this.props.task.items.length,
+            previousItemLength: activeTask.items.length,
             isSortItemsModalVisible: false
         };
+    }
+
+    componentDidMount() {
+        this.props.navigation.setParams({
+            taskName: this.getHeaderText(),
+            task: this.state.task,
+            showSortItemsModal: this.showSortItemsModal
+        });
+    }
+
+    getHeaderText() {
+        return this.state.task.name.length > 12 ?
+            `${this.state.task.name.slice(0, 12)}...` :
+            this.state.task.name;
     }
 
     componentWillReceiveProps(nextProps: IProps) {
@@ -121,7 +171,7 @@ export default class Component extends React.Component<IProps, IState> {
     }
 
     handleOnEditItemClick(item: IItem) {
-        Actions.patchItem({
+        this.props.navigation.navigate("PatchItem", {
             taskUid: this.state.task.uid,
             item
         });
@@ -143,7 +193,7 @@ export default class Component extends React.Component<IProps, IState> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
+                {/* <View style={styles.headerContainer}>
                     <Header
                         innerContainerStyles={{ flexDirection: "row" }}
                         backgroundColor={theme.backgroundColor}
@@ -173,14 +223,14 @@ export default class Component extends React.Component<IProps, IState> {
                         statusBarProps={{ translucent: true }}
                         outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
                     />
-                </View>
+                </View> */}
 
                 <ScrollView style={styles.scrollViewContainer}>
                     <List containerStyle={{ marginBottom: 20, borderTopWidth: 0, marginLeft: 0, paddingLeft: 0, marginTop: 0 }}>
                         <FlatList
                             data={this.state.task.items}
-                            keyExtractor={item => item.uid.toString()}
-                            renderItem={({ item }) => (
+                            keyExtractor={(item: any) => item.uid.toString()}
+                            renderItem={({ item }: any) => (
                                 <ListItem
                                     containerStyle={styles.listElement}
                                     title={item.name}

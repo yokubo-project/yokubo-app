@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
-import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
@@ -11,10 +10,6 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
@@ -27,11 +22,15 @@ const styles = StyleSheet.create({
         color: theme.inputTextColor,
         fontSize: 20,
         marginBottom: 10
+    },
+    androidButtonWrapper: {
+        margin: 13,
+        backgroundColor: "transparent"
     }
 });
 
 // tslint:disable-next-line:no-empty-interface
-interface IProps { }
+interface IProps { navigation: any; }
 interface IState {
     inputEmail: string;
     inputPassword: string;
@@ -40,8 +39,15 @@ interface IState {
     inputGeneralError: string;
 }
 
-export default class Component extends React.Component<IProps, IState> {
+export default class SignIn extends React.Component<IProps, IState> {
 
+    static navigationOptions = ({ navigation }: any) => {
+        return {
+            title: "Sign In"
+        };
+    }
+
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -142,31 +148,14 @@ export default class Component extends React.Component<IProps, IState> {
                 inputPasswordError: null,
                 inputGeneralError: null
             });
-            Actions.tasks();
+            // Actions.tasks();
+            this.props.navigation.navigate("Tasks");
         }
     }
 
     render() {
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        centerComponent={{
-                            text: i18n.t("signIn.header"),
-                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
-                        } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
                 <View style={styles.formContainer}>
                     <FormInput
                         inputStyle={styles.inputStyle}
@@ -203,7 +192,7 @@ export default class Component extends React.Component<IProps, IState> {
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
-                            onPress={() => { Actions.signUp(); }}
+                            onPress={() => this.props.navigation.navigate("SignUp")}
                         >
                             {i18n.t("signIn.signupLink")}
                         </Text>
@@ -216,7 +205,7 @@ export default class Component extends React.Component<IProps, IState> {
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
-                            onPress={() => { Actions.forgotPwd(); }}
+                            onPress={() => this.props.navigation.navigate("ForgotPwd")}
                         >
                             {i18n.t("signIn.forgotPwdLink")}
                         </Text>

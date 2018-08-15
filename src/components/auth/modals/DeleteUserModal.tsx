@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, TextStyle, View } from "react-native";
 import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
 
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
@@ -32,11 +31,14 @@ interface IState {
 }
 
 interface IProps {
+    navigation: any;
     isVisible: boolean;
     hide(): void;
 }
 
-export default class Component extends React.Component<IProps, IState> {
+export default class DeleteUserModal extends React.Component<IProps, IState> {
+
+    static navigationOptions: any = { header: null };
 
     constructor(props: IProps) {
         super(props);
@@ -69,7 +71,7 @@ export default class Component extends React.Component<IProps, IState> {
                 inputGeneralError: null
             });
             this.props.hide();
-            Actions.home();
+            this.props.navigation.navigate("Home");
         }
     }
 

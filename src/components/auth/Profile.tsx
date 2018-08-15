@@ -1,8 +1,7 @@
 import React from "react";
-import { FlatList, Image, Linking, ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
-import { Button, FormInput, FormValidationMessage, Header, List, ListItem } from "react-native-elements";
-import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
+import { Linking, ScrollView, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { List, ListItem } from "react-native-elements";
+import { withNavigation } from "react-navigation";
 
 import * as Config from "../../config";
 import i18n from "../../shared/i18n";
@@ -16,10 +15,6 @@ import UpdateProfileModal from "./modals/UpdateProfileModal";
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listContainer: {
@@ -37,8 +32,10 @@ const styles = StyleSheet.create({
     }
 });
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps { }
+interface IProps {
+    navigation: any;
+}
+
 interface IState {
     isProfileModalVisible: boolean;
     isResetPwdModalVisible: boolean;
@@ -46,8 +43,15 @@ interface IState {
     isDeleteUserModalVisible: boolean;
 }
 
-export default class Component extends React.Component<IProps, IState> {
+class Profile extends React.Component<IProps, IState> {
 
+    static navigationOptions = ({ navigation }: any) => {
+        return {
+            title: "Profile"
+        };
+    }
+
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -75,24 +79,6 @@ export default class Component extends React.Component<IProps, IState> {
 
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        centerComponent={{
-                            text: i18n.t("profile.header"),
-                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
-                        } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
                 <ScrollView style={styles.listContainer}>
                     <View style={{ paddingTop: 30 }}>
                         <Text
@@ -181,10 +167,12 @@ export default class Component extends React.Component<IProps, IState> {
                     hide={() => this.hideResetPwdModal()}
                 />
                 <LogoutModal
+                    navigation={this.props.navigation}
                     isVisible={this.state.isLogoutModalVisible}
                     hide={() => this.hideLogoutModal()}
                 />
                 <DeleteUserModal
+                    navigation={this.props.navigation}
                     isVisible={this.state.isDeleteUserModalVisible}
                     hide={() => this.hideDeleteUserModal()}
                 />
@@ -193,3 +181,5 @@ export default class Component extends React.Component<IProps, IState> {
     }
 
 }
+
+export default withNavigation(Profile);

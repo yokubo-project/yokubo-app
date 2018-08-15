@@ -1,16 +1,14 @@
+import { Ionicons } from "@expo/vector-icons";
 import { ImagePicker } from "expo";
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
-import { Button, FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
-import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
+import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Button, FormInput, FormValidationMessage, Icon } from "react-native-elements";
 
-import * as Config from "../../config";
+import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
+import ModalButton from "../../shared/components/ModalButton";
 import i18n from "../../shared/i18n";
-import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 import { theme } from "../../shared/styles";
 import { uploadImageAsync } from "../../shared/uploadImage";
-import authStore from "../../state/authStore";
 import taskStore, { IFullTask, IMetric } from "../../state/taskStore";
 import DeleteTask from "../task/DeleteTask";
 import CreateMetricModal from "./modals/CreateMetricModal";
@@ -24,10 +22,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: theme.backgroundColor,
         alignItems: "stretch"
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
-        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
         flex: 1,
@@ -76,22 +70,47 @@ interface IState {
 }
 
 interface IProps {
+    navigation: any;
     task: IFullTask;
 }
 
-export default class Component extends React.Component<IProps, IState> {
+export default class PatchTask extends React.Component<IProps, IState> {
 
+    static navigationOptions = ({ navigation }: any) => {
+        const taskName = navigation.getParam("taskName");
+
+        return {
+            title: taskName,
+            headerRight: (
+                <ModalButton
+                    navigation={navigation}
+                    getParameter="showDeleteModal"
+                    ioniconName="md-trash"
+                    ioniconColor="white"
+                />
+            )
+        };
+    }
+
+    // tslint:disable-next-line:variable-name
+    _showDeleteModal = () => {
+        this.setState({ isDeleteModalVisible: true });
+    }
+
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
 
+        const task = this.props.navigation.state.params.task;
+
         this.state = {
-            name: this.props.task.name,
-            imageUid: this.props.task.image.uid,
-            metrics: this.props.task.metrics,
+            name: task.name,
+            imageUid: task.image.uid,
+            metrics: task.metrics,
             metricsToBePatched: [],
             inputNameError: null,
             inputGeneralError: null,
-            image: this.props.task.image.thumbnail,
+            image: task.image.thumbnail,
             isDeleteModalVisible: false,
             isCreateMetricModalVisible: false,
             isUpdateMetricModalVisible: false,
@@ -99,6 +118,15 @@ export default class Component extends React.Component<IProps, IState> {
             isPreparingImageModalVisible: false,
             metricToBePatched: null
         };
+    }
+
+    componentDidMount() {
+        const task = this.props.navigation.state.params.task;
+
+        this.props.navigation.setParams({
+            taskName: task.name.length > 15 ? `${task.name.slice(0, 15)}...` : `${task.name}`,
+            showDeleteModal: this._showDeleteModal
+        });
     }
 
     async updateTask() {
@@ -116,7 +144,7 @@ export default class Component extends React.Component<IProps, IState> {
         }
 
         this.setState({ isPatchingTaskModalVisible: true });
-        await taskStore.patchTask(this.props.task.uid, { name, imageUid, metrics });
+        await taskStore.patchTask(this.props.navigation.state.params.task.uid, { name, imageUid, metrics });
 
         if (taskStore.error !== null) {
             switch (taskStore.error) {
@@ -128,7 +156,10 @@ export default class Component extends React.Component<IProps, IState> {
                     });
             }
         } else {
-            Actions.pop();
+            this.setState({
+                isPatchingTaskModalVisible: false
+            });
+            this.props.navigation.goBack();
         }
     }
 
@@ -168,7 +199,7 @@ export default class Component extends React.Component<IProps, IState> {
 
     patchMetric(metricToBePatched: IMetric) {
         // update metric injected via props
-        const metric = this.props.task.metrics.filter(e => e.uid === metricToBePatched.uid)[0];
+        const metric = this.props.navigation.state.params.task.metrics.filter(e => e.uid === metricToBePatched.uid)[0];
         if (metric) {
             metric.name = metricToBePatched.name;
             metric.unit = metricToBePatched.unit;
@@ -238,39 +269,21 @@ export default class Component extends React.Component<IProps, IState> {
         this.setState({ isUpdateMetricModalVisible: true });
     }
 
+    async deleteTask() {
+        await taskStore.deleteTask(this.props.navigation.state.params.task.uid);
+        this.props.navigation.goBack();
+    }
+
     // tslint:disable-next-line:max-func-body-length
     render() {
-        const taskName = this.props.task.name.length > 15 ? `${this.props.task.name.slice(0, 15)}...` : `${this.props.task.name}`;
-
         return (
             <View style={styles.mainContainer}>
                 <DeleteTask
-                    task={this.props.task}
+                    task={this.props.navigation.state.params.task}
                     visible={this.state.isDeleteModalVisible}
                     hideVisibility={() => this.hideDeleteModal()}
+                    deleteTask={() => this.deleteTask()}
                 />
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        // tslint:disable-next-line:max-line-length
-                        centerComponent={{ text: i18n.t("patchTask.header", { taskName }), style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
-                        rightComponent={{
-                            icon: "delete",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { this.showDeleteModal(); }
-                        } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
                 <View
                     style={styles.imageContainer}
                 >

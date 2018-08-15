@@ -1,0 +1,1 @@
+-) Undefined states if server is not reachable or no internet connection is available

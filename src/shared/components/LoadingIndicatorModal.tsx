@@ -1,11 +1,7 @@
 import React from "react";
-import { ActivityIndicator, StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
 
-import authStore from "../../state/authStore";
-import taskStore, { IItem } from "../../state/taskStore";
 import { theme } from "../styles";
 
 const styles = StyleSheet.create({

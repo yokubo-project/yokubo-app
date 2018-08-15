@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
-import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 
 import { validateEmail } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
@@ -12,10 +11,6 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         justifyContent: "space-around",
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
@@ -31,16 +26,24 @@ const styles = StyleSheet.create({
     }
 });
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps { }
+interface IProps {
+    navigation: any;
+}
 interface IState {
     inputEmail: string;
     inputEmailError: string;
     inputGeneralError: string;
     emailHint: string;
 }
-export default class Component extends React.Component<IProps, IState> {
+export default class ForgotPwd extends React.Component<IProps, IState> {
 
+    static navigationOptions = ({ navigation }: any) => {
+        return {
+            title: "Forgot Password"
+        };
+    }
+
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -114,24 +117,6 @@ export default class Component extends React.Component<IProps, IState> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        centerComponent={{
-                            text: i18n.t("forgotPwd.header"),
-                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
-                        } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
                 <View style={styles.formContainer}>
                     <FormInput
                         inputStyle={styles.inputStyle}
@@ -174,7 +159,7 @@ export default class Component extends React.Component<IProps, IState> {
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
-                            onPress={() => { Actions.signIn(); }}
+                            onPress={() => this.props.navigation.navigate("SignIn")}
                         >
                             {i18n.t("forgotPwd.signinLink")}
                         </Text>

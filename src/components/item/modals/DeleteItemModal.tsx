@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, TextStyle, View } from "react-native";
 import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
 
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
@@ -31,6 +30,7 @@ interface IState {
 }
 
 interface IProps {
+    navigation: any;
     isVisible: boolean;
     taskUid: string;
     item: IItem;
@@ -59,8 +59,7 @@ export default class Component extends React.Component<IProps, IState> {
             this.setState({
                 inputGeneralError: null
             });
-            this.props.hide();
-            Actions.pop();
+            this.props.navigation.goBack();
         }
     }
 

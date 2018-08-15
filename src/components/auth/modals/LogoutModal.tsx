@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { StyleSheet, Text, View } from "react-native";
+import { Button, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
 
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
@@ -30,11 +29,14 @@ interface IState {
 }
 
 interface IProps {
+    navigation: any;
     isVisible: boolean;
     hide(): void;
 }
 
-export default class Component extends React.Component<IProps, IState> {
+export default class LogoutModal extends React.Component<IProps, IState> {
+
+    static navigationOptions: any = { header: null };
 
     constructor(props: IProps) {
         super(props);
@@ -46,7 +48,7 @@ export default class Component extends React.Component<IProps, IState> {
     async signOut() {
         this.props.hide();
         await authStore.signOut();
-        Actions.home();
+        this.props.navigation.navigate("Home");
     }
 
     closeModal() {

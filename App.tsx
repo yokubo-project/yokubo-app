@@ -1,12 +1,14 @@
+import { observer } from "mobx-react";
 import React from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { Actions, Router, Scene, Stack } from "react-native-router-flux";
+import { createStackNavigator } from "react-navigation";
 
+import { theme } from "./src/shared/styles";
 import authStore from "./src/state/authStore";
-import taskStore from "./src/state/taskStore";
 
 import ForgotPwd from "./src/components/auth/ForgotPwd";
 import Home from "./src/components/auth/Home";
+import LogoutModal from "./src/components/auth/modals/LogoutModal";
 import Profile from "./src/components/auth/Profile";
 import SignIn from "./src/components/auth/SignIn";
 import SignUp from "./src/components/auth/SignUp";
@@ -15,11 +17,11 @@ import CreateTask from "./src/components/task/CreateTask";
 import PatchTask from "./src/components/task/PatchTask";
 import Tasks from "./src/components/task/Tasks";
 
-import { observer } from "mobx-react";
 import CreateItem from "./src/components/item/CreateItem";
 import Items from "./src/components/item/Items";
 import PatchItem from "./src/components/item/PatchItem";
-import { theme } from "./src/shared/styles";
+
+import Tab from "./src/components/item/modals/TabNavigation";
 
 const styles = StyleSheet.create({
     spinnerContainer: {
@@ -43,31 +45,8 @@ const Spinner = () => {
         </View>
     );
 };
-
-class App extends React.Component<null, null> {
-
-    render() {
-        return (
-            <Routes />
-        );
-    }
-
-}
-
 @observer
-class Routes extends React.Component<null, null> {
-
-    isSignedIn() {
-        if (!authStore.isAuthenticated) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    toLoginPage() {
-        Actions.signIn();
-    }
+class App extends React.Component<null, null> {
 
     render() {
         if (authStore.isRehydrated === false) {
@@ -76,33 +55,47 @@ class Routes extends React.Component<null, null> {
             );
         }
 
-        return (
-            <Router>
-                <Stack key="root">
-                    <Scene
-                        key="isAuth"
-                        component={Home}
-                        title="isAuth"
-                        hideNavBar={true}
-                        onEnter={this.isSignedIn}
-                        success={() => { Actions.tasks(); }}
-                        failure={() => { Actions.home(); }}
-                    />
-                    <Scene key="home" component={Home} title="Home" hideNavBar={true} />
-                    <Scene key="signIn" component={SignIn} title="Sign In" hideNavBar={true} />
-                    <Scene key="signUp" component={SignUp} title="Sign Up" hideNavBar={true} />
-                    <Scene key="forgotPwd" component={ForgotPwd} title="Forgot Password" hideNavBar={true} />
-                    <Scene key="profile" component={Profile} title="Profile" hideNavBar={true} />
-                    <Scene key="tasks" component={Tasks} title="Tasks" hideNavBar={true} type="reset" />
-                    <Scene key="createTask" component={CreateTask} title="New Task" hideNavBar={true} />
-                    <Scene key="patchTask" component={PatchTask} title="Update Task" hideNavBar={true} />
-                    <Scene key="items" component={Items} title="Items" hideNavBar={true} />
-                    <Scene key="createItem" component={CreateItem} title="New Item" hideNavBar={true} />
-                    <Scene key="patchItem" component={PatchItem} title="Patch Item" hideNavBar={true} panHandlers={null} />
-                </Stack>
-            </Router>
-        );
+        return <RootStack />;
     }
+
 }
+
+// tslint:disable-next-line:variable-name
+const RootStack = createStackNavigator(
+    {
+        Home,
+        SignIn,
+        SignUp,
+        Profile,
+        ForgotPwd,
+        LogoutModal,
+        Tasks,
+        CreateTask,
+        PatchTask,
+        Tab: {
+            screen: Tab,
+            headerMode: "none",
+            navigationOptions: {
+                header: null
+            }
+        },
+        Items,
+        CreateItem,
+        PatchItem
+    },
+    {
+        initialRouteName: authStore.isAuthenticated === true ? "Tasks" : "Home",
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: theme.headerBackgroundColor
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+                fontWeight: "bold"
+            }
+        }
+
+    }
+);
 
 export default App;

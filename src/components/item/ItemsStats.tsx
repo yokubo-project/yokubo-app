@@ -3,20 +3,17 @@ import * as moment from "moment";
 import React from "react";
 import { ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Header, List } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { HeaderBackButton } from "react-navigation";
 
+import NavigationButton from "../../shared/components/NavigationButton";
 import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
-import { IFullTask } from "../../state/taskStore";
+import taskStore, { IFullTask } from "../../state/taskStore";
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     scrollViewContainer: {
@@ -58,18 +55,59 @@ interface IState {
 interface IProps {
     task: IFullTask;
     headerText: string;
-    handleOnAddIconClick(): void;
+    navigation: any;
 }
 
 @observer
-export default class Component extends React.Component<IProps, IState> {
+export default class ItemStats extends React.Component<IProps, IState> {
 
+    static navigationOptions = ({ navigation }: any) => {
+        const taskName = navigation.getParam("taskName");
+        const task = navigation.getParam("task");
+
+        return {
+            headerLeft: (
+                <HeaderBackButton
+                    tintColor="white"
+                    onPress={() => { navigation.navigate("Tasks"); }}
+                />
+            ),
+            title: taskName,
+            headerRight: (
+                <View>
+                    <NavigationButton
+                        navigation={navigation}
+                        additionalProps={{ task }}
+                        navigateToScreen="CreateItem"
+                        ioniconName="md-add"
+                        ioniconColor="white"
+                    />
+                </View>
+            )
+        };
+    }
+
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
 
+        const activeTask = taskStore.getActiveTask();
         this.state = {
-            task: this.props.task
+            task: activeTask
         };
+    }
+
+    componentDidMount() {
+        this.props.navigation.setParams({
+            taskName: this.getHeaderText(),
+            task: this.state.task
+        });
+    }
+
+    getHeaderText() {
+        return this.state.task.name.length > 12 ?
+            `${this.state.task.name.slice(0, 12)}...` :
+            this.state.task.name;
     }
 
     renderEntryStatictics(entries: any) {
@@ -165,28 +203,6 @@ export default class Component extends React.Component<IProps, IState> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
-                        rightComponent={{
-                            icon: "add",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { this.props.handleOnAddIconClick(); }
-                        } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
-
                 <ScrollView style={styles.scrollViewContainer}>
                     <List containerStyle={{ marginBottom: 20, borderTopWidth: 0, marginLeft: 0, paddingLeft: 0, marginTop: 0 }}>
                         {this.renderEntryStatictics(this.state.task.items)}

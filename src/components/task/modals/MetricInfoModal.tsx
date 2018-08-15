@@ -39,7 +39,7 @@ interface IProps {
     hide(): void;
 }
 
-export default class Component extends React.Component<IProps, IState> {
+export default class MetricInfoModal extends React.Component<IProps, IState> {
 
     closeModal() {
         this.props.hide();

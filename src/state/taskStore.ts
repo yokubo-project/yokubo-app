@@ -91,8 +91,17 @@ export type TaskError = "Unknown" | "InvalidTimePeriod";
 class Tasks {
 
     @observable tasks: any = observable.map();
+    @observable activeTask: any = null;
     @observable error: TaskError = null;
     @observable isLoading: boolean = false;
+
+    @action setActiveTask = (task: any) => {
+        this.activeTask = task;
+    }
+
+    @action getActiveTask = () => {
+        return this.activeTask;
+    }
 
     @action fetchTasks = async () => {
         if (this.isLoading) { return; }

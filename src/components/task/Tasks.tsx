@@ -2,9 +2,9 @@ import * as _ from "lodash";
 import { observer } from "mobx-react";
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
-import { Header, Icon } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
+import { Button, Header } from "react-native-elements";
 
+import NavigationButton from "../../shared/components/NavigationButton";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
 import authStore from "../../state/authStore";
@@ -13,10 +13,6 @@ import taskStore from "../../state/taskStore";
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listContainer: {
@@ -74,13 +70,36 @@ const styles = StyleSheet.create({
 });
 
 // tslint:disable-next-line:no-empty-interface
-interface IProps { }
+interface IProps { navigation: any; }
 interface IState {
     loadedTasks: boolean;
 }
 @observer
-export default class Component extends React.Component<IProps, IState> {
+export default class Tasks extends React.Component<IProps, IState> {
 
+    static navigationOptions = ({ navigation }: any) => {
+        return {
+            title: "Tasks",
+            headerLeft: (
+                <NavigationButton
+                    navigation={navigation}
+                    navigateToScreen="Profile"
+                    ioniconName="md-more"
+                    ioniconColor="white"
+                />
+            ),
+            headerRight: (
+                <NavigationButton
+                    navigation={navigation}
+                    navigateToScreen="CreateTask"
+                    ioniconName="md-add"
+                    ioniconColor="white"
+                />
+            )
+        };
+    }
+
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
 
@@ -98,10 +117,6 @@ export default class Component extends React.Component<IProps, IState> {
         this.setState({
             loadedTasks: true
         });
-    }
-
-    handleOnCreateTaskClick() {
-        Actions.createTask();
     }
 
     renderTasks(tasks: any) {
@@ -123,10 +138,13 @@ export default class Component extends React.Component<IProps, IState> {
                         <TouchableOpacity
                             key={`column${columnIndex}`}
                             onPress={() => {
-                                Actions.items({ task });
+                                taskStore.setActiveTask(task);
+                                task.items.length > 0 ?
+                                    this.props.navigation.navigate("Tab") :
+                                    this.props.navigation.navigate("Items", { task });
                             }}
                             onLongPress={() => {
-                                Actions.patchTask({ task });
+                                this.props.navigation.navigate("PatchTask", { task });
                             }}
                             style={styles.formContainerTouchableElement}
                             activeOpacity={0.8}
@@ -197,31 +215,6 @@ export default class Component extends React.Component<IProps, IState> {
 
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "account-circle",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.profile(); }
-                        } as any}
-                        centerComponent={{
-                            text: i18n.t("tasks.header"),
-                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
-                        } as any}
-                        rightComponent={{
-                            icon: "add",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { this.handleOnCreateTaskClick(); }
-                        } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
-
                 {content}
             </View>
         );

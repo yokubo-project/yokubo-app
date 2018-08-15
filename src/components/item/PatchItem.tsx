@@ -3,10 +3,10 @@ import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
-import { Actions } from "react-native-router-flux";
 
+import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
+import ModalButton from "../../shared/components/ModalButton";
 import i18n from "../../shared/i18n";
-import LoadingIndicatorModal from "../../shared/modals/LoadingIndicatorModal";
 import { theme } from "../../shared/styles";
 import taskStore, { IItem } from "../../state/taskStore";
 import DeleteItemModal from "./modals/DeleteItemModal";
@@ -14,10 +14,6 @@ import DeleteItemModal from "./modals/DeleteItemModal";
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    headerContainer: {
-        height: 90,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     formContainer: {
@@ -61,21 +57,44 @@ interface IState {
 }
 
 interface IProps {
+    navigation: any;
     taskUid: string;
     item: any;
 }
 @observer
-export default class Component extends React.Component<IProps, IState> {
+export default class PatchItem extends React.Component<IProps, IState> {
 
+    static navigationOptions = ({ navigation }: any) => {
+        const itemName = navigation.getParam("itemName");
+
+        return {
+            title: itemName,
+            headerRight: (
+                <ModalButton
+                    navigation={navigation}
+                    getParameter="showDeleteModal"
+                    ioniconName="md-trash"
+                    ioniconColor="white"
+                />
+            )
+        };
+    }
+
+    // tslint:disable-next-line:variable-name
+    _showDeleteModal = () => {
+        this.setState({ isDeleteItemModalVisible: true });
+    }
+
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
 
         this.state = {
-            name: this.props.item.name,
+            name: this.props.navigation.state.params.item.name,
             nameError: null,
-            fromDate: this.props.item.period[0],
-            toDate: this.props.item.period[1],
-            metrics: JSON.parse(JSON.stringify(this.props.item.metricQuantities)),
+            fromDate: this.props.navigation.state.params.item.period[0],
+            toDate: this.props.navigation.state.params.item.period[1],
+            metrics: JSON.parse(JSON.stringify(this.props.navigation.state.params.item.metricQuantities)),
             isDeleteItemModalVisible: false,
             inputNameError: null,
             inputDateError: null,
@@ -83,6 +102,15 @@ export default class Component extends React.Component<IProps, IState> {
             inputGeneralError: null,
             isPatchingItemModalVisible: false
         };
+    }
+
+    componentDidMount() {
+        const item = this.props.navigation.state.params.item;
+
+        this.props.navigation.setParams({
+            itemName: item.name.length > 15 ? `${item.name.slice(0, 15)}...` : `${item.name}`,
+            showDeleteModal: this._showDeleteModal
+        });
     }
 
     async patchItem() {
@@ -127,7 +155,7 @@ export default class Component extends React.Component<IProps, IState> {
         });
 
         this.setState({ isPatchingItemModalVisible: true });
-        await taskStore.patchItem(this.props.taskUid, this.props.item.uid, {
+        await taskStore.patchItem(this.props.navigation.state.params.taskUid, this.props.navigation.state.params.item.uid, {
             name,
             period: [fromDate, toDate],
             metrics
@@ -153,7 +181,7 @@ export default class Component extends React.Component<IProps, IState> {
                     });
             }
         } else {
-            Actions.pop();
+            this.props.navigation.goBack();
         }
     }
 
@@ -232,31 +260,6 @@ export default class Component extends React.Component<IProps, IState> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        centerComponent={{
-                            text: i18n.t("patchItem.header"),
-                            style: { color: "#fff", fontSize: 20, fontWeight: "bold" }
-                        } as any}
-                        rightComponent={{
-                            icon: "delete",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { this.showDeleteItemModal(); }
-                        } as any}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View>
-
                 {
                     // Form input for name
                 }
@@ -372,10 +375,11 @@ export default class Component extends React.Component<IProps, IState> {
                 </View>
 
                 <DeleteItemModal
+                    navigation={this.props.navigation}
                     isVisible={this.state.isDeleteItemModalVisible}
                     hide={() => this.hideDeleteItemModal()}
-                    taskUid={this.props.taskUid}
-                    item={this.props.item}
+                    taskUid={this.props.navigation.state.params.taskUid}
+                    item={this.props.navigation.state.params.item}
                 />
                 {this.showGeneralError()}
 

@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Button } from "react-native-elements";
 import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
 
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
@@ -36,13 +35,9 @@ interface IProps {
     task: IFullTask;
     visible: boolean;
     hideVisibility(): void;
+    deleteTask(): void;
 }
-export default class Component extends React.Component<IProps, null> {
-
-    async deleteTask() {
-        taskStore.deleteTask(this.props.task.uid);
-        Actions.pop();
-    }
+export default class DeleteTask extends React.Component<IProps, null> {
 
     render() {
         return (
@@ -75,7 +70,7 @@ export default class Component extends React.Component<IProps, null> {
                             buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                             textStyle={{ textAlign: "center", fontSize: 18 }}
                             title={i18n.t("deleteTask.deleteButton")}
-                            onPress={() => { this.deleteTask(); }}
+                            onPress={() => { this.props.deleteTask(); }}
                         />
                     </View>
                 </Modal>
