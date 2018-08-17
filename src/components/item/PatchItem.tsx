@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
 import ModalButton from "../../shared/components/ModalButton";
@@ -57,10 +58,16 @@ interface IState {
 }
 
 interface IProps {
-    navigation: any;
-    taskUid: string;
-    item: any;
+    navigation: NavigationScreenProp<{
+        params: {
+            taskUid: string;
+            item: any;
+        };
+    } & {
+        [prop: string]: any;
+    }, any>;
 }
+
 @observer
 export default class PatchItem extends React.Component<IProps, IState> {
 

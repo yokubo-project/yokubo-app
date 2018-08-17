@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import { validateEmail } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    navigation: any;
+    navigation: NavigationScreenProp<any, any>;
 }
 interface IState {
     inputEmail: string;
@@ -37,7 +38,7 @@ interface IState {
 }
 export default class ForgotPwd extends React.Component<IProps, IState> {
 
-    static navigationOptions = ({ navigation }: any) => {
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             title: "Forgot Password"
         };

@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
@@ -30,7 +31,9 @@ const styles = StyleSheet.create({
 });
 
 // tslint:disable-next-line:no-empty-interface
-interface IProps { navigation: any; }
+interface IProps {
+    navigation: NavigationScreenProp<any, any>;
+}
 interface IState {
     inputEmail: string;
     inputPassword: string;
@@ -41,7 +44,7 @@ interface IState {
 
 export default class SignIn extends React.Component<IProps, IState> {
 
-    static navigationOptions = ({ navigation }: any) => {
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             title: "Sign In"
         };
@@ -148,7 +151,6 @@ export default class SignIn extends React.Component<IProps, IState> {
                 inputPasswordError: null,
                 inputGeneralError: null
             });
-            // Actions.tasks();
             this.props.navigation.navigate("Tasks");
         }
     }

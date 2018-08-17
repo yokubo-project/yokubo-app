@@ -2,6 +2,7 @@ import { ImagePicker } from "expo";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Button, FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 import * as uuid from "uuid";
 
 import * as Config from "../../config";
@@ -59,9 +60,8 @@ const styles = StyleSheet.create({
     }
 });
 
-// tslint:disable-next-line:no-empty-interface
 interface IProps {
-    navigation: any;
+    navigation: NavigationScreenProp<any, any>;
 }
 interface IState {
     name: string;
@@ -83,13 +83,15 @@ interface IState {
 }
 export default class CreateTask extends React.Component<IProps, IState> {
 
-    static navigationOptions: any = {
-        title: "Create Task"
-    };
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
+        return {
+            title: "Create Task"
+        };
+    }
 
+    // tslint:disable:member-ordering
     tempMetricName: string = "";
     tempMetricUnit: string = "";
-
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -107,6 +109,7 @@ export default class CreateTask extends React.Component<IProps, IState> {
             metricToBePatched: null
         };
     }
+    // tslint:enable:member-ordering
 
     async createTask() {
         const name = this.state.name;

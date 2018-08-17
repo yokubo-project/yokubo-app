@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
@@ -29,15 +30,20 @@ interface IState {
 }
 
 interface IProps {
-    navigation: any;
+    navigation: NavigationScreenProp<any, any>;
     isVisible: boolean;
     hide(): void;
 }
 
 export default class LogoutModal extends React.Component<IProps, IState> {
 
-    static navigationOptions: any = { header: null };
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
+        return {
+            header: null
+        };
+    }
 
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
         this.state = {

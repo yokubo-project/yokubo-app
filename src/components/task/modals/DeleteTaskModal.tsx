@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Button } from "react-native-elements";
 import Modal from "react-native-modal";
 
-import i18n from "../../shared/i18n";
-import { theme } from "../../shared/styles";
-import taskStore, { IFullTask } from "../../state/taskStore";
+import i18n from "../../../shared/i18n";
+import { theme } from "../../../shared/styles";
+import taskStore, { IFullTask } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
     mainContainer: {

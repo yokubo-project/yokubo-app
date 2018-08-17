@@ -2,7 +2,6 @@ import React from "react";
 import { ScrollView, StyleSheet, Text, TextStyle, View } from "react-native";
 import { Button, FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
 
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";

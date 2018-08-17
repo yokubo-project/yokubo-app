@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import { validateEmail } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    navigation: any;
+    navigation: NavigationScreenProp<any, any>;
 }
 interface IState {
     inputName: string;
@@ -40,10 +41,13 @@ interface IState {
 }
 export default class SignUp extends React.Component<IProps, IState> {
 
-    static navigationOptions: any = {
-        title: "Sign Up"
-    };
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
+        return {
+            title: "Sign Up"
+        };
+    }
 
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
         this.state = {

@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Button } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
@@ -35,9 +36,17 @@ const styles = StyleSheet.create({
         textAlign: "center"
     } as TextStyle
 });
-export default class Home extends React.Component<{ navigation: any }, null> {
 
-    static navigationOptions: any = { header: null };
+interface IProps {
+    navigation: NavigationScreenProp<any, any>;
+}
+export default class Home extends React.Component<IProps, null> {
+
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
+        return {
+            header: null
+        };
+    }
 
     render() {
         return (
@@ -60,7 +69,6 @@ export default class Home extends React.Component<{ navigation: any }, null> {
                         buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
                         textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("home.signupButton")}
-                        // onPress={() => { Actions.signUp(); }}
                         onPress={() => this.props.navigation.navigate("SignUp")}
                     />
                     <View style={{ flex: 1, flexDirection: "row", padding: 30, justifyContent: "center" }}>
@@ -71,7 +79,6 @@ export default class Home extends React.Component<{ navigation: any }, null> {
                         </Text>
                         <Text
                             style={{ padding: 5, fontSize: 20, color: theme.textColor }}
-                            // onPress={() => { Actions.signIn(); }}
                             onPress={() => this.props.navigation.navigate("SignIn")}
                         >
                             {i18n.t("home.signinLink")}

@@ -18,10 +18,9 @@ import PatchTask from "./src/components/task/PatchTask";
 import Tasks from "./src/components/task/Tasks";
 
 import CreateItem from "./src/components/item/CreateItem";
-import Items from "./src/components/item/Items";
 import PatchItem from "./src/components/item/PatchItem";
 
-import Tab from "./src/components/item/modals/TabNavigation";
+import ItemTabNavigation from "./src/components/item/modals/TabNavigation";
 
 const styles = StyleSheet.create({
     spinnerContainer: {
@@ -72,14 +71,13 @@ const RootStack = createStackNavigator(
         Tasks,
         CreateTask,
         PatchTask,
-        Tab: {
-            screen: Tab,
+        ItemTabNavigation: {
+            screen: ItemTabNavigation,
             headerMode: "none",
             navigationOptions: {
                 header: null
             }
         },
-        Items,
         CreateItem,
         PatchItem
     },

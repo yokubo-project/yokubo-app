@@ -5,7 +5,7 @@ import React from "react";
 import { FlatList, ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Button, Header, Icon, List, ListItem } from "react-native-elements";
 import { material } from "react-native-typography";
-import { HeaderBackButton } from "react-navigation";
+import { HeaderBackButton, NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import ModalButton from "../../shared/components/ModalButton";
 import NavigationButton from "../../shared/components/NavigationButton";
@@ -47,7 +47,21 @@ const styles = StyleSheet.create({
         color: theme.inputTextColor,
         fontSize: 14,
         marginLeft: 10
-    }
+    },
+    welcomeScreenContainer: {
+        flexGrow: 1,
+        backgroundColor: theme.backgroundColor,
+        justifyContent: "center",
+        alignItems: "center"
+    } as ViewStyle,
+    welcomeScreen: {
+        flex: 1,
+        color: theme.textColor,
+        textAlign: "center",
+        paddingLeft: 20,
+        paddingRight: 20,
+        fontSize: 20
+    } as TextStyle
 });
 
 interface IState {
@@ -59,9 +73,7 @@ interface IState {
 }
 
 interface IProps {
-    task: IFullTask;
-    headerText: string;
-    navigation: any;
+    navigation: NavigationScreenProp<any, any>;
 }
 @observer
 export default class ItemsList extends React.Component<any, IState> {
@@ -191,40 +203,29 @@ export default class ItemsList extends React.Component<any, IState> {
     }
 
     render() {
+
+        if (this.state.task.items.length === 0) {
+            return (
+                <View style={styles.mainContainer}>
+                    <View style={styles.welcomeScreenContainer}>
+                        <Text style={styles.welcomeScreen}>
+                            {i18n.t("items.welcome", { taskName: this.state.task.name })} {"\n"}
+                            {i18n.t("items.getStarted")}
+                        </Text>
+                    </View>
+
+                    <SortItemsModal
+                        isVisible={this.state.isSortItemsModalVisible}
+                        hide={() => this.hideSortItemsModal()}
+                        metrics={this.state.task.metrics}
+                        sortItemsAndHide={(sortKey, sortDirection) => this.sortItemsAndHideSortItemsModal(sortKey, sortDirection)}
+                    />
+                </View>
+            );
+        }
+
         return (
             <View style={styles.mainContainer}>
-                {/* <View style={styles.headerContainer}>
-                    <Header
-                        innerContainerStyles={{ flexDirection: "row" }}
-                        backgroundColor={theme.backgroundColor}
-                        leftComponent={{
-                            icon: "arrow-back",
-                            color: "#fff",
-                            underlayColor: "transparent",
-                            onPress: () => { Actions.pop(); }
-                        } as any}
-                        centerComponent={{ text: this.props.headerText, style: { color: "#fff", fontSize: 20, fontWeight: "bold" } } as any}
-                        rightComponent={
-                            <View style={{ flex: 1, flexDirection: "row", marginTop: 23 }}>
-                                <Icon
-                                    name="sort"
-                                    color="#fff"
-                                    underlayColor="transparent"
-                                    iconStyle={{ marginRight: 16 }}
-                                    onPress={() => { this.showSortItemsModal(); }}
-                                />
-                                <Icon
-                                    name="add"
-                                    color="#fff"
-                                    underlayColor="transparent"
-                                    onPress={() => { this.props.handleOnAddIconClick(); }}
-                                />
-                            </View>}
-                        statusBarProps={{ translucent: true }}
-                        outerContainerStyles={{ borderBottomWidth: 2, height: 80, borderBottomColor: "#222222" }}
-                    />
-                </View> */}
-
                 <ScrollView style={styles.scrollViewContainer}>
                     <List containerStyle={{ marginBottom: 20, borderTopWidth: 0, marginLeft: 0, paddingLeft: 0, marginTop: 0 }}>
                         <FlatList

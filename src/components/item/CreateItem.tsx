@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import DatePicker from "react-native-datepicker";
 import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
 import i18n from "../../shared/i18n";
@@ -53,16 +54,25 @@ interface IState {
 }
 
 interface IProps {
-    navigation: any;
-    task: IFullTask;
+    navigation: NavigationScreenProp<{
+        params: {
+            task: IFullTask;
+        };
+    } & {
+        [prop: string]: any;
+    }, any>;
 }
+
 @observer
 export default class CreateItem extends React.Component<IProps, IState> {
 
-    static navigationOptions: any = {
-        title: "Create Item"
-    };
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
+        return {
+            title: "Create Item"
+        };
+    }
 
+    // tslint:disable-next-line:member-ordering
     constructor(props: IProps) {
         super(props);
 

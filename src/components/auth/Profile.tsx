@@ -1,7 +1,7 @@
 import React from "react";
 import { Linking, ScrollView, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { List, ListItem } from "react-native-elements";
-import { withNavigation } from "react-navigation";
+import { NavigationScreenProp, NavigationScreenProps, withNavigation } from "react-navigation";
 
 import * as Config from "../../config";
 import i18n from "../../shared/i18n";
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 });
 
 interface IProps {
-    navigation: any;
+    navigation: NavigationScreenProp<any, any>;
 }
 
 interface IState {
@@ -45,7 +45,7 @@ interface IState {
 
 class Profile extends React.Component<IProps, IState> {
 
-    static navigationOptions = ({ navigation }: any) => {
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             title: "Profile"
         };

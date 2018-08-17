@@ -3,7 +3,7 @@ import * as moment from "moment";
 import React from "react";
 import { ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 import { Header, List } from "react-native-elements";
-import { HeaderBackButton } from "react-navigation";
+import { HeaderBackButton, NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import NavigationButton from "../../shared/components/NavigationButton";
 import { formatDuration } from "../../shared/helpers";
@@ -45,7 +45,21 @@ const styles = StyleSheet.create({
         color: theme.inputTextColor,
         fontSize: 14,
         marginLeft: 15
-    }
+    },
+    welcomeScreenContainer: {
+        flexGrow: 1,
+        backgroundColor: theme.backgroundColor,
+        justifyContent: "center",
+        alignItems: "center"
+    } as ViewStyle,
+    welcomeScreen: {
+        flex: 1,
+        color: theme.textColor,
+        textAlign: "center",
+        paddingLeft: 20,
+        paddingRight: 20,
+        fontSize: 20
+    } as TextStyle
 });
 
 interface IState {
@@ -53,9 +67,7 @@ interface IState {
 }
 
 interface IProps {
-    task: IFullTask;
-    headerText: string;
-    navigation: any;
+    navigation: NavigationScreenProp<any, any>;
 }
 
 @observer
@@ -201,6 +213,20 @@ export default class ItemStats extends React.Component<IProps, IState> {
     }
 
     render() {
+
+        if (this.state.task.items.length === 0) {
+            return (
+                <View style={styles.mainContainer}>
+                    <View style={styles.welcomeScreenContainer}>
+                        <Text style={styles.welcomeScreen}>
+                            {i18n.t("items.welcome", { taskName: this.state.task.name })} {"\n"}
+                            {i18n.t("items.getStarted")}
+                        </Text>
+                    </View>
+                </View>
+            );
+        }
+
         return (
             <View style={styles.mainContainer}>
                 <ScrollView style={styles.scrollViewContainer}>

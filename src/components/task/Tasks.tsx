@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Button, Header } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import NavigationButton from "../../shared/components/NavigationButton";
 import i18n from "../../shared/i18n";
@@ -70,14 +71,16 @@ const styles = StyleSheet.create({
 });
 
 // tslint:disable-next-line:no-empty-interface
-interface IProps { navigation: any; }
+interface IProps {
+    navigation: NavigationScreenProp<any, any>;
+}
 interface IState {
     loadedTasks: boolean;
 }
 @observer
 export default class Tasks extends React.Component<IProps, IState> {
 
-    static navigationOptions = ({ navigation }: any) => {
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
             title: "Tasks",
             headerLeft: (
@@ -139,9 +142,7 @@ export default class Tasks extends React.Component<IProps, IState> {
                             key={`column${columnIndex}`}
                             onPress={() => {
                                 taskStore.setActiveTask(task);
-                                task.items.length > 0 ?
-                                    this.props.navigation.navigate("Tab") :
-                                    this.props.navigation.navigate("Items", { task });
+                                this.props.navigation.navigate("ItemTabNavigation");
                             }}
                             onLongPress={() => {
                                 this.props.navigation.navigate("PatchTask", { task });

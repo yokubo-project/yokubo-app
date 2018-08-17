@@ -3,6 +3,7 @@ import { ImagePicker } from "expo";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Button, FormInput, FormValidationMessage, Icon } from "react-native-elements";
+import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
 import ModalButton from "../../shared/components/ModalButton";
@@ -10,7 +11,7 @@ import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
 import { uploadImageAsync } from "../../shared/uploadImage";
 import taskStore, { IFullTask, IMetric } from "../../state/taskStore";
-import DeleteTask from "../task/DeleteTask";
+import DeleteTaskModal from "../task/modals/DeleteTaskModal";
 import CreateMetricModal from "./modals/CreateMetricModal";
 import UpdateMetricModal from "./modals/UpdateMetricModal";
 
@@ -70,13 +71,18 @@ interface IState {
 }
 
 interface IProps {
-    navigation: any;
-    task: IFullTask;
+    navigation: NavigationScreenProp<{
+        params: {
+            task: IFullTask;
+        };
+    } & {
+        [prop: string]: any;
+    }, any>;
 }
 
 export default class PatchTask extends React.Component<IProps, IState> {
 
-    static navigationOptions = ({ navigation }: any) => {
+    static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         const taskName = navigation.getParam("taskName");
 
         return {
@@ -278,7 +284,7 @@ export default class PatchTask extends React.Component<IProps, IState> {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <DeleteTask
+                <DeleteTaskModal
                     task={this.props.navigation.state.params.task}
                     visible={this.state.isDeleteModalVisible}
                     hideVisibility={() => this.hideDeleteModal()}

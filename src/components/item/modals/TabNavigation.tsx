@@ -5,13 +5,11 @@ import { createBottomTabNavigator, createStackNavigator } from "react-navigation
 import { theme } from "../../../shared/styles";
 import ItemsList from "../ItemsList";
 import ItemsStats from "../ItemsStats";
-import PatchItem from "../PatchItem";
 
 // tslint:disable-next-line:variable-name
 const ItemsListStack = createStackNavigator(
     {
         ItemsList
-        // PatchItem
     },
     {
         initialRouteName: "ItemsList",
@@ -30,7 +28,6 @@ const ItemsListStack = createStackNavigator(
 const ItemsStatsStack = createStackNavigator(
     {
         ItemsStats
-        // PatchItem
     },
     {
         initialRouteName: "ItemsStats",
@@ -47,7 +44,7 @@ const ItemsStatsStack = createStackNavigator(
 );
 
 // tslint:disable-next-line:variable-name
-const Tab = createBottomTabNavigator(
+const TabNavigation = createBottomTabNavigator(
     {
         ItemsListStack,
         ItemsStatsStack
@@ -73,4 +70,4 @@ const Tab = createBottomTabNavigator(
         }
     });
 
-export default Tab;
+export default TabNavigation;
