@@ -40,7 +40,6 @@ const Spinner = () => {
     return (
         <View style={styles.spinnerContainer}>
             <ActivityIndicator size="large" color={theme.spinnerColor} />
-            <Text style={styles.rehydrationText}>Signing in...</Text>
         </View>
     );
 };
@@ -53,6 +52,8 @@ class App extends React.Component<null, null> {
                 <Spinner />
             );
         }
+        // tslint:disable-next-line:variable-name
+        const RootStack = createRootStack(authStore.isAuthenticated === true ? "Tasks" : "Home");
 
         return <RootStack />;
     }
@@ -60,40 +61,42 @@ class App extends React.Component<null, null> {
 }
 
 // tslint:disable-next-line:variable-name
-const RootStack = createStackNavigator(
-    {
-        Home,
-        SignIn,
-        SignUp,
-        Profile,
-        ForgotPwd,
-        LogoutModal,
-        Tasks,
-        CreateTask,
-        PatchTask,
-        ItemTabNavigation: {
-            screen: ItemTabNavigation,
-            headerMode: "none",
-            navigationOptions: {
-                header: null
-            }
-        },
-        CreateItem,
-        PatchItem
-    },
-    {
-        initialRouteName: authStore.isAuthenticated === true ? "Tasks" : "Home",
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: theme.headerBackgroundColor
+const createRootStack = (initialScreen: string) => {
+    return createStackNavigator(
+        {
+            Home,
+            SignIn,
+            SignUp,
+            Profile,
+            ForgotPwd,
+            LogoutModal,
+            Tasks,
+            CreateTask,
+            PatchTask,
+            ItemTabNavigation: {
+                screen: ItemTabNavigation,
+                headerMode: "none",
+                navigationOptions: {
+                    header: null
+                }
             },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-                fontWeight: "bold"
+            CreateItem,
+            PatchItem
+        },
+        {
+            initialRouteName: initialScreen,
+            navigationOptions: {
+                headerStyle: {
+                    backgroundColor: theme.headerBackgroundColor
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                    fontWeight: "bold"
+                }
             }
-        }
 
-    }
-);
+        }
+    );
+};
 
 export default App;
