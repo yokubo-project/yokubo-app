@@ -20,12 +20,6 @@ const styles = StyleSheet.create({
         flexGrow: 7,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
-    welcomeScreenContainer: {
-        flexGrow: 1,
-        backgroundColor: theme.backgroundColor,
-        justifyContent: "center",
-        alignItems: "center"
-    } as ViewStyle,
     formContainer: {
         flex: 2,
         flexDirection: "row",
@@ -62,8 +56,9 @@ const styles = StyleSheet.create({
     },
     welcomeScreen: {
         flex: 1,
-        color: theme.textColor,
+        color: theme.text.primaryColor,
         textAlign: "center",
+        paddingTop: 40,
         paddingLeft: 20,
         paddingRight: 20,
         fontSize: 20
@@ -194,12 +189,10 @@ export default class Tasks extends React.Component<IProps, IState> {
 
     renderWelcomeScreen() {
         return (
-            <View style={styles.welcomeScreenContainer}>
-                <Text style={styles.welcomeScreen}>
-                    {i18n.t("tasks.welcome", { username: authStore.profile ? authStore.profile.name : "" })} {"\n"}
-                    {i18n.t("tasks.getStarted")}
-                </Text>
-            </View>
+            <Text style={styles.welcomeScreen}>
+                {i18n.t("tasks.welcome", { username: authStore.profile ? authStore.profile.name : "" })} {"\n"}
+                {i18n.t("tasks.getStarted")}
+            </Text>
         );
     }
 

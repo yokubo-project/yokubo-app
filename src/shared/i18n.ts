@@ -92,7 +92,7 @@ i18n
                         unexpectedError: "An unexpected error happened"
                     },
                     logout: {
-                        logoutHint: "Are you sure you want to logut?",
+                        logoutHint: "Are you sure you want to logout?",
                         logoutButton: "LOGOUT"
                     },
                     resetPwd: {
@@ -123,6 +123,7 @@ i18n
                         unexpectedError: "An unexpected error happened",
                         loadingIndicator: "Creating Item",
                         descPlaceholder: "Description",
+                        notesPlaceholder: "Optional notes",
                         datePickerStartPlaceholder: "Start Date",
                         datePickerEndPlaceholder: "End Date",
                         datePickerConfirm: "Confirm",
@@ -310,6 +311,7 @@ i18n
                         unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
                         loadingIndicator: "Item wird hinzugefügt",
                         descPlaceholder: "Beschreibung",
+                        notesPlaceholder: "Optionale Anmerkungen",
                         datePickerStartPlaceholder: "Start-Datum",
                         datePickerEndPlaceholder: "End-Datum",
                         datePickerConfirm: "Ok",

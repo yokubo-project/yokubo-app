@@ -1,16 +1,18 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
+import Button from "../../../shared/components/Button";
+import TextInputField from "../../../shared/components/TextInputField";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
 
 const styles = StyleSheet.create({
     modalInputStyle: {
-        color: theme.inputTextColor,
+        color: theme.text.primaryColor,
         fontSize: 20,
         marginBottom: 10
     },
@@ -115,7 +117,7 @@ export default class DeleteUserModal extends React.Component<IProps, IState> {
                 <View style={styles.modalContent}>
                     <Text
                         style={{
-                            color: theme.inputTextColor,
+                            color: theme.text.primaryColor,
                             fontSize: 15,
                             textAlign: "center",
                             marginBottom: 20
@@ -123,25 +125,19 @@ export default class DeleteUserModal extends React.Component<IProps, IState> {
                     >
                         {i18n.t("deleteUser.deleteUserHint")}
                     </Text>
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+
+                    <TextInputField
                         placeholder={i18n.t("deleteUser.currentPwdPlaceholder")}
                         onChangeText={(value) => this.setState({ inputDeleteUserPwd: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                         secureTextEntry={true}
                     />
                     {this.showPwdError()}
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("deleteUser.deleteUserButton")}
                         onPress={() => { this.deleteUser(); }}
                     />
                     {this.showGeneralError()}
-
                 </View>
             </Modal>
         );

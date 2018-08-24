@@ -1,18 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { StyleSheet, Text, TextInput, TextStyle, View } from "react-native";
+import { FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
 
+import Button from "../../../shared/components/Button";
+import TextInputField from "../../../shared/components/TextInputField";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
 
 const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
     modalContent: {
         backgroundColor: theme.backgroundColor,
         justifyContent: "center",
@@ -139,30 +136,22 @@ export default class ResetPwdModal extends React.Component<IProps, IState> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+                    <TextInputField
                         placeholder={i18n.t("resetPwd.currentPwdPlaceholder")}
                         onChangeText={(value) => this.setState({ inputCurrentPwd: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
+                        autoFocus={true}
                         secureTextEntry={true}
                     />
                     {this.showCurrentPwdError()}
 
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+                    <TextInputField
                         placeholder={i18n.t("resetPwd.newPwdPlaceholder")}
                         onChangeText={(value) => this.setState({ inputNewPwd: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                         secureTextEntry={true}
                     />
                     {this.showNewPwdError()}
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("resetPwd.resetPwdButton")}
                         onPress={() => { this.resetPwd(); }}
                     />

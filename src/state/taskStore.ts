@@ -64,14 +64,14 @@ export interface IMetric {
 
 export interface IPostItem {
     name: string;
-    desc: string;
+    desc: string | null;
     period: string[];
     metrics: string;
 }
 
 export interface IPatchItem {
     name?: string;
-    desc?: string;
+    desc?: string | null;
     period?: string[];
     metrics?: string;
 }
@@ -79,7 +79,7 @@ export interface IPatchItem {
 export interface IItem {
     uid: string;
     name: string;
-    desc: string;
+    desc: string | null;
     period: string[];
     duration: number;
     metrics: string;

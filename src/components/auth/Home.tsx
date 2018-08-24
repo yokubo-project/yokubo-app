@@ -1,10 +1,14 @@
 import React from "react";
 import { Image, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
-import { Button } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
+
+import Button from "../../shared/components/Button";
+import ClickableText from "../../shared/components/ClickableText";
+import PrimaryText from "../../shared/components/PrimaryText";
 
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
+import authStore from "../../state/authStore";
 
 // tslint:disable-next-line:no-var-requires
 const LOGO = require("../../../assets/yokubo_logo.png");
@@ -31,7 +35,7 @@ const styles = StyleSheet.create({
     } as ViewStyle,
     quote: {
         flex: 1,
-        color: theme.inputTextColor,
+        color: theme.text.primaryColor,
         fontSize: 20,
         textAlign: "center"
     } as TextStyle
@@ -46,6 +50,12 @@ export default class Home extends React.Component<IProps, null> {
         return {
             header: null
         };
+    }
+
+    componentWillMount() {
+        if (authStore.isAuthenticated) {
+            this.props.navigation.navigate("Tasks");
+        }
     }
 
     render() {
@@ -65,24 +75,17 @@ export default class Home extends React.Component<IProps, null> {
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("home.signupButton")}
                         onPress={() => this.props.navigation.navigate("SignUp")}
                     />
-                    <View style={{ flex: 1, flexDirection: "row", padding: 30, justifyContent: "center" }}>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
-                        >
-                            {i18n.t("home.alreadyRegistered")}
-                        </Text>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.textColor }}
+                    <View style={{ flex: 1, flexDirection: "row", padding: 15, justifyContent: "center" }}>
+                        <PrimaryText
+                            text={i18n.t("home.alreadyRegistered")}
+                        />
+                        <ClickableText
+                            text={i18n.t("home.signinLink")}
                             onPress={() => this.props.navigation.navigate("SignIn")}
-                        >
-                            {i18n.t("home.signinLink")}
-                        </Text>
+                        />
                     </View>
                 </View>
             </View>

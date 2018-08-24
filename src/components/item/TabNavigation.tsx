@@ -2,9 +2,9 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { createBottomTabNavigator, createStackNavigator } from "react-navigation";
 
-import { theme } from "../../../shared/styles";
-import ItemsList from "../ItemsList";
-import ItemsStats from "../ItemsStats";
+import { theme } from "../../shared/styles";
+import ItemsList from "./ItemsList";
+import ItemsStats from "./ItemsStats";
 
 // tslint:disable-next-line:variable-name
 const ItemsListStack = createStackNavigator(
@@ -17,7 +17,7 @@ const ItemsListStack = createStackNavigator(
             headerStyle: {
                 backgroundColor: theme.headerBackgroundColor
             },
-            headerTintColor: "#fff",
+            headerTintColor: theme.tabBar.headerTintColor,
             headerTitleStyle: {
                 fontWeight: "bold"
             }
@@ -35,7 +35,7 @@ const ItemsStatsStack = createStackNavigator(
             headerStyle: {
                 backgroundColor: theme.headerBackgroundColor
             },
-            headerTintColor: "#fff",
+            headerTintColor: theme.tabBar.headerTintColor,
             headerTitleStyle: {
                 fontWeight: "bold"
             }
@@ -64,8 +64,8 @@ const TabNavigation = createBottomTabNavigator(
             }
         }),
         tabBarOptions: {
-            activeTintColor: "#333333",
-            inactiveTintColor: "#a9a9a9",
+            activeTintColor: theme.tabBar.tabBarActiveColor,
+            inactiveTintColor: theme.tabBar.tabBarInactiveColor,
             showLabel: false
         }
     });

@@ -20,7 +20,7 @@ import Tasks from "./src/components/task/Tasks";
 import CreateItem from "./src/components/item/CreateItem";
 import PatchItem from "./src/components/item/PatchItem";
 
-import ItemTabNavigation from "./src/components/item/modals/TabNavigation";
+import ItemTabNavigation from "./src/components/item/TabNavigation";
 
 const styles = StyleSheet.create({
     spinnerContainer: {
@@ -28,10 +28,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        backgroundColor: "#333333"
-    },
-    rehydrationText: {
-        color: theme.textColor
+        backgroundColor: theme.backgroundColor
     }
 });
 
@@ -53,7 +50,7 @@ class App extends React.Component<null, null> {
             );
         }
         // tslint:disable-next-line:variable-name
-        const RootStack = createRootStack(authStore.isAuthenticated === true ? "Tasks" : "Home");
+        const RootStack = createRootStack("Home");
 
         return <RootStack />;
     }
@@ -89,7 +86,7 @@ const createRootStack = (initialScreen: string) => {
                 headerStyle: {
                     backgroundColor: theme.headerBackgroundColor
                 },
-                headerTintColor: "#fff",
+                headerTintColor: "white",
                 headerTitleStyle: {
                     fontWeight: "bold"
                 }

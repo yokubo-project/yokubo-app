@@ -1,7 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { FormValidationMessage } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
+
+import Button from "../../shared/components/Button";
+import ClickableText from "../../shared/components/ClickableText";
+import PrimaryText from "../../shared/components/PrimaryText";
+import TextInputField from "../../shared/components/TextInputField";
 
 import { validateEmail } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
@@ -17,14 +22,8 @@ const styles = StyleSheet.create({
     formContainer: {
         flex: 1,
         justifyContent: "flex-start",
-        backgroundColor: theme.backgroundColor,
         marginTop: 10
-    } as ViewStyle,
-    inputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    }
+    } as ViewStyle
 });
 
 interface IProps {
@@ -119,51 +118,42 @@ export default class ForgotPwd extends React.Component<IProps, IState> {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.formContainer}>
-                    <FormInput
-                        inputStyle={styles.inputStyle}
+                    <TextInputField
                         placeholder={i18n.t("forgotPwd.emailPlaceholder")}
                         onChangeText={(e) => this.parseEmail(e)}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
+                        autoFocus={true}
                     />
                     {this.showEmailError()}
                     {this.showGeneralError()}
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("forgotPwd.resetPwdButton")}
                         onPress={() => { this.processForgotPwd(); }}
                     />
 
-                    <View style={{ flexDirection: "row", padding: 30, justifyContent: "center" }}>
-                        {this.state.emailHint &&
+                    {this.state.emailHint &&
+                        <View style={{ flexDirection: "row", padding: 15, justifyContent: "center" }}>
                             <Text
                                 style={{
                                     padding: 5,
-                                    marginBottom: 5,
                                     marginTop: 10,
-                                    fontSize: 20,
-                                    color: theme.inputTextColor,
+                                    fontSize: 18,
+                                    color: theme.text.primaryColor,
                                     textAlign: "center"
                                 }}
                             >
                                 {this.state.emailHint}
-                            </Text>}
-                    </View>
-                    <View style={{ flexDirection: "row", padding: 30, justifyContent: "center" }}>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
-                        >
-                            {i18n.t("forgotPwd.signinText")}
-                        </Text>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.textColor }}
+                            </Text>
+                        </View>
+                    }
+                    <View style={{ flexDirection: "row", padding: 15, justifyContent: "center" }}>
+                        <PrimaryText
+                            text={i18n.t("forgotPwd.signinText")}
+                        />
+                        <ClickableText
+                            text={i18n.t("forgotPwd.signinLink")}
                             onPress={() => this.props.navigation.navigate("SignIn")}
-                        >
-                            {i18n.t("forgotPwd.signinLink")}
-                        </Text>
+                        />
                     </View>
                 </View>
             </View>

@@ -1,20 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
+import Button from "../../../shared/components/Button";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
 import taskStore, { IItem } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
     modalContent: {
         backgroundColor: theme.backgroundColor,
         justifyContent: "center",
@@ -91,27 +87,18 @@ export default class Component extends React.Component<IProps, IState> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <View
+                    <Text
                         style={{
-                            marginTop: 15,
-                            marginLeft: 15,
-                            marginBottom: 15,
-                            marginRight: 15,
-                            flexDirection: "row",
-                            flexWrap: "wrap"
+                            color: theme.text.primaryColor,
+                            fontSize: 18,
+                            textAlign: "center",
+                            marginBottom: 20
                         }}
                     >
-                        <Text
-                            style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
-                        >
-                            {i18n.t("deleteItem.deleteHint", { itemName: this.props.item.name })}
-                        </Text>
-                    </View>
+                        {i18n.t("deleteItem.deleteHint", { itemName: this.props.item.name })}
+                    </Text>
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("deleteItem.deleteButton")}
                         onPress={() => { this.deleteItem(); }}
                     />

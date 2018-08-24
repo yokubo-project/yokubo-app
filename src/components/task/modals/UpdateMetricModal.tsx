@@ -1,9 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
-import { Actions } from "react-native-router-flux";
 
+import Button from "../../../shared/components/Button";
+import TextInputField from "../../../shared/components/TextInputField";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
@@ -18,11 +19,6 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10
-    },
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
     }
 });
 
@@ -120,28 +116,21 @@ export default class UpdateMetricModal extends React.Component<IProps, IState> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+                    <TextInputField
                         defaultValue={this.state.name}
+                        placeholder={this.state.name}
                         onChangeText={(value) => this.setState({ name: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showNameError()}
 
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+                    <TextInputField
                         defaultValue={this.state.unit}
+                        placeholder={this.state.unit}
                         onChangeText={(value) => this.setState({ unit: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showUnitError()}
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("patchMetric.patchMetricButton")}
                         onPress={() => this.patchMetric()}
                     />

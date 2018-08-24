@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import React from "react";
 import { FlatList, ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
-import { Button, Header, Icon, List, ListItem } from "react-native-elements";
+import { Button, Header, Icon, ListItem } from "react-native-elements";
 import { material } from "react-native-typography";
 import { HeaderBackButton, NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
@@ -20,44 +20,27 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
-    headerContainer: {
-        height: 90,
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    formContainer: {
-        flex: 1,
-        justifyContent: "space-around",
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    scrollViewContainer: {
-        flexGrow: 6,
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
     listElement: {
         backgroundColor: theme.backgroundColor,
         paddingTop: 12,
         paddingBottom: 12,
         borderTopWidth: 0,
         borderBottomWidth: 1,
-        borderColor: "gray",
+        borderColor: theme.listItem.borderColor,
+        borderBottomColor: theme.listItem.borderColor, // needs to be explicitly defined
         marginLeft: 0
     },
     listText: {
         // ...material.body1,
-        color: theme.inputTextColor,
+        color: theme.text.primaryColor,
         fontSize: 14,
         marginLeft: 10
     },
-    welcomeScreenContainer: {
-        flexGrow: 1,
-        backgroundColor: theme.backgroundColor,
-        justifyContent: "center",
-        alignItems: "center"
-    } as ViewStyle,
     welcomeScreen: {
         flex: 1,
-        color: theme.textColor,
+        color: theme.text.primaryColor,
         textAlign: "center",
+        paddingTop: 40,
         paddingLeft: 20,
         paddingRight: 20,
         fontSize: 20
@@ -203,16 +186,13 @@ export default class ItemsList extends React.Component<any, IState> {
     }
 
     render() {
-
         if (this.state.task.items.length === 0) {
             return (
                 <View style={styles.mainContainer}>
-                    <View style={styles.welcomeScreenContainer}>
-                        <Text style={styles.welcomeScreen}>
-                            {i18n.t("items.welcome", { taskName: this.state.task.name })} {"\n"}
-                            {i18n.t("items.getStarted")}
-                        </Text>
-                    </View>
+                    <Text style={styles.welcomeScreen}>
+                        {i18n.t("items.welcome", { taskName: this.state.task.name })} {"\n"}
+                        {i18n.t("items.getStarted")}
+                    </Text>
 
                     <SortItemsModal
                         isVisible={this.state.isSortItemsModalVisible}
@@ -226,25 +206,21 @@ export default class ItemsList extends React.Component<any, IState> {
 
         return (
             <View style={styles.mainContainer}>
-                <ScrollView style={styles.scrollViewContainer}>
-                    <List containerStyle={{ marginBottom: 20, borderTopWidth: 0, marginLeft: 0, paddingLeft: 0, marginTop: 0 }}>
-                        <FlatList
-                            data={this.state.task.items}
-                            keyExtractor={(item: any) => item.uid.toString()}
-                            renderItem={({ item }: any) => (
-                                <ListItem
-                                    containerStyle={styles.listElement}
-                                    title={item.name}
-                                    titleStyle={{ color: theme.textColor, fontSize: 18, fontWeight: "bold" }}
-                                    subtitle={this.renderMetrices(item)}
-                                    hideChevron={true}
-                                    underlayColor={theme.underlayColor}
-                                    onLongPress={() => this.handleOnEditItemClick(item)}
-                                />
-                            )}
+                <FlatList
+                    data={this.state.task.items}
+                    keyExtractor={(item: any) => item.uid.toString()}
+                    renderItem={({ item }: any) => (
+                        <ListItem
+                            containerStyle={styles.listElement}
+                            title={item.name}
+                            titleStyle={{ color: theme.text.linkColor, fontSize: 18 }}
+                            subtitle={this.renderMetrices(item)}
+                            hideChevron={true}
+                            underlayColor={theme.listItem.underlayColor}
+                            onLongPress={() => this.handleOnEditItemClick(item)}
                         />
-                    </List>
-                </ScrollView>
+                    )}
+                />
 
                 <SortItemsModal
                     isVisible={this.state.isSortItemsModalVisible}

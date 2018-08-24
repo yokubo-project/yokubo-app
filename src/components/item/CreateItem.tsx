@@ -1,11 +1,14 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { StyleSheet, Text, View, ViewStyle } from "react-native";
-import DatePicker from "react-native-datepicker";
-import { Button, FormInput, FormValidationMessage, Header } from "react-native-elements";
+import { EmitterSubscription, Keyboard, ScrollView, StyleSheet, Text, TextInput, View, ViewStyle } from "react-native";
+import { FormInput, FormValidationMessage, Header } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
+import Button from "../../shared/components/Button";
+import DatePicker from "../../shared/components/DatePicker";
 import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
+import TextInputField from "../../shared/components/TextInputField";
+import TextInputFieldWithLabel from "../../shared/components/TextInputFieldWithLabel";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
 import taskStore, { IFullTask } from "../../state/taskStore";
@@ -15,42 +18,40 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
-    formContainer: {
+    buttonContainer: {
         flex: 1,
-        justifyContent: "space-around",
-        backgroundColor: theme.backgroundColor
+        justifyContent: "flex-end",
+        backgroundColor: theme.backgroundColor,
+        marginBottom: 30
     } as ViewStyle,
-    metricInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        width: "100%",
-        minWidth: "50%"
-    },
     inputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        width: "100%",
-        minWidth: "50%"
-    },
-    unitStyle: {
-        textAlign: "left",
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginLeft: 0,
-        paddingTop: 12
+        color: theme.textInput.inputColor,
+        fontSize: 18,
+        flex: 1,
+        borderWidth: 1,
+        borderColor: theme.textInput.borderColor,
+        borderRadius: 3,
+        margin: 15,
+        marginBottom: 0,
+        padding: 8,
+        backgroundColor: theme.textInput.backgroundColor
     }
 });
 
 interface IState {
     name: string;
+    desc: string | null;
     fromDate: string;
     toDate: string;
     metrics: any;
     inputNameError: string;
+    inputDescError: string;
     inputDateError: string;
     inputMetricsError: string;
     inputGeneralError: string;
     isCreatingItemModalVisible: boolean;
+    keyboardOpen: boolean;
+    keyboardHeight: number;
 }
 
 interface IProps {
@@ -65,6 +66,8 @@ interface IProps {
 
 @observer
 export default class CreateItem extends React.Component<IProps, IState> {
+    keyboardDidHideListener: EmitterSubscription;
+    keyboardDidShowListener: EmitterSubscription;
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
@@ -78,19 +81,47 @@ export default class CreateItem extends React.Component<IProps, IState> {
 
         this.state = {
             name: "",
+            desc: null,
             fromDate: null,
             toDate: null,
             metrics: JSON.parse(JSON.stringify(this.props.navigation.state.params.task.metrics)),
             inputNameError: null,
+            inputDescError: null,
             inputDateError: null,
             inputMetricsError: null,
             inputGeneralError: null,
-            isCreatingItemModalVisible: false
+            isCreatingItemModalVisible: false,
+            keyboardOpen: false,
+            keyboardHeight: 0
         };
+    }
+
+    componentDidMount() {
+        this.keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", this._keyboardDidShow.bind(this));
+        this.keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", this._keyboardDidHide.bind(this));
+    }
+
+    componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+
+    // tslint:disable-next-line:function-name
+    _keyboardDidShow(event: any) {
+        this.setState({
+            keyboardOpen: true,
+            keyboardHeight: event.endCoordinates.height || 200
+        });
+    }
+
+    // tslint:disable-next-line:function-name
+    _keyboardDidHide() {
+        this.setState({ keyboardOpen: false });
     }
 
     async createItem() {
         const name = this.state.name;
+        const desc = this.state.desc;
         const fromDate = this.state.fromDate;
         const toDate = this.state.toDate;
 
@@ -133,7 +164,7 @@ export default class CreateItem extends React.Component<IProps, IState> {
         this.setState({ isCreatingItemModalVisible: true });
         await taskStore.createItem(this.props.navigation.state.params.task.uid, {
             name,
-            desc: "Desc",
+            desc,
             period: [fromDate, toDate],
             metrics
         });
@@ -209,17 +240,13 @@ export default class CreateItem extends React.Component<IProps, IState> {
             <View>
                 {metrices.map(metric => {
                     return (
-                        <View key={metric.uid} style={{ flexDirection: "row" }}>
-                            <FormInput
-                                inputStyle={styles.metricInputStyle}
-                                placeholder={metric.name}
-                                keyboardType="numeric"
-                                onChangeText={(e) => this.passMetricToState(metric.uid, e)}
-                                underlineColorAndroid={theme.textColor}
-                                selectionColor={theme.inputTextColor} // cursor color
-                            />
-                            <Text style={styles.unitStyle}>{metric.unit}</Text>
-                        </View>
+                        <TextInputFieldWithLabel
+                            key={metric.uid}
+                            label={metric.unit}
+                            placeholder={metric.name}
+                            keyboardType="numeric"
+                            onChangeText={(e) => this.passMetricToState(metric.uid, e)}
+                        />
                     );
                 })}
             </View>
@@ -229,131 +256,76 @@ export default class CreateItem extends React.Component<IProps, IState> {
     // tslint:disable-next-line:max-func-body-length
     render() {
         return (
-            <View style={styles.mainContainer}>
-                {
-                    // Form input for name
-                }
-                <FormInput
-                    inputStyle={styles.inputStyle}
+            <ScrollView
+                style={styles.mainContainer}
+                // tslint:disable-next-line:jsx-no-string-ref
+                ref="scroll"
+                keyboardDismissMode="none"
+                keyboardShouldPersistTaps="handled"
+            >
+                <TextInputField
                     placeholder={i18n.t("createItem.descPlaceholder")}
                     onChangeText={(value) => this.setState({ name: value })}
-                    underlineColorAndroid={theme.textColor}
-                    selectionColor={theme.inputTextColor} // cursor color
                 />
                 {this.showNameError()}
 
-                {
-                    // Form input for date
-                }
                 <DatePicker
-                    style={{ width: 300 }}
                     date={this.state.fromDate}
-                    mode="datetime"
                     placeholder={i18n.t("createItem.datePickerStartPlaceholder")}
-                    format="YYYY-MM-DD HH:mm"
                     confirmBtnText={i18n.t("createItem.datePickerConfirm")}
                     cancelBtnText={i18n.t("createItem.datePickerCancel")}
-                    showIcon={false}
                     onDateChange={(date) => this.setState({ fromDate: date })}
-                    customStyles={{
-                        dateInput: {
-                            borderWidth: 0,
-                            marginLeft: 16
-                        },
-                        dateText: {
-                            fontSize: 20,
-                            position: "absolute",
-                            left: 0,
-                            marginLeft: 0,
-                            color: theme.inputTextColor
-                        },
-                        placeholderText: {
-                            fontSize: 20,
-                            position: "absolute",
-                            left: 0,
-                            marginLeft: 0
-                        }
-                        // dateTouchBody: {borderColor:"red", borderWidth:3}
-                    }}
                 />
-
-                {
-                    // Line: Because datepicker line is not customizable we draw a line manually
-                }
-                <View
-                    style={{
-                        borderBottomColor: theme.textColor,
-                        marginLeft: 20,
-                        marginRight: 20,
-                        borderBottomWidth: 1
-                    }}
-                />
-
-                {
-                    // Form input for date
-                }
                 <DatePicker
-                    style={{ width: 300 }}
                     date={this.state.toDate}
-                    mode="datetime"
                     placeholder={i18n.t("createItem.datePickerEndPlaceholder")}
-                    format="YYYY-MM-DD HH:mm"
                     confirmBtnText={i18n.t("createItem.datePickerCancel")}
                     cancelBtnText={i18n.t("createItem.datePickerCancel")}
-                    showIcon={false}
                     onDateChange={(date) => this.setState({ toDate: date })}
-                    customStyles={{
-                        dateInput: {
-                            borderWidth: 0,
-                            marginLeft: 16
-                        },
-                        dateText: {
-                            fontSize: 20,
-                            position: "absolute",
-                            left: 0,
-                            marginLeft: 0,
-                            color: theme.inputTextColor
-                        },
-                        placeholderText: {
-                            fontSize: 20,
-                            position: "absolute",
-                            left: 0,
-                            marginLeft: 0
-                        }
-                    }}
-                />
-                {
-                    // Line: Because datepicker line is not customizable we draw a line manually
-                }
-                <View
-                    style={{
-                        borderBottomColor: theme.textColor,
-                        marginLeft: 20,
-                        marginRight: 20,
-                        borderBottomWidth: 1
-                    }}
                 />
                 {this.showDateError()}
 
                 {this.renderMetrices(this.props.navigation.state.params.task.metrics)}
                 {this.showMetricsError()}
 
-                <View style={styles.formContainer}>
+                <TextInput
+                    style={styles.inputStyle}
+                    placeholder={i18n.t("createItem.notesPlaceholder")}
+                    placeholderTextColor={theme.textInput.placeholderTextColor}
+                    onChangeText={(value) => this.setState({ desc: value })}
+                    selectionColor={theme.textInput.selectionColor} // cursor color
+                    underlineColorAndroid="transparent"
+                    multiline={true}
+                    numberOfLines={3}
+                    // tslint:disable-next-line:no-console max-line-length
+                    onFocus={async () => {
+                        setTimeout(
+                            () => {
+                                (this.refs.scroll as any).scrollToEnd({ animated: true });
+                            },
+                            250);
+                    }}
+                />
+
+                <View style={styles.buttonContainer}>
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("createItem.createItemButton")}
                         onPress={() => { this.createItem(); }}
                     />
                 </View>
                 {this.showGeneralError()}
 
+                {/*
+                    Workaround: rendering of an empty view with the hight of the keyboard
+                    in order to make all form fields visible to the user
+                */}
+                <View style={{ height: this.state.keyboardOpen ? this.state.keyboardHeight : 0 }} />
+
                 <LoadingIndicatorModal
                     isVisible={this.state.isCreatingItemModalVisible}
                     loadingText={i18n.t("createItem.loadingIndicator")}
                 />
-            </View>
+            </ScrollView>
         );
     }
 

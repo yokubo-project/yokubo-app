@@ -18,16 +18,15 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
     listContainer: {
-        flexGrow: 1,
-        backgroundColor: theme.backgroundColor
+        flexGrow: 1
     } as ViewStyle,
     listElement: {
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.listItem.backgroundColor,
         paddingTop: 12,
         paddingBottom: 12,
         borderTopWidth: 1,
         borderBottomWidth: 0,
-        borderColor: "gray",
+        borderColor: theme.listItem.borderColor,
         marginLeft: 0
     }
 });
@@ -83,8 +82,7 @@ class Profile extends React.Component<IProps, IState> {
                     <View style={{ paddingTop: 30 }}>
                         <Text
                             style={{
-                                backgroundColor: theme.backgroundColor,
-                                color: theme.textColor,
+                                color: theme.text.primaryColor,
                                 fontSize: 25,
                                 paddingTop: 5,
                                 paddingBottom: 10,
@@ -95,8 +93,7 @@ class Profile extends React.Component<IProps, IState> {
                         </Text>
                         <Text
                             style={{
-                                backgroundColor: theme.backgroundColor,
-                                color: theme.textColor,
+                                color: theme.text.primaryColor,
                                 fontSize: 18,
                                 paddingTop: 5,
                                 paddingBottom: 10,
@@ -110,50 +107,50 @@ class Profile extends React.Component<IProps, IState> {
                         <ListItem
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.updateProfile")}
-                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.listItem.primaryColor, fontSize: 18 }}
                             onPress={() => this.showProfileModal()}
                             hideChevron={true}
-                            underlayColor={theme.underlayColor}
+                            underlayColor={theme.listItem.underlayColor}
                         />
                         <ListItem
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.changePassword")}
-                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.listItem.primaryColor, fontSize: 18 }}
                             onPress={() => this.showResetPwdModal()}
                             hideChevron={true}
-                            underlayColor={theme.underlayColor}
+                            underlayColor={theme.listItem.underlayColor}
                         />
                         <ListItem
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.privacy")}
-                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.listItem.primaryColor, fontSize: 18 }}
                             onPress={() => Linking.openURL(`${Config.BASE_URL}/views/v1/privacy`)}
                             hideChevron={true}
-                            underlayColor={theme.underlayColor}
+                            underlayColor={theme.listItem.underlayColor}
                         />
                         <ListItem
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.imprint")}
-                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.listItem.primaryColor, fontSize: 18 }}
                             onPress={() => Linking.openURL(`${Config.BASE_URL}/views/v1/imprint`)}
                             hideChevron={true}
-                            underlayColor={theme.underlayColor}
+                            underlayColor={theme.listItem.underlayColor}
                         />
                         <ListItem
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.logout")}
-                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.listItem.primaryColor, fontSize: 18 }}
                             onPress={() => this.showLogoutModal()}
                             hideChevron={true}
-                            underlayColor={theme.underlayColor}
+                            underlayColor={theme.listItem.underlayColor}
                         />
                         <ListItem
                             containerStyle={styles.listElement}
                             title={i18n.t("profile.deleteUser")}
-                            titleStyle={{ color: theme.textColor, fontSize: 18 }}
+                            titleStyle={{ color: theme.listItem.primaryColor, fontSize: 18 }}
                             onPress={() => this.showDeleteUserModal()}
                             hideChevron={true}
-                            underlayColor={theme.underlayColor}
+                            underlayColor={theme.listItem.underlayColor}
                         />
                     </List>
                 </ScrollView>

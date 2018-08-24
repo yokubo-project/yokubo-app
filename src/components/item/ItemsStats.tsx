@@ -16,46 +16,36 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: theme.backgroundColor
     } as ViewStyle,
-    scrollViewContainer: {
-        flexGrow: 1,
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
     listElement: {
         backgroundColor: theme.backgroundColor,
         paddingTop: 12,
         paddingBottom: 12,
         borderTopWidth: 0,
         borderBottomWidth: 1,
-        borderColor: "gray",
+        borderColor: theme.listItem.borderColor,
         marginLeft: 0
     },
     listText: {
         // ...material.body1,
-        color: theme.inputTextColor,
+        color: theme.text.primaryColor,
         fontSize: 14,
         marginLeft: 10
     },
     metricTextHeader: {
-        color: theme.textColor,
+        color: theme.text.linkColor,
         fontSize: 18,
-        fontWeight: "bold",
         marginLeft: 15
     },
     metricText: {
-        color: theme.inputTextColor,
+        color: theme.text.primaryColor,
         fontSize: 14,
         marginLeft: 15
     },
-    welcomeScreenContainer: {
-        flexGrow: 1,
-        backgroundColor: theme.backgroundColor,
-        justifyContent: "center",
-        alignItems: "center"
-    } as ViewStyle,
     welcomeScreen: {
         flex: 1,
-        color: theme.textColor,
+        color: theme.text.primaryColor,
         textAlign: "center",
+        paddingTop: 40,
         paddingLeft: 20,
         paddingRight: 20,
         fontSize: 20
@@ -173,8 +163,8 @@ export default class ItemStats extends React.Component<IProps, IState> {
                 <Text style={styles.metricText}>
                     {i18n.t("itemStats.average")}: {(metric.totalValue / entries.length).toFixed(2)} {metric.metricUnit}
                 </Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.min")}:  {metric.minValue} {metric.metricUnit}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.max")}:  {metric.maxValue} {metric.metricUnit}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.min")}: {metric.minValue} {metric.metricUnit}</Text>
+                <Text style={styles.metricText}>{i18n.t("itemStats.max")}: {metric.maxValue} {metric.metricUnit}</Text>
             </View>
         ));
 
@@ -182,11 +172,11 @@ export default class ItemStats extends React.Component<IProps, IState> {
             <View key={"duration"} style={styles.listElement}>
                 <Text style={styles.metricTextHeader}>{timespan.metricName}</Text>
                 <Text style={styles.metricText}>
-                    {i18n.t("itemStats.total")}:
+                    {i18n.t("itemStats.total")}:&nbsp;
                     {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}
                 </Text>
                 <Text style={styles.metricText}>
-                    {i18n.t("itemStats.average")}:
+                    {i18n.t("itemStats.average")}:&nbsp;
                     {
                         Math.floor(moment.duration(
                             timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length
@@ -194,11 +184,11 @@ export default class ItemStats extends React.Component<IProps, IState> {
                     }
                 </Text>
                 <Text style={styles.metricText}>
-                    {i18n.t("itemStats.min")}:
+                    {i18n.t("itemStats.min")}:&nbsp;
                     {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}
                 </Text>
                 <Text style={styles.metricText}>
-                    {i18n.t("itemStats.max")}:
+                    {i18n.t("itemStats.max")}:&nbsp;
                     {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}
                 </Text>
             </View>);
@@ -217,24 +207,28 @@ export default class ItemStats extends React.Component<IProps, IState> {
         if (this.state.task.items.length === 0) {
             return (
                 <View style={styles.mainContainer}>
-                    <View style={styles.welcomeScreenContainer}>
-                        <Text style={styles.welcomeScreen}>
-                            {i18n.t("items.welcome", { taskName: this.state.task.name })} {"\n"}
-                            {i18n.t("items.getStarted")}
-                        </Text>
-                    </View>
+                    <Text style={styles.welcomeScreen}>
+                        {i18n.t("items.welcome", { taskName: this.state.task.name })} {"\n"}
+                        {i18n.t("items.getStarted")}
+                    </Text>
                 </View>
             );
         }
 
         return (
-            <View style={styles.mainContainer}>
-                <ScrollView style={styles.scrollViewContainer}>
-                    <List containerStyle={{ marginBottom: 20, borderTopWidth: 0, marginLeft: 0, paddingLeft: 0, marginTop: 0 }}>
-                        {this.renderEntryStatictics(this.state.task.items)}
-                    </List>
-                </ScrollView>
-            </View>
+            <ScrollView style={styles.mainContainer}>
+                <List
+                    containerStyle={{
+                        marginBottom: 20,
+                        borderTopWidth: 0,
+                        marginLeft: 0,
+                        paddingLeft: 0,
+                        marginTop: 0
+                    }}
+                >
+                    {this.renderEntryStatictics(this.state.task.items)}
+                </List>
+            </ScrollView>
         );
     }
 

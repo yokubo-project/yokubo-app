@@ -1,19 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Button, FormValidationMessage } from "react-native-elements";
+import { FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
+import Button from "../../../shared/components/Button";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
 
 const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
     modalContent: {
         backgroundColor: theme.backgroundColor,
         justifyContent: "center",
@@ -82,18 +78,16 @@ export default class LogoutModal extends React.Component<IProps, IState> {
                 <View style={styles.modalContent}>
                     <Text
                         style={{
-                            color: theme.inputTextColor,
-                            fontSize: 15,
+                            color: theme.text.primaryColor,
+                            fontSize: 18,
                             textAlign: "center",
                             marginBottom: 20
                         }}
                     >
                         {i18n.t("logout.logoutHint")}
                     </Text>
+
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("logout.logoutButton")}
                         onPress={() => { this.signOut(); }}
                     />

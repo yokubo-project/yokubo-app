@@ -1,12 +1,14 @@
 import { ImagePicker } from "expo";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
-import { Button, FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
+import { FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 import * as uuid from "uuid";
 
 import * as Config from "../../config";
+import Button from "../../shared/components/Button";
 import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
+import TextInputField from "../../shared/components/TextInputField";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
 import { uploadImageAsync } from "../../shared/uploadImage";
@@ -25,35 +27,18 @@ const styles = StyleSheet.create({
         backgroundColor: theme.backgroundColor,
         alignItems: "stretch"
     } as ViewStyle,
-    formContainer: {
+    buttonContainer: {
         flex: 1,
-        justifyContent: "space-around",
-        backgroundColor: theme.backgroundColor
+        justifyContent: "flex-end",
+        backgroundColor: theme.backgroundColor,
+        marginBottom: 30
     } as ViewStyle,
     imageContainer: {
+        marginTop: 30,
         backgroundColor: theme.backgroundColor,
         alignItems: "center",
         marginBottom: 20
     } as ViewStyle,
-    inputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginRight: 100
-    },
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
-    modalContent: {
-        backgroundColor: theme.backgroundColor,
-        justifyContent: "center",
-        alignItems: "stretch",
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
     imageStyle: {
         width: 150,
         height: 150
@@ -257,37 +242,36 @@ export default class CreateTask extends React.Component<IProps, IState> {
                             resizeMode="cover"
                             // @ts-ignore
                             borderRadius={100}
+                            borderWidth={1}
+                            borderColor={theme.borderColor}
                         />
                     </TouchableOpacity>
                 </View>
-                <FormInput
-                    inputStyle={styles.inputStyle}
+                <TextInputField
                     placeholder={i18n.t("createTask.namePlaceholder")}
                     onChangeText={(value) => this.setState({ name: value })}
-                    underlineColorAndroid={theme.textColor}
-                    selectionColor={theme.inputTextColor} // cursor color
                 />
                 {this.showNameError()}
 
                 <View
                     style={{
                         marginTop: 15,
-                        marginLeft: 15
+                        marginLeft: 20,
+                        marginRight: 20
                     }}
                 >
                     <View style={{ flexDirection: "row" }}>
-                        <Text style={{ color: theme.inputTextColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
+                        <Text style={{ color: theme.text.primaryColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
                         {!this.state.metrics || this.state.metrics.length === 0 && <Icon
                             name="info"
-                            color="#fff"
+                            color={theme.text.linkColor}
                             underlayColor="transparent"
                             iconStyle={{ marginLeft: 10, marginRight: 2, marginTop: 3 }}
                             onPress={() => { this.showMetricInfoModal(); }}
                         />}
                         <Icon
-
                             name="add"
-                            color="#fff"
+                            color={theme.button.backgroundColor}
                             underlayColor="transparent"
                             iconStyle={{ marginLeft: 10, marginRight: 10, marginTop: 3 }}
                             onPress={() => { this.showCreateMetricModal(); }}
@@ -296,8 +280,9 @@ export default class CreateTask extends React.Component<IProps, IState> {
                     {
                         !this.state.metrics || this.state.metrics.length === 0 && <Text
                             style={{
-                                color: theme.inputTextColor,
-                                fontSize: 20
+                                color: theme.text.primaryColor,
+                                fontSize: 20,
+                                paddingTop: 15
                             }}
                         >
                             {i18n.t("createTask.noMetricsYet")}
@@ -305,21 +290,21 @@ export default class CreateTask extends React.Component<IProps, IState> {
                     }
                     {this.state.metrics.map(metric =>
                         <View key={`${metric.name}${metric.unit}`} style={{ flexDirection: "row", paddingTop: 15 }}>
-                            <Text style={{ color: theme.textColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
-                            <Text style={{ color: theme.inputTextColor, fontSize: 20, paddingRight: 5 }}>
+                            <Text style={{ color: theme.text.primaryColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
+                            <Text style={{ color: theme.text.primaryColor, fontSize: 20, paddingRight: 5 }}>
                                 {metric.name} ({metric.unit})
                             </Text>
                             <View style={{ flexDirection: "row", paddingTop: 15, position: "absolute", right: 10 }}>
                                 <Icon
                                     name="create"
-                                    color="#fff"
+                                    color={theme.button.backgroundColor}
                                     underlayColor="transparent"
                                     iconStyle={{ marginLeft: 10, marginRight: 10 }}
                                     onPress={() => { this.showUpdateMetricModal(metric); }}
                                 />
                                 <Icon
                                     name="delete"
-                                    color="#fff"
+                                    color={theme.button.backgroundColor}
                                     underlayColor="transparent"
                                     onPress={() => { this.deleteMetric(metric); }}
                                 />
@@ -344,11 +329,8 @@ export default class CreateTask extends React.Component<IProps, IState> {
                     metric={this.state.metricToBePatched}
                 />}
 
-                <View style={styles.formContainer}>
+                <View style={styles.buttonContainer}>
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("createTask.createTaskButton")}
                         onPress={() => { this.createTask(); }}
                     />

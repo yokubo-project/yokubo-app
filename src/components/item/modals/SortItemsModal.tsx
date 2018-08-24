@@ -9,11 +9,6 @@ import authStore from "../../../state/authStore";
 import taskStore, { IItem } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
     modalContent: {
         backgroundColor: theme.backgroundColor,
         paddingTop: 20,
@@ -23,7 +18,7 @@ const styles = StyleSheet.create({
     },
     textElement: {
         padding: 5,
-        color: theme.inputTextColor,
+        color: theme.text.primaryColor,
         fontSize: 20,
         textAlign: "center"
     }
@@ -103,7 +98,7 @@ export default class Component extends React.Component<IProps, IState> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <Text style={{ textAlign: "left", paddingLeft: 20, color: theme.inputTextColor, fontSize: 20 }}>Sort by:</Text>
+                    <Text style={{ textAlign: "left", paddingLeft: 20, color: theme.text.primaryColor, fontSize: 20 }}>Sort by:</Text>
                     <Text
                         style={styles.textElement}
                         onPress={() => { this.sortEntriesAndHide("name", "asc"); }}

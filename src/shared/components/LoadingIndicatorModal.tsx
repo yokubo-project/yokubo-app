@@ -5,11 +5,6 @@ import Modal from "react-native-modal";
 import { theme } from "../styles";
 
 const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
     modalContent: {
         backgroundColor: theme.backgroundColor,
         justifyContent: "center",
@@ -26,7 +21,7 @@ interface IProps {
     loadingText: string;
 }
 
-export default class Component extends React.Component<IProps, null> {
+export default class LoadingIndicatorModal extends React.Component<IProps, null> {
 
     render() {
         return (
@@ -46,7 +41,7 @@ export default class Component extends React.Component<IProps, null> {
                     >
                         <ActivityIndicator size="large" color={theme.spinnerColor} />
                         <Text
-                            style={{ color: theme.textColor, fontSize: 20, textAlign: "center", paddingTop: 5, paddingLeft: 10 }}
+                            style={{ color: theme.spinnerColor, fontSize: 20, textAlign: "center", paddingTop: 5, paddingLeft: 10 }}
                         >
                             {this.props.loadingText}
                         </Text>

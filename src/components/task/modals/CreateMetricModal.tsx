@@ -1,9 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
 import * as uuid from "uuid";
 
+import Button from "../../../shared/components/Button";
+import TextInputField from "../../../shared/components/TextInputField";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
@@ -18,11 +20,6 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10
-    },
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
     }
 });
 
@@ -110,28 +107,19 @@ export default class CreateMetricModal extends React.Component<IProps, IState> {
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+                    <TextInputField
                         placeholder={i18n.t("addMetric.metricNamePlaceholder")}
                         onChangeText={(value) => this.setState({ name: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showNameError()}
 
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+                    <TextInputField
                         placeholder={i18n.t("addMetric.metricUnitPlaceholder")}
                         onChangeText={(value) => this.setState({ unit: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showUnitError()}
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("addMetric.addMetricButton")}
                         onPress={() => this.addMetric()}
                     />

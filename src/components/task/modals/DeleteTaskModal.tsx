@@ -1,25 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
-import { Button } from "react-native-elements";
 import Modal from "react-native-modal";
 
+import Button from "../../../shared/components/Button";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import taskStore, { IFullTask } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        backgroundColor: theme.backgroundColor
-    } as ViewStyle,
-    inputStyle: {
-        marginRight: 100,
-        color: "black",
-        fontSize: 20
-    },
-    modalInputStyle: {
-        color: "black",
-        fontSize: 20
-    },
     modalContent: {
         backgroundColor: theme.backgroundColor,
         justifyContent: "center",
@@ -41,40 +29,29 @@ export default class DeleteTask extends React.Component<IProps, null> {
 
     render() {
         return (
-            <View style={styles.mainContainer}>
-                <Modal
-                    isVisible={this.props.visible}
-                    onBackdropPress={() => this.props.hideVisibility()}
-                    onBackButtonPress={() => this.props.hideVisibility()}
-                >
-                    <View style={styles.modalContent}>
-                        <View
-                            style={{
-                                marginTop: 15,
-                                marginLeft: 15,
-                                marginBottom: 15,
-                                marginRight: 15,
-                                flexDirection: "row",
-                                flexWrap: "wrap"
-                            }}
-                        >
-                            <Text
-                                style={{ padding: 5, color: theme.inputTextColor, fontSize: 20, textAlign: "center", paddingTop: 10 }}
-                            >
-                                {i18n.t("deleteTask.deleteHint", { taskName: this.props.task.name })}?
-                            </Text>
-                        </View>
+            <Modal
+                isVisible={this.props.visible}
+                onBackdropPress={() => this.props.hideVisibility()}
+                onBackButtonPress={() => this.props.hideVisibility()}
+            >
+                <View style={styles.modalContent}>
+                    <Text
+                        style={{
+                            color: theme.text.primaryColor,
+                            fontSize: 18,
+                            textAlign: "center",
+                            marginBottom: 20
+                        }}
+                    >
+                        {i18n.t("deleteTask.deleteHint", { taskName: this.props.task.name })}
+                    </Text>
 
-                        <Button
-                            raised={true}
-                            buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                            textStyle={{ textAlign: "center", fontSize: 18 }}
-                            title={i18n.t("deleteTask.deleteButton")}
-                            onPress={() => { this.props.deleteTask(); }}
-                        />
-                    </View>
-                </Modal>
-            </View>
+                    <Button
+                        title={i18n.t("deleteTask.deleteButton")}
+                        onPress={() => { this.props.deleteTask(); }}
+                    />
+                </View>
+            </Modal>
         );
     }
 

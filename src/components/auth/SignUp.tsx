@@ -1,7 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, ViewStyle } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import { FormValidationMessage } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
+
+import Button from "../../shared/components/Button";
+import ClickableText from "../../shared/components/ClickableText";
+import PrimaryText from "../../shared/components/PrimaryText";
+import TextInputField from "../../shared/components/TextInputField";
 
 import { validateEmail } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
@@ -17,13 +22,19 @@ const styles = StyleSheet.create({
     formContainer: {
         flex: 1,
         justifyContent: "flex-start",
-        backgroundColor: theme.backgroundColor,
         marginTop: 10
     } as ViewStyle,
     inputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
+        color: theme.textInput.inputColor,
+        fontSize: 18,
+        height: 50,
+        borderWidth: 1,
+        borderColor: theme.textInput.borderColor,
+        borderRadius: 3,
+        margin: 15,
+        marginBottom: 0,
+        padding: 8,
+        backgroundColor: theme.textInput.backgroundColor
     }
 });
 
@@ -204,54 +215,39 @@ export default class SignUp extends React.Component<IProps, IState> {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.formContainer}>
-                    <FormInput
-                        inputStyle={styles.inputStyle}
+                    <TextInputField
                         placeholder={i18n.t("signUp.namePlaceholder")}
                         onChangeText={(e) => this.parseName(e)}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
+                        autoFocus={true}
                     />
                     {this.showNameError()}
 
-                    <FormInput
-                        inputStyle={styles.inputStyle}
+                    <TextInputField
                         placeholder={i18n.t("signUp.emailPlaceholder")}
                         onChangeText={(e) => this.parseEmail(e)}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showEmailError()}
 
-                    <FormInput
-                        inputStyle={styles.inputStyle}
+                    <TextInputField
                         placeholder={i18n.t("signUp.pwdPlaceholder")}
                         onChangeText={(e) => this.parsePassword(e)}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
-                        secureTextEntry={true}
                     />
                     {this.showPasswordError()}
                     {this.showGeneralError()}
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("signUp.signupButton")}
                         onPress={() => { this.processSignUp(); }}
                     />
-                    <View style={{ flexDirection: "row", padding: 30, justifyContent: "center" }}>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
-                        >
-                            {i18n.t("signUp.alreadyRegistered")}
-                        </Text>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.textColor }}
+
+                    <View style={{ flexDirection: "row", padding: 15, justifyContent: "center" }}>
+                        <PrimaryText
+                            text={i18n.t("signUp.alreadyRegistered")}
+                        />
+                        <ClickableText
+                            text={i18n.t("signUp.signinLink")}
                             onPress={() => this.props.navigation.navigate("SignIn")}
-                        >
-                            {i18n.t("signUp.signinLink")}
-                        </Text>
+                        />
                     </View>
                 </View>
             </View>

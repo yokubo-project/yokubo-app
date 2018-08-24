@@ -1,18 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
 
+import Button from "../../../shared/components/Button";
+import TextInputField from "../../../shared/components/TextInputField";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
 
 const styles = StyleSheet.create({
-    modalInputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
     modalContent: {
         backgroundColor: theme.backgroundColor,
         justifyContent: "center",
@@ -151,30 +148,22 @@ export default class UpdateProfileModal extends React.Component<IProps, IState> 
                 onBackButtonPress={() => this.closeModal()}
             >
                 <View style={styles.modalContent}>
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+                    <TextInputField
                         defaultValue={authStore.profile.name}
                         placeholder={i18n.t("updateProfile.namePlaceholder")}
                         onChangeText={(value) => this.setState({ inputName: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
+                        autoFocus={true}
                     />
                     {this.showNameError()}
 
-                    <FormInput
-                        inputStyle={styles.modalInputStyle}
+                    <TextInputField
                         defaultValue={authStore.username}
                         placeholder={i18n.t("updateProfile.emailPlaceholder")}
                         onChangeText={(value) => this.setState({ inputEmail: value })}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                     />
                     {this.showEmailError()}
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("updateProfile.updateProfileButton")}
                         onPress={() => { this.patchProfile(); }}
                     />

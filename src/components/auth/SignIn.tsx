@@ -1,7 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, ViewStyle } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import { FormValidationMessage } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
+
+import Button from "../../shared/components/Button";
+import ClickableText from "../../shared/components/ClickableText";
+import PrimaryText from "../../shared/components/PrimaryText";
+import TextInputField from "../../shared/components/TextInputField";
 
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
@@ -16,18 +21,8 @@ const styles = StyleSheet.create({
     formContainer: {
         flex: 1,
         justifyContent: "flex-start",
-        backgroundColor: theme.backgroundColor,
         marginTop: 10
-    } as ViewStyle,
-    inputStyle: {
-        color: theme.inputTextColor,
-        fontSize: 20,
-        marginBottom: 10
-    },
-    androidButtonWrapper: {
-        margin: 13,
-        backgroundColor: "transparent"
-    }
+    } as ViewStyle
 });
 
 // tslint:disable-next-line:no-empty-interface
@@ -159,58 +154,43 @@ export default class SignIn extends React.Component<IProps, IState> {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.formContainer}>
-                    <FormInput
-                        inputStyle={styles.inputStyle}
+                    <TextInputField
                         placeholder={i18n.t("signIn.emailPlaceholder")}
                         onChangeText={(e) => this.parseEmail(e)}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
+                        autoFocus={true}
                     />
                     {this.showEmailError()}
 
-                    <FormInput
-                        inputStyle={styles.inputStyle}
+                    <TextInputField
                         placeholder={i18n.t("signIn.pwdPlaceholder")}
                         onChangeText={(e) => this.parsePassword(e)}
-                        underlineColorAndroid={theme.textColor}
-                        selectionColor={theme.inputTextColor} // cursor color
                         secureTextEntry={true}
                     />
                     {this.showPasswordError()}
                     {this.showGeneralError()}
 
                     <Button
-                        raised={true}
-                        buttonStyle={{ backgroundColor: theme.backgroundColor, borderRadius: 0 }}
-                        textStyle={{ textAlign: "center", fontSize: 18 }}
                         title={i18n.t("signIn.signinButton")}
                         onPress={() => { this.processSignIn(); }}
                     />
-                    <View style={{ flexDirection: "row", paddingTop: 30, justifyContent: "center" }}>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
-                        >
-                            {i18n.t("signIn.notAMember")}
-                        </Text>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.textColor }}
-                            onPress={() => this.props.navigation.navigate("SignUp")}
-                        >
-                            {i18n.t("signIn.signupLink")}
-                        </Text>
-                    </View>
+
                     <View style={{ flexDirection: "row", paddingTop: 15, justifyContent: "center" }}>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.inputTextColor }}
-                        >
-                            {i18n.t("signIn.forgotPwd")}
-                        </Text>
-                        <Text
-                            style={{ padding: 5, fontSize: 20, color: theme.textColor }}
+                        <PrimaryText
+                            text={i18n.t("signIn.notAMember")}
+                        />
+                        <ClickableText
+                            text={i18n.t("signIn.signupLink")}
+                            onPress={() => this.props.navigation.navigate("SignUp")}
+                        />
+                    </View>
+                    <View style={{ flexDirection: "row", paddingTop: 5, justifyContent: "center" }}>
+                        <PrimaryText
+                            text={i18n.t("signIn.forgotPwd")}
+                        />
+                        <ClickableText
+                            text={i18n.t("signIn.forgotPwdLink")}
                             onPress={() => this.props.navigation.navigate("ForgotPwd")}
-                        >
-                            {i18n.t("signIn.forgotPwdLink")}
-                        </Text>
+                        />
                     </View>
                 </View>
             </View>
