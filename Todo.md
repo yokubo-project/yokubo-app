@@ -6,4 +6,3 @@
 -) Limit metrics to max three?
 -) Remove empty space in email
 -) Add modal to show complete item
--) Add info to item in list if a description is available

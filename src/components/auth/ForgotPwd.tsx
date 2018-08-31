@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 import { FormValidationMessage } from "react-native-elements";
@@ -77,7 +78,7 @@ export default class ForgotPwd extends React.Component<IProps, IState> {
     }
 
     async processForgotPwd() {
-        const email = this.state.inputEmail;
+        const email = _.trim(this.state.inputEmail);
 
         if (email.length < 5) {
             this.setState({

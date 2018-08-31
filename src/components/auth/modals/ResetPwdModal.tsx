@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import React from "react";
 import { StyleSheet, Text, TextInput, TextStyle, View } from "react-native";
 import { FormValidationMessage } from "react-native-elements";
@@ -48,8 +49,8 @@ export default class ResetPwdModal extends React.Component<IProps, IState> {
     }
 
     async resetPwd() {
-        const currentPwd = this.state.inputCurrentPwd;
-        const newPwd = this.state.inputNewPwd;
+        const currentPwd = _.trim(this.state.inputCurrentPwd);
+        const newPwd = _.trim(this.state.inputNewPwd);
 
         if (newPwd.length < 6) {
             this.setState({

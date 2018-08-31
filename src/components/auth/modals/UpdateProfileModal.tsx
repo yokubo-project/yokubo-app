@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import React from "react";
 import { StyleSheet, Text, TextStyle, View } from "react-native";
 import { FormValidationMessage } from "react-native-elements";
@@ -47,7 +48,7 @@ export default class UpdateProfileModal extends React.Component<IProps, IState> 
     }
 
     async patchProfile() {
-        const email = this.state.inputEmail;
+        const email = _.trim(this.state.inputEmail);
         const name = this.state.inputName;
 
         if (name !== "" && name.length < 3) {

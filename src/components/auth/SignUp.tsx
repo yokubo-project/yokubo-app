@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import React from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import { FormValidationMessage } from "react-native-elements";
@@ -123,8 +124,8 @@ export default class SignUp extends React.Component<IProps, IState> {
     }
 
     async processSignUp() {
-        const email = this.state.inputEmail;
-        const password = this.state.inputPassword;
+        const email = _.trim(this.state.inputEmail);
+        const password = _.trim(this.state.inputPassword);
         const name = this.state.inputName;
 
         if (name.length < 3) {
