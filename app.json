@@ -18,6 +18,7 @@
     },
     "android": {
       "package": "org.yokubo.app"
-    }
+    },
+    "orientation": "portrait"
   }
 }
