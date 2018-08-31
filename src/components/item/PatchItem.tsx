@@ -148,7 +148,7 @@ export default class PatchItem extends React.Component<IProps, IState> {
 
     async patchItem() {
         const name = this.state.name;
-        const desc = this.state.desc;
+        const desc = this.state.desc === "" ? null : this.state.desc;
         const fromDate = this.state.fromDate;
         const toDate = this.state.toDate;
 

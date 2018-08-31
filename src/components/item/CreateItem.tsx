@@ -121,7 +121,7 @@ export default class CreateItem extends React.Component<IProps, IState> {
 
     async createItem() {
         const name = this.state.name;
-        const desc = this.state.desc;
+        const desc = this.state.desc === "" ? null : this.state.desc;
         const fromDate = this.state.fromDate;
         const toDate = this.state.toDate;
 

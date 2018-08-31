@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import * as _ from "lodash";
 import { observer } from "mobx-react";
 import moment from "moment";
@@ -215,9 +216,13 @@ export default class ItemsList extends React.Component<any, IState> {
                             title={item.name}
                             titleStyle={{ color: theme.text.linkColor, fontSize: 18 }}
                             subtitle={this.renderMetrices(item)}
-                            hideChevron={true}
                             underlayColor={theme.listItem.underlayColor}
                             onLongPress={() => this.handleOnEditItemClick(item)}
+                            rightIcon={item.desc ? <View style={{ marginRight: 20 }}><Ionicons
+                                name="md-book"
+                                size={25}
+                                color={theme.listItem.primaryColor}
+                            /></View> : <View />}
                         />
                     )}
                 />
