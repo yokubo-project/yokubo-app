@@ -149,6 +149,14 @@ i18n
                         deleteButton: "DELETE",
                         deleteHint: "Delete Item {{itemName}}?"
                     },
+                    showItemDetails: {
+                        closeButton: "CLOSE",
+                        desc: "Description: {{itemDescription}}",
+                        duration: "Duration: {{itemDuration}}",
+                        startDate: "Start: {{itemStart}}",
+                        endDate: "End: {{itemÈnd}}",
+                        createdAt: "Created at: {{itemCreatedAt}}"
+                    },
                     itemStats: {
                         total: "Total",
                         average: "Average",
@@ -336,6 +344,14 @@ i18n
                     deleteItem: {
                         deleteButton: "LÖSCHEN",
                         deleteHint: "Item {{itemName}} löschen?"
+                    },
+                    showItemDetails: {
+                        closeButton: "SCHLIESSEN",
+                        desc: "Beschreibung: {{itemDescription}}",
+                        duration: "Dauer: {{itemDuration}}",
+                        startDate: "Start: {{itemStart}}",
+                        endDate: "Ende: {{itemÈnd}}",
+                        createdAt: "Angelegt am: {{itemCreatedAt}}"
                     },
                     itemStats: {
                         total: "Gesamt",

@@ -4,5 +4,3 @@
 -) Sort by start date (not by createdAt date)
 -) Resort when an item was added
 -) Limit metrics to max three?
--) Remove empty space in email
--) Add modal to show complete item

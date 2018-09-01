@@ -14,6 +14,7 @@ import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
 import taskStore, { IFullTask, IItem } from "../../state/taskStore";
+import ShowDetailsModal from "./modals/ShowDetailsModal";
 import SortItemsModal from "./modals/SortItemsModal";
 
 const styles = StyleSheet.create({
@@ -53,6 +54,8 @@ interface IState {
     sortKey: string;
     sortDirection: string;
     previousItemLength: number;
+    selectedItem: IItem;
+    isShowDetailsModalVisible: boolean;
     isSortItemsModalVisible: boolean;
 }
 
@@ -104,6 +107,8 @@ export default class ItemsList extends React.Component<any, IState> {
             sortKey: "createdAt",
             sortDirection: "asc",
             previousItemLength: activeTask.items.length,
+            selectedItem: null,
+            isShowDetailsModalVisible: false,
             isSortItemsModalVisible: false
         };
     }
@@ -159,9 +164,9 @@ export default class ItemsList extends React.Component<any, IState> {
 
         return (
             <View>
-                <Text style={styles.listText}>{i18n.t("itemList.date")}: {moment(entry.createdAt).format("DD.MM.YYYY")}</Text>
-                {metrices}
+                <Text style={styles.listText}>{i18n.t("itemList.date")}: {moment(entry.period[0]).format("DD.MM.YYYY")}</Text>
                 <Text style={styles.listText}>{i18n.t("itemList.duration")}: {formatDuration(entry.duration)}</Text>
+                {metrices}
             </View>
         );
     }
@@ -172,6 +177,14 @@ export default class ItemsList extends React.Component<any, IState> {
             item
         });
     }
+
+    showDetailsModal = (item: IItem) => this.setState({
+        selectedItem: item,
+        isShowDetailsModalVisible: true
+    })
+    hideDetailsModal = () => this.setState({
+        isShowDetailsModalVisible: false
+    })
 
     showSortItemsModal = () => this.setState({
         isSortItemsModalVisible: true
@@ -218,6 +231,7 @@ export default class ItemsList extends React.Component<any, IState> {
                             subtitle={this.renderMetrices(item)}
                             underlayColor={theme.listItem.underlayColor}
                             onLongPress={() => this.handleOnEditItemClick(item)}
+                            onPress={() => this.showDetailsModal(item)}
                             rightIcon={item.desc ? <View style={{ marginRight: 20 }}><Ionicons
                                 name="md-book"
                                 size={25}
@@ -232,6 +246,11 @@ export default class ItemsList extends React.Component<any, IState> {
                     hide={() => this.hideSortItemsModal()}
                     metrics={this.state.task.metrics}
                     sortItemsAndHide={(sortKey, sortDirection) => this.sortItemsAndHideSortItemsModal(sortKey, sortDirection)}
+                />
+                <ShowDetailsModal
+                    isVisible={this.state.isShowDetailsModalVisible}
+                    hide={() => this.hideDetailsModal()}
+                    item={this.state.selectedItem}
                 />
             </View>
         );
