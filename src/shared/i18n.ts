@@ -27,6 +27,9 @@ i18n
         resources: {
             en: {
                 translation: {
+                    app: {
+                        noInternetConnection: "No internet connection. Please check your network settings."
+                    },
                     home: {
                         quote: "It's the challenge that makes the greatness.",
                         alreadyRegistered: "Already a member?",
@@ -223,6 +226,9 @@ i18n
             },
             de: {
                 translation: {
+                    app: {
+                        noInternetConnection: "Keine Internetverbindung. Bitte prüfe deine Netzwerkeinstellungen."
+                    },
                     home: {
                         quote: "Man wächst mit seinen Aufgaben",
                         alreadyRegistered: "Bereits registriert?",

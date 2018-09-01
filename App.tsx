@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, NetInfo, StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "react-navigation";
 
 import { theme } from "./src/shared/styles";
@@ -21,6 +21,7 @@ import CreateItem from "./src/components/item/CreateItem";
 import PatchItem from "./src/components/item/PatchItem";
 
 import ItemTabNavigation from "./src/components/item/TabNavigation";
+import i18n from "./src/shared/i18n";
 
 const styles = StyleSheet.create({
     spinnerContainer: {
@@ -40,8 +41,42 @@ const Spinner = () => {
         </View>
     );
 };
+
+interface IState {
+    connectionStatus: "offline" | "online" | "unknown";
+}
 @observer
-class App extends React.Component<null, null> {
+class App extends React.Component<null, IState> {
+
+    state: IState = {
+        connectionStatus: "online"
+    };
+
+    async componentDidMount() {
+        const connectionInfo = await NetInfo.getConnectionInfo();
+        this.handleConnectivityChange(connectionInfo);
+
+        NetInfo.addEventListener(
+            "connectionChange",
+            this.handleConnectivityChange
+        );
+    }
+
+    handleConnectivityChange = (connectionInfo: any) => {
+        if (connectionInfo.type === "none") {
+            this.setState({
+                connectionStatus: "offline"
+            });
+        } else if (connectionInfo.type === "unknown") {
+            this.setState({
+                connectionStatus: "unknown"
+            });
+        } else {
+            this.setState({
+                connectionStatus: "online"
+            });
+        }
+    }
 
     render() {
         if (authStore.isRehydrated === false) {
@@ -49,6 +84,17 @@ class App extends React.Component<null, null> {
                 <Spinner />
             );
         }
+
+        if (this.state.connectionStatus !== "online") {
+            return (
+                <View style={{ height: 125, backgroundColor: "red" }}>
+                    <Text style={{ paddingTop: 40, color: "white", textAlign: "center", fontSize: 20 }}>
+                        {i18n.t("app.noInternetConnection")}
+                    </Text>
+                </View>
+            );
+        }
+
         // tslint:disable-next-line:variable-name
         const RootStack = createRootStack("Home");
 
