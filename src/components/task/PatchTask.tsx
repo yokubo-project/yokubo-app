@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ImagePicker } from "expo";
 import React from "react";
-import { Image, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View, ViewStyle } from "react-native";
 import { FormInput, FormValidationMessage, Icon } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
@@ -23,11 +23,9 @@ const PLACEHOLDER_IMAGE = require("../../../assets/placeholder.jpg");
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
-        alignItems: "stretch"
+        backgroundColor: theme.backgroundColor
     } as ViewStyle,
     buttonContainer: {
-        flex: 1,
         justifyContent: "flex-end",
         backgroundColor: theme.backgroundColor,
         marginBottom: 30
@@ -282,101 +280,107 @@ export default class PatchTask extends React.Component<IProps, IState> {
     // tslint:disable-next-line:max-func-body-length
     render() {
         return (
-            <View style={styles.mainContainer}>
-                <DeleteTaskModal
-                    task={this.props.navigation.state.params.task}
-                    visible={this.state.isDeleteModalVisible}
-                    hideVisibility={() => this.hideDeleteModal()}
-                    deleteTask={() => this.deleteTask()}
-                />
-                <View
-                    style={styles.imageContainer}
+            <View style={{ flex: 1 }}>
+                <ScrollView
+                    style={styles.mainContainer}
+                    keyboardDismissMode="none"
+                    keyboardShouldPersistTaps="handled"
                 >
-                    <TouchableOpacity
-                        activeOpacity={0.9}
-                        onPress={this.pickImage}
+                    <DeleteTaskModal
+                        task={this.props.navigation.state.params.task}
+                        visible={this.state.isDeleteModalVisible}
+                        hideVisibility={() => this.hideDeleteModal()}
+                        deleteTask={() => this.deleteTask()}
+                    />
+                    <View
+                        style={styles.imageContainer}
                     >
-                        <Image
-                            source={this.state.image ? { uri: this.state.image } : PLACEHOLDER_IMAGE}
-                            style={styles.imageStyle}
-                            resizeMode="cover"
-                            // @ts-ignore
-                            borderRadius={100}
-                            borderWidth={1}
-                            borderColor={theme.borderColor}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <TextInputField
-                    placeholder={this.state.name}
-                    defaultValue={this.state.name}
-                    onChangeText={(value) => this.setState({ name: value })}
-                />
-                {this.showNameError()}
-
-                <View
-                    style={{
-                        marginTop: 15,
-                        marginLeft: 20,
-                        marginRight: 20
-                    }}
-                >
-                    <View style={{ flexDirection: "row" }}>
-                        <Text style={{ color: theme.text.primaryColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
-                        <Icon
-                            name="add"
-                            color={theme.button.backgroundColor}
-                            underlayColor="transparent"
-                            iconStyle={{ marginLeft: 10, marginRight: 10, marginTop: 3 }}
-                            onPress={() => { this.showCreateMetricModal(); }}
-                        />
-                    </View>
-                    {
-                        !this.state.metrics || this.state.metrics.length === 0 && <Text
-                            style={{
-                                color: theme.text.primaryColor,
-                                fontSize: 20
-                            }}
+                        <TouchableOpacity
+                            activeOpacity={0.9}
+                            onPress={this.pickImage}
                         >
-                            {i18n.t("patchTask.noMetricsYet")}
-                        </Text>
-                    }
-                    {this.state.metrics.map(metric =>
-                        <View key={`${metric.name}${metric.unit}`} style={{ flexDirection: "row", paddingTop: 15 }}>
-                            <Text style={{ color: theme.text.primaryColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
-                            <Text style={{ color: theme.text.primaryColor, fontSize: 20, paddingRight: 5 }}>
-                                {metric.name} ({metric.unit})
-                            </Text>
-                            <View style={{ flexDirection: "row", paddingTop: 15, position: "absolute", right: 10 }}>
-                                <Icon
-                                    name="create"
-                                    color={theme.button.backgroundColor}
-                                    underlayColor="transparent"
-                                    iconStyle={{ marginLeft: 10, marginRight: 10 }}
-                                    onPress={() => { this.showUpdateMetricModal(metric); }}
-                                />
-                                <Icon
-                                    name="delete"
-                                    color={theme.button.backgroundColor}
-                                    underlayColor="transparent"
-                                    onPress={() => { this.deleteMetric(metric); }}
-                                />
-                            </View>
-                        </View>
-                    )}
-                </View>
+                            <Image
+                                source={this.state.image ? { uri: this.state.image } : PLACEHOLDER_IMAGE}
+                                style={styles.imageStyle}
+                                resizeMode="cover"
+                                // @ts-ignore
+                                borderRadius={100}
+                                borderWidth={1}
+                                borderColor={theme.borderColor}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <TextInputField
+                        placeholder={this.state.name}
+                        defaultValue={this.state.name}
+                        onChangeText={(value) => this.setState({ name: value })}
+                    />
+                    {this.showNameError()}
 
-                <CreateMetricModal
-                    isVisible={this.state.isCreateMetricModalVisible}
-                    hide={() => this.hideCreateMetricModal()}
-                    addMetric={(uid: string, name: string, unit: string) => this.addMetric(uid, name, unit)}
-                />
-                {this.state.metricToBePatched && <UpdateMetricModal
-                    isVisible={this.state.isUpdateMetricModalVisible}
-                    hide={() => this.hideUpdateMetricModal()}
-                    patchMetric={(metric: IMetric) => this.patchMetric(metric)}
-                    metric={this.state.metricToBePatched}
-                />}
+                    <View
+                        style={{
+                            marginTop: 15,
+                            marginLeft: 20,
+                            marginRight: 20
+                        }}
+                    >
+                        <View style={{ flexDirection: "row" }}>
+                            <Text style={{ color: theme.text.primaryColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
+                            <Icon
+                                name="add"
+                                color={theme.button.backgroundColor}
+                                underlayColor="transparent"
+                                iconStyle={{ marginLeft: 10, marginRight: 10, marginTop: 3 }}
+                                onPress={() => { this.showCreateMetricModal(); }}
+                            />
+                        </View>
+                        {
+                            !this.state.metrics || this.state.metrics.length === 0 && <Text
+                                style={{
+                                    color: theme.text.primaryColor,
+                                    fontSize: 20
+                                }}
+                            >
+                                {i18n.t("patchTask.noMetricsYet")}
+                            </Text>
+                        }
+                        {this.state.metrics.map(metric =>
+                            <View key={`${metric.name}${metric.unit}`} style={{ flexDirection: "row", paddingTop: 15 }}>
+                                <Text style={{ color: theme.text.primaryColor, fontSize: 20, paddingRight: 5 }}>{"\u2022"}</Text>
+                                <Text style={{ color: theme.text.primaryColor, fontSize: 20, paddingRight: 5 }}>
+                                    {metric.name} ({metric.unit})
+                            </Text>
+                                <View style={{ flexDirection: "row", paddingTop: 15, position: "absolute", right: 10 }}>
+                                    <Icon
+                                        name="create"
+                                        color={theme.button.backgroundColor}
+                                        underlayColor="transparent"
+                                        iconStyle={{ marginLeft: 10, marginRight: 10 }}
+                                        onPress={() => { this.showUpdateMetricModal(metric); }}
+                                    />
+                                    <Icon
+                                        name="delete"
+                                        color={theme.button.backgroundColor}
+                                        underlayColor="transparent"
+                                        onPress={() => { this.deleteMetric(metric); }}
+                                    />
+                                </View>
+                            </View>
+                        )}
+                    </View>
+
+                    <CreateMetricModal
+                        isVisible={this.state.isCreateMetricModalVisible}
+                        hide={() => this.hideCreateMetricModal()}
+                        addMetric={(uid: string, name: string, unit: string) => this.addMetric(uid, name, unit)}
+                    />
+                    {this.state.metricToBePatched && <UpdateMetricModal
+                        isVisible={this.state.isUpdateMetricModalVisible}
+                        hide={() => this.hideUpdateMetricModal()}
+                        patchMetric={(metric: IMetric) => this.patchMetric(metric)}
+                        metric={this.state.metricToBePatched}
+                    />}
+                </ScrollView>
 
                 <View style={styles.buttonContainer}>
                     <Button

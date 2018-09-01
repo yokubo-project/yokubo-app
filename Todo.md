@@ -1,5 +1,4 @@
 -) Undefined states if server is not reachable or no internet connection is available
 -) Internationalize header
--) Make metrics modal in create and patch task scrollable
 -) Resort when an item was added
 -) Limit metrics to max three?
