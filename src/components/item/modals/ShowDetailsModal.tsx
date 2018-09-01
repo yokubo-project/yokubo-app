@@ -14,8 +14,6 @@ import taskStore, { IItem } from "../../../state/taskStore";
 const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: theme.backgroundColor,
-        paddingTop: 20,
-        paddingBottom: 10,
         paddingLeft: 10,
         paddingRight: 10
     },
@@ -79,8 +77,13 @@ export default class Component extends React.Component<IProps, IState> {
                 onBackdropPress={() => this.closeModal()}
                 onBackButtonPress={() => this.closeModal()}
             >
-                <View style={{ paddingBottom: 15, backgroundColor: theme.backgroundColor }}>
+                <View
+                    style={{
+                        backgroundColor: theme.backgroundColor
+                    }}
+                >
                     <ScrollView style={styles.modalContent}>
+                        <View style={{ paddingTop: 30 }} />
                         <Text style={styles.primaryText}>
                             {this.props.item.name}
                         </Text>
@@ -114,6 +117,7 @@ export default class Component extends React.Component<IProps, IState> {
                                 onPress={() => { this.closeModal(); }}
                             />
                         </View>
+                        <View style={{ paddingBottom: 30 }} />
                     </ScrollView>
                 </View>
             </Modal>

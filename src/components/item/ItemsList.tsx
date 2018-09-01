@@ -104,7 +104,7 @@ export default class ItemsList extends React.Component<any, IState> {
         const activeTask = taskStore.getActiveTask();
         this.state = {
             task: activeTask,
-            sortKey: "createdAt",
+            sortKey: "period",
             sortDirection: "asc",
             previousItemLength: activeTask.items.length,
             selectedItem: null,

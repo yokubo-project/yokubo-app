@@ -1,6 +1,6 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, TextStyle, View } from "react-native";
-import { Button, FormInput, FormValidationMessage } from "react-native-elements";
+import { ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { FormInput, FormValidationMessage } from "react-native-elements";
 import Modal from "react-native-modal";
 
 import i18n from "../../../shared/i18n";
@@ -10,11 +10,7 @@ import taskStore, { IItem } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
     modalContent: {
-        backgroundColor: theme.backgroundColor,
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10
+        backgroundColor: theme.backgroundColor
     },
     textElement: {
         padding: 5,
@@ -46,47 +42,50 @@ export default class Component extends React.Component<IProps, IState> {
     }
 
     renderMetricTags(metrics: any) {
-        const renderedMetricTagsAsc = metrics.map(metric => {
+        return metrics.map(metric => {
             return (
-                <Text
-                    key={`${metric.uid}asc`}
-                    style={styles.textElement}
-                    onPress={() => {
-                        this.sortEntriesAndHide((item) => {
-                            const merticQuanitity = item.metricQuantities.filter(
-                                (metricQuantity) => metricQuantity.metric.uid === metric.uid
-                            )[0];
-
-                            return merticQuanitity.quantity;
-                        },                      "asc");
-                    }}
+                <View
+                    key={`${metric.uid}`}
                 >
-                    {"\u2022"} {`${metric.name} `} &#8593;
-                </Text>
+                    <Text
+                        key={`${metric.uid}asc`}
+                        style={styles.textElement}
+                        onPress={() => {
+                            this.sortEntriesAndHide(
+                                (item) => {
+                                    const merticQuanitity = item.metricQuantities.filter(
+                                        (metricQuantity) => metricQuantity.metric.uid === metric.uid
+                                    )[0];
+
+                                    return merticQuanitity.quantity;
+                                },
+                                "asc"
+                            );
+                        }}
+                    >
+                        {"\u2022"} {`${metric.name} `} &#8593;
+                    </Text>
+                    <Text
+                        key={`${metric.uid}desc`}
+                        style={styles.textElement}
+                        onPress={() => {
+                            this.sortEntriesAndHide(
+                                (item) => {
+                                    const merticQuanitity = item.metricQuantities.filter(
+                                        (metricQuantity) => metricQuantity.metric.uid === metric.uid
+                                    )[0];
+
+                                    return merticQuanitity.quantity;
+                                },
+                                "desc"
+                            );
+                        }}
+                    >
+                        {"\u2022"} {`${metric.name} `} &#8595;
+                    </Text>
+                </View>
             );
         });
-        const renderedMetricTagsDesc = metrics.map(metric => {
-            return (
-                <Text
-                    key={`${metric.uid}desc`}
-                    style={styles.textElement}
-                    onPress={() => {
-                        this.sortEntriesAndHide((item) => {
-                            const merticQuanitity = item.metricQuantities.filter(
-                                (metricQuantity) => metricQuantity.metric.uid === metric.uid
-                            )[0];
-
-                            return merticQuanitity.quantity;
-                        },                      "desc");
-                    }}
-                >
-                    {"\u2022"} {`${metric.name} `} &#8595;
-                </Text>
-            );
-        });
-
-        return renderedMetricTagsAsc.concat(renderedMetricTagsDesc);
-
     }
 
     render() {
@@ -97,45 +96,62 @@ export default class Component extends React.Component<IProps, IState> {
                 onBackdropPress={() => this.closeModal()}
                 onBackButtonPress={() => this.closeModal()}
             >
-                <View style={styles.modalContent}>
-                    <Text style={{ textAlign: "left", paddingLeft: 20, color: theme.text.primaryColor, fontSize: 20 }}>Sort by:</Text>
-                    <Text
-                        style={styles.textElement}
-                        onPress={() => { this.sortEntriesAndHide("name", "asc"); }}
-                    >
-                        {"\u2022"} {i18n.t("sortItems.sortByName")} &#8593;
-                    </Text>
-                    <Text
-                        style={styles.textElement}
-                        onPress={() => { this.sortEntriesAndHide("name", "desc"); }}
-                    >
-                        {"\u2022"} {i18n.t("sortItems.sortByName")} &#8595;
-                    </Text>
-                    <Text
-                        style={styles.textElement}
-                        onPress={() => { this.sortEntriesAndHide("createdAt", "asc"); }}
-                    >
-                        {"\u2022"} {i18n.t("sortItems.sortByDate")} &#8593;
-                    </Text>
-                    <Text
-                        style={styles.textElement}
-                        onPress={() => { this.sortEntriesAndHide("createdAt", "desc"); }}
-                    >
-                        {"\u2022"} {i18n.t("sortItems.sortByDate")} &#8595;
-                    </Text>
-                    <Text
-                        style={styles.textElement}
-                        onPress={() => { this.sortEntriesAndHide("duration", "asc"); }}
-                    >
-                        {"\u2022"} {i18n.t("sortItems.sortByDuration")} &#8593;
-                    </Text>
-                    <Text
-                        style={styles.textElement}
-                        onPress={() => { this.sortEntriesAndHide("duration", "desc"); }}
-                    >
-                        {"\u2022"} {i18n.t("sortItems.sortByDuration")} &#8595;
-                    </Text>
-                    {this.renderMetricTags(this.props.metrics)}
+                <View
+                    style={{
+                        backgroundColor: theme.backgroundColor
+                    }}
+                >
+                    <ScrollView style={styles.modalContent}>
+                        <Text
+                            style={{
+                                textAlign: "left",
+                                paddingLeft: 20,
+                                color: theme.text.primaryColor,
+                                fontSize: 20,
+                                paddingTop: 30
+                            }}
+                        >
+                            Sort by:
+                        </Text>
+                        <Text
+                            style={styles.textElement}
+                            onPress={() => { this.sortEntriesAndHide("name", "asc"); }}
+                        >
+                            {"\u2022"} {i18n.t("sortItems.sortByName")} &#8593;
+                        </Text>
+                        <Text
+                            style={styles.textElement}
+                            onPress={() => { this.sortEntriesAndHide("name", "desc"); }}
+                        >
+                            {"\u2022"} {i18n.t("sortItems.sortByName")} &#8595;
+                        </Text>
+                        <Text
+                            style={styles.textElement}
+                            onPress={() => { this.sortEntriesAndHide("period", "asc"); }}
+                        >
+                            {"\u2022"} {i18n.t("sortItems.sortByDate")} &#8593;
+                        </Text>
+                        <Text
+                            style={styles.textElement}
+                            onPress={() => { this.sortEntriesAndHide("period", "desc"); }}
+                        >
+                            {"\u2022"} {i18n.t("sortItems.sortByDate")} &#8595;
+                        </Text>
+                        <Text
+                            style={styles.textElement}
+                            onPress={() => { this.sortEntriesAndHide("duration", "asc"); }}
+                        >
+                            {"\u2022"} {i18n.t("sortItems.sortByDuration")} &#8593;
+                        </Text>
+                        <Text
+                            style={styles.textElement}
+                            onPress={() => { this.sortEntriesAndHide("duration", "desc"); }}
+                        >
+                            {"\u2022"} {i18n.t("sortItems.sortByDuration")} &#8595;
+                        </Text>
+                        {this.renderMetricTags(this.props.metrics)}
+                        <View style={{ paddingBottom: 30 }} />
+                    </ScrollView>
                 </View>
             </Modal>
         );
