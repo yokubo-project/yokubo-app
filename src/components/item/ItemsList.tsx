@@ -8,6 +8,7 @@ import { Button, Header, Icon, ListItem } from "react-native-elements";
 import { material } from "react-native-typography";
 import { HeaderBackButton, NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
+import { autorun } from "mobx";
 import ModalButton from "../../shared/components/ModalButton";
 import NavigationButton from "../../shared/components/NavigationButton";
 import { formatDuration } from "../../shared/helpers";
@@ -105,8 +106,8 @@ export default class ItemsList extends React.Component<any, IState> {
         this.state = {
             task: activeTask,
             sortKey: "period",
-            sortDirection: "asc",
-            previousItemLength: activeTask.items.length,
+            sortDirection: "desc",
+            previousItemLength: 0,
             selectedItem: null,
             isShowDetailsModalVisible: false,
             isSortItemsModalVisible: false
@@ -114,6 +115,8 @@ export default class ItemsList extends React.Component<any, IState> {
     }
 
     componentDidMount() {
+        this.resortEntries();
+
         this.props.navigation.setParams({
             taskName: this.getHeaderText(),
             task: this.state.task,
@@ -121,14 +124,14 @@ export default class ItemsList extends React.Component<any, IState> {
         });
     }
 
+    componentDidUpdate(previousProps: IProps, previousState: IState) {
+        this.resortEntries();
+    }
+
     getHeaderText() {
         return this.state.task.name.length > 12 ?
             `${this.state.task.name.slice(0, 12)}...` :
             this.state.task.name;
-    }
-
-    componentWillReceiveProps(nextProps: IProps) {
-        this.resortEntries();
     }
 
     renderDate(duration: string) {
