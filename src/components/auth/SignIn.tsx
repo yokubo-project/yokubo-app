@@ -42,7 +42,7 @@ export default class SignIn extends React.Component<IProps, IState> {
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            title: "Sign In"
+            title: i18n.t("signIn.header")
         };
     }
 

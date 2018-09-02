@@ -40,7 +40,7 @@ export default class ForgotPwd extends React.Component<IProps, IState> {
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            title: "Forgot Password"
+            title: i18n.t("forgotPwd.header")
         };
     }
 

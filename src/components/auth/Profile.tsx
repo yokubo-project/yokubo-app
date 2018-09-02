@@ -46,7 +46,7 @@ class Profile extends React.Component<IProps, IState> {
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            title: "Profile"
+            title: i18n.t("profile.header")
         };
     }
 

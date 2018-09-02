@@ -68,7 +68,7 @@ export default class CreateTask extends React.Component<IProps, IState> {
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            title: "Create Task"
+            title: i18n.t("createTask.header")
         };
     }
 

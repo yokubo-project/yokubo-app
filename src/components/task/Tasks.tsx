@@ -77,7 +77,7 @@ export default class Tasks extends React.Component<IProps, IState> {
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            title: "Tasks",
+            title: i18n.t("tasks.header"),
             headerLeft: (
                 <NavigationButton
                     navigation={navigation}

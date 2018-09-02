@@ -83,7 +83,7 @@ export default class PatchTask extends React.Component<IProps, IState> {
         const taskName = navigation.getParam("taskName");
 
         return {
-            title: taskName,
+            title: i18n.t("patchTask.header", { taskName }),
             headerRight: (
                 <ModalButton
                     navigation={navigation}

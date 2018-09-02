@@ -71,7 +71,7 @@ export default class CreateItem extends React.Component<IProps, IState> {
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            title: "Create Item"
+            title: i18n.t("createItem.header")
         };
     }
 

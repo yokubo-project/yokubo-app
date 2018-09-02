@@ -77,7 +77,7 @@ export default class PatchItem extends React.Component<IProps, IState> {
         const itemName = navigation.getParam("itemName");
 
         return {
-            title: itemName,
+            title: i18n.t("patchItem.header", { itemName }),
             headerRight: (
                 <ModalButton
                     navigation={navigation}

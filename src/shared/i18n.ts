@@ -133,7 +133,7 @@ i18n
                         datePickerCancel: "Cancel"
                     },
                     patchItem: {
-                        header: "Update Item",
+                        header: "Update {{itemName}}",
                         descToShort: "Description must be at least 3 characters long",
                         invalidDateRange: "Invalid date range provided. Make sure start date is before end date",
                         incompleteMetrics: "Not all metrics are filled out",
@@ -332,7 +332,7 @@ i18n
                         datePickerCancel: "Abbrechen"
                     },
                     patchItem: {
-                        header: "Item ändern",
+                        header: "Update {{itemName}}",
                         descToShort: "Beschreibung muss aus mindestens 3 Zeichen bestehen",
                         invalidDateRange: "Ungültiger Zeitraum. Stell sicher dass das Start-Datum vor dem End-Datum liegt.",
                         incompleteMetrics: "Nicht alle Metriken sind ausgefüllt",

@@ -55,7 +55,7 @@ export default class SignUp extends React.Component<IProps, IState> {
 
     static navigationOptions = ({ navigation }: NavigationScreenProps) => {
         return {
-            title: "Sign Up"
+            title: i18n.t("signUp.header")
         };
     }
 
