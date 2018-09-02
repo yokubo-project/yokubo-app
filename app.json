@@ -2,9 +2,10 @@
   "expo": {
     "name": "Yokubo",
     "icon": "./assets/yokubo_app_logo.png",
-    "version": "1.1.1",
+    "version": "2.0.0",
     "slug": "yokubo",
     "sdkVersion": "27.0.0",
+    "githubUrl": "https://github.com/yokubo-project",
     "splash": {
       "image": "./assets/yokubo_logo.png",
       "backgroundColor": "#fff",
@@ -17,7 +18,8 @@
       "bundleIdentifier": "org.yokubo.app"
     },
     "android": {
-      "package": "org.yokubo.app"
+      "package": "org.yokubo.app",
+      "versionCode": 2
     },
     "orientation": "portrait"
   }
