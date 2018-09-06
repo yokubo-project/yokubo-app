@@ -1,9 +1,11 @@
 {
   "expo": {
     "name": "Yokubo",
+    "description": "A minimalistic project management tool.",
     "icon": "./assets/yokubo_app_logo.png",
     "version": "2.0.0",
     "slug": "yokubo",
+    "privacy": "public",
     "sdkVersion": "27.0.0",
     "githubUrl": "https://github.com/yokubo-project",
     "splash": {

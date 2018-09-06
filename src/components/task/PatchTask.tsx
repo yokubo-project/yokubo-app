@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ImagePicker } from "expo";
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { FormInput, FormValidationMessage, Icon } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
