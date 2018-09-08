@@ -84,6 +84,7 @@ export default class PatchItem extends React.Component<IProps, IState> {
                     getParameter="showDeleteModal"
                     ioniconName="md-trash"
                     ioniconColor="white"
+                    marginRight={15}
                 />
             )
         };

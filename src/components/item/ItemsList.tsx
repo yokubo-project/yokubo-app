@@ -85,6 +85,7 @@ export default class ItemsList extends React.Component<any, IState> {
                         getParameter="showSortItemsModal"
                         ioniconName="md-reorder"
                         ioniconColor="white"
+                        marginRight={5}
                     />
                     <NavigationButton
                         navigation={navigation}
@@ -92,6 +93,7 @@ export default class ItemsList extends React.Component<any, IState> {
                         navigateToScreen="CreateItem"
                         ioniconName="md-add"
                         ioniconColor="white"
+                        marginRight={15}
                     />
                 </View>
             )

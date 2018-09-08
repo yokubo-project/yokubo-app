@@ -83,6 +83,7 @@ export default class ItemStats extends React.Component<IProps, IState> {
                         navigateToScreen="CreateItem"
                         ioniconName="md-add"
                         ioniconColor="white"
+                        marginRight={15}
                     />
                 </View>
             )

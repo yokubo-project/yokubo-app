@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { ImagePicker } from "expo";
+import { ImagePicker, Permissions } from "expo";
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { FormInput, FormValidationMessage, Icon } from "react-native-elements";
@@ -90,6 +90,7 @@ export default class PatchTask extends React.Component<IProps, IState> {
                     getParameter="showDeleteModal"
                     ioniconName="md-trash"
                     ioniconColor="white"
+                    marginRight={15}
                 />
             )
         };
@@ -238,6 +239,25 @@ export default class PatchTask extends React.Component<IProps, IState> {
     }
 
     pickImage = async () => {
+        const permissionResults = await Promise.all([
+            await Permissions.askAsync(Permissions.CAMERA_ROLL),
+            await Permissions.askAsync(Permissions.CAMERA)
+        ]);
+        const isPermissionGranted = permissionResults.some(permissionResult => {
+            return permissionResult.status !== "granted";
+        }) === true ? false : true;
+
+        if (!isPermissionGranted) {
+            // tslint:disable-next-line:no-console
+            console.log("Permission not granted, aborting image picker");
+            this.setState({
+                isPreparingImageModalVisible: false,
+                inputGeneralError: "Permission not granted to pick image."
+            });
+
+            return;
+        }
+
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false

@@ -84,6 +84,7 @@ export default class Tasks extends React.Component<IProps, IState> {
                     navigateToScreen="Profile"
                     ioniconName="md-more"
                     ioniconColor="white"
+                    marginLeft={15}
                 />
             ),
             headerRight: (
@@ -92,6 +93,7 @@ export default class Tasks extends React.Component<IProps, IState> {
                     navigateToScreen="CreateTask"
                     ioniconName="md-add"
                     ioniconColor="white"
+                    marginRight={15}
                 />
             )
         };

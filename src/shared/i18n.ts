@@ -381,7 +381,7 @@ i18n
                         metrics: "Metriken",
                         noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",
                         namePlaceholder: "Name",
-                        createTaskButton: "HINZUFÜGEM",
+                        createTaskButton: "HINZUFÜGEN",
                         loadingPrepareImage: "Bild wird hinzugefügt",
                         loadingCreateTask: "Task wird angelegt"
                     },

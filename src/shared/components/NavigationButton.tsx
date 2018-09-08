@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { TouchableNativeFeedback, View } from "react-native";
+import { View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
+import HeaderButtons, { HeaderButton } from "react-navigation-header-buttons";
 
 interface IProps {
     navigation: NavigationScreenProp<any, any>;
@@ -9,39 +10,36 @@ interface IProps {
     navigateToScreen: string;
     ioniconName: string;
     ioniconColor: string;
+    marginLeft?: number;
+    marginRight?: number;
 }
 
+// tslint:disable-next-line:variable-name
+const MultiFontFamilyHeaderButton = props => (
+    <HeaderButton {...props} IconComponent={props.MyIconComponent} iconSize={28} color={props.ioniconColor} />
+);
 export default class Component extends React.Component<IProps, null> {
+
+    marginLeft: number = this.props.marginLeft ? this.props.marginLeft : 0;
+    marginRight: number = this.props.marginRight ? this.props.marginRight : 0;
 
     render() {
         return (
             <View
-                style={{ borderRadius: 100, width: 50, height: 50 }}
+                style={{ marginLeft: this.marginLeft, marginRight: this.marginRight }}
             >
-                <TouchableNativeFeedback
-                    onPress={() => setTimeout(
-                        () => this.props.navigation.navigate(this.props.navigateToScreen, this.props.additionalProps),
-                        40
-                    )}
-                    background={TouchableNativeFeedback.Ripple("rgba(0, 0, 0, .80)", true)}
-                >
-                    <View
-                        style={{
-                            width: 50,
-                            height: 50,
-                            backgroundColor: "transparent",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            alignSelf: "center"
-                        }}
-                    >
-                        <Ionicons
-                            name={this.props.ioniconName}
-                            size={28}
-                            color={this.props.ioniconColor}
-                        />
-                    </View>
-                </TouchableNativeFeedback>
+                <HeaderButtons HeaderButtonComponent={MultiFontFamilyHeaderButton}>
+                    <HeaderButtons.Item
+                        title={this.props.ioniconName}
+                        MyIconComponent={Ionicons}
+                        iconName={this.props.ioniconName}
+                        ioniconColor={this.props.ioniconColor}
+                        onPress={() => setTimeout(
+                            () => this.props.navigation.navigate(this.props.navigateToScreen, this.props.additionalProps),
+                            40
+                        )}
+                    />
+                </HeaderButtons>
             </View>
         );
     }

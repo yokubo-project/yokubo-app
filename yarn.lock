@@ -6120,6 +6120,10 @@ react-native-modal@4.0.0:
     prop-types "15.5.10"
     react-native-animatable "^1.2.3"
 
+react-native-platform-touchable@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz#fde4acc65eea585d28b164d0c3716a42129a68e4"
+
 react-native-safe-area-view@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.7.0.tgz#38f5ab9368d6ef9e5d18ab64212938af3ec39421"
@@ -6287,6 +6291,12 @@ react-navigation-drawer@0.4.3:
   resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-0.4.3.tgz#c04c94e2429b7e724801af05bd0a93a79cb27f71"
   dependencies:
     react-native-drawer-layout-polyfill "^1.3.2"
+
+react-navigation-header-buttons@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-header-buttons/-/react-navigation-header-buttons-2.1.0.tgz#0f1faae21a741ae6d7f5c8f7ee4882d4a081d8b1"
+  dependencies:
+    react-native-platform-touchable "^1.1.1"
 
 react-navigation-tabs@0.5.1:
   version "0.5.1"

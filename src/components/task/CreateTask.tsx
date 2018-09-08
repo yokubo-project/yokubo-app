@@ -1,4 +1,4 @@
-import { ImagePicker } from "expo";
+import { ImagePicker, Permissions } from "expo";
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
@@ -178,6 +178,25 @@ export default class CreateTask extends React.Component<IProps, IState> {
     }
 
     pickImage = async () => {
+        const permissionResults = await Promise.all([
+            await Permissions.askAsync(Permissions.CAMERA_ROLL),
+            await Permissions.askAsync(Permissions.CAMERA)
+        ]);
+        const isPermissionGranted = permissionResults.some(permissionResult => {
+            return permissionResult.status !== "granted";
+        }) === true ? false : true;
+
+        if (!isPermissionGranted) {
+            // tslint:disable-next-line:no-console
+            console.log("Permission not granted, aborting image picker");
+            this.setState({
+                isPreparingImageModalVisible: false,
+                inputGeneralError: "Permission not granted to pick image."
+            });
+
+            return;
+        }
+
         const pickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false
