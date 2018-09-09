@@ -38,7 +38,10 @@ const styles = StyleSheet.create({
     } as ViewStyle,
     imageStyle: {
         width: 150,
-        height: 150
+        height: 150,
+        borderRadius: 150 / 2,
+        borderWidth: 2,
+        borderColor: theme.borderColor
     }
 });
 
@@ -312,9 +315,7 @@ export default class PatchTask extends React.Component<IProps, IState> {
                         hideVisibility={() => this.hideDeleteModal()}
                         deleteTask={() => this.deleteTask()}
                     />
-                    <View
-                        style={styles.imageContainer}
-                    >
+                    <View style={styles.imageContainer}>
                         <TouchableOpacity
                             activeOpacity={0.9}
                             onPress={this.pickImage}
@@ -323,10 +324,6 @@ export default class PatchTask extends React.Component<IProps, IState> {
                                 source={this.state.image ? { uri: this.state.image } : PLACEHOLDER_IMAGE}
                                 style={styles.imageStyle}
                                 resizeMode="cover"
-                                // @ts-ignore
-                                borderRadius={100}
-                                borderWidth={1}
-                                borderColor={theme.borderColor}
                             />
                         </TouchableOpacity>
                     </View>
