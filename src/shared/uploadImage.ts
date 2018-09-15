@@ -1,6 +1,9 @@
 import * as Config from "../config";
 import authStore from "../state/authStore";
 
+export const UPLOAD_IMAGE_ERR_SIZE_TO_LARGE = "UploadSizeTooLarge";
+export const UPLOAD_IMAGE_ERR_UNKNOWN = "UnknownImageUploadError";
+
 export async function uploadImageAsync(uri: string): Promise<string> {
     const apiUrl = `${Config.BASE_URL}/api/v1/images`;
     const uriParts = uri.split(".");
@@ -24,6 +27,12 @@ export async function uploadImageAsync(uri: string): Promise<string> {
     };
 
     const results = await fetch(apiUrl, options);
+    if (results.status !== 200) {
+        if (results.status === 413) {
+            throw new Error(UPLOAD_IMAGE_ERR_SIZE_TO_LARGE);
+        }
+        throw new Error(UPLOAD_IMAGE_ERR_UNKNOWN);
+    }
     const parsedResults = await results.json();
 
     return parsedResults[0].uid;

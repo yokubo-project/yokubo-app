@@ -3,6 +3,7 @@ import React from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import { FormInput, FormValidationMessage, Header, Icon } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
+import Sentry from "sentry-expo";
 import * as uuid from "uuid";
 
 import * as Config from "../../config";
@@ -11,7 +12,7 @@ import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal
 import TextInputField from "../../shared/components/TextInputField";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
-import { uploadImageAsync } from "../../shared/uploadImage";
+import { UPLOAD_IMAGE_ERR_SIZE_TO_LARGE, uploadImageAsync } from "../../shared/uploadImage";
 import authStore from "../../state/authStore";
 import taskStore, { IMetric } from "../../state/taskStore";
 import CreateMetricModal from "./modals/CreateMetricModal";
@@ -53,6 +54,7 @@ interface IState {
     name: string;
     imageUid: string;
     inputNameError: string;
+    inputImageError: string;
     inputGeneralError: string;
     metrics: {
         uid: string;
@@ -85,6 +87,7 @@ export default class CreateTask extends React.Component<IProps, IState> {
             imageUid: null,
             metrics: [],
             inputNameError: null,
+            inputImageError: null,
             inputGeneralError: null,
             image: null,
             isMetricInfoModalVisible: false,
@@ -105,9 +108,14 @@ export default class CreateTask extends React.Component<IProps, IState> {
         if (name.length < 3) {
             this.setState({
                 inputNameError: i18n.t("createTask.nameToShort"),
+                inputImageError: null,
                 inputGeneralError: null
             });
 
+            return;
+        }
+
+        if (this.state.inputImageError || this.state.inputGeneralError) {
             return;
         }
 
@@ -119,6 +127,7 @@ export default class CreateTask extends React.Component<IProps, IState> {
                 default:
                     this.setState({
                         inputNameError: null,
+                        inputImageError: null,
                         inputGeneralError: i18n.t("createTask.unexpectedError"),
                         isCreatingTaskModalVisible: false
                     });
@@ -139,6 +148,14 @@ export default class CreateTask extends React.Component<IProps, IState> {
     showGeneralError() {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
+        }
+
+        return null;
+    }
+
+    showImageError() {
+        if (this.state.inputImageError) {
+            return <FormValidationMessage>{this.state.inputImageError}</FormValidationMessage>;
         }
 
         return null;
@@ -190,11 +207,9 @@ export default class CreateTask extends React.Component<IProps, IState> {
         }) === true ? false : true;
 
         if (!isPermissionGranted) {
-            // tslint:disable-next-line:no-console
-            console.log("Permission not granted, aborting image picker");
             this.setState({
                 isPreparingImageModalVisible: false,
-                inputGeneralError: "Permission not granted to pick image."
+                inputImageError: i18n.t("createTask.noCameraPermission")
             });
 
             return;
@@ -210,14 +225,28 @@ export default class CreateTask extends React.Component<IProps, IState> {
                 this.setState({ isPreparingImageModalVisible: true });
                 const imageUid = await uploadImageAsync(pickerResult.uri);
                 this.setState({
-                    image: pickerResult.uri,
                     imageUid: imageUid,
-                    isPreparingImageModalVisible: false
+                    image: pickerResult.uri,
+                    isPreparingImageModalVisible: false,
+                    inputImageError: null
                 });
             }
         } catch (e) {
-            // tslint:disable-next-line:no-console
-            console.log("Error picking image: ", e);
+            if (e.message === UPLOAD_IMAGE_ERR_SIZE_TO_LARGE) {
+                this.setState({
+                    inputNameError: null,
+                    inputImageError: i18n.t("createTask.imageToLarge"),
+                    inputGeneralError: null,
+                    isPreparingImageModalVisible: false
+                });
+            } else {
+                this.setState({
+                    inputNameError: null,
+                    inputImageError: i18n.t("createTask.unknownUploadError"),
+                    inputGeneralError: null,
+                    isPreparingImageModalVisible: false
+                });
+            }
             this.setState({ isPreparingImageModalVisible: false });
         }
     }
@@ -268,6 +297,8 @@ export default class CreateTask extends React.Component<IProps, IState> {
                             />
                         </TouchableOpacity>
                     </View>
+                    {this.showImageError()}
+
                     <TextInputField
                         placeholder={i18n.t("createTask.namePlaceholder")}
                         onChangeText={(value) => this.setState({ name: value })}
@@ -282,7 +313,7 @@ export default class CreateTask extends React.Component<IProps, IState> {
                         }}
                     >
                         <View style={{ flexDirection: "row" }}>
-                            <Text style={{ color: theme.text.primaryColor, fontSize: 20 }}>{i18n.t("patchTask.metrics")}</Text>
+                            <Text style={{ color: theme.text.primaryColor, fontSize: 20 }}>{i18n.t("createTask.metrics")}</Text>
                             {!this.state.metrics || this.state.metrics.length === 0 && <Icon
                                 name="info"
                                 color={theme.text.linkColor}

@@ -54,6 +54,7 @@
     "react-native-typography": "^1.1.0",
     "react-navigation": "^2.9.3",
     "react-navigation-header-buttons": "^2.1.0",
+    "sentry-expo": "^1.9.0",
     "tslint": "5.10.0",
     "uuid": "^3.2.1"
   }

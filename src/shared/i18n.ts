@@ -178,6 +178,9 @@ i18n
                     createTask: {
                         header: "New Task",
                         nameToShort: "Name must be at least 3 characters long",
+                        imageToLarge: "Image is to large, please try another image",
+                        noCameraPermission: "Permission to pick an image are not given",
+                        unknownUploadError: "An unknown error occurred when trying to upload the image",
                         unexpectedError: "An unexpected error happened",
                         metrics: "Metrics",
                         noMetricsYet: "You haven't added any metrics yet.",
@@ -190,6 +193,9 @@ i18n
                     patchTask: {
                         header: "Update {{taskName}}",
                         nameToShort: "Name must be at least 3 characters long",
+                        imageToLarge: "Image is to large, please try another image",
+                        noCameraPermission: "Permission to pick an image are not given",
+                        unknownUploadError: "An unknown error occurred when trying to upload the image",
                         unexpectedError: "An unexpected error happened",
                         metrics: "Metrics",
                         noMetricsYet: "You haven't added any metrics yet.",
@@ -377,6 +383,9 @@ i18n
                     createTask: {
                         header: "Neuer Task",
                         nameToShort: "Name muss aus mindestens 3 Zeichen bestehen",
+                        imageToLarge: "Das ausgewählte Bild ist zu groß, bitte versuch es mit einem anderen",
+                        noCameraPermission: "Nötige Berechtigungen zum Auswählen eines Bildes sind nicht gegeben",
+                        unknownUploadError: "Ein unbekannter Fehler beim Upload deines Bildes ist aufgetreten",
                         unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
                         metrics: "Metriken",
                         noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",
@@ -388,6 +397,9 @@ i18n
                     patchTask: {
                         header: "Update {{taskName}}",
                         nameToShort: "Name muss aus mindestens 3 Zeichen bestehen",
+                        imageToLarge: "Das ausgewählte Bild ist zu groß, bitte versuch es mit einem anderen",
+                        noCameraPermission: "Nötige Berechtigungen zum Auswählen eines Bildes sind nicht gegeben",
+                        unknownUploadError: "Ein unbekannter Fehler beim Upload deines Bildes ist aufgetreten",
                         unexpectedError: "Ein unerwarteter Fehler ist aufgetreten",
                         metrics: "Metriken",
                         noMetricsYet: "Du hast noch keine Metriken hinzugefügt.",

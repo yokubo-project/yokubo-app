@@ -2,6 +2,9 @@ import { observer } from "mobx-react";
 import React from "react";
 import { ActivityIndicator, NetInfo, StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "react-navigation";
+import Sentry from "sentry-expo";
+
+import * as Config from "./src/config";
 
 import { theme } from "./src/shared/styles";
 import authStore from "./src/state/authStore";
@@ -22,6 +25,9 @@ import PatchItem from "./src/components/item/PatchItem";
 
 import ItemTabNavigation from "./src/components/item/TabNavigation";
 import i18n from "./src/shared/i18n";
+
+Sentry.enableInExpoDevelopment = true;
+Sentry.config(Config.SENTRY_ENDPOINT).install();
 
 const styles = StyleSheet.create({
     spinnerContainer: {

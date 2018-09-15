@@ -11,7 +11,7 @@ import ModalButton from "../../shared/components/ModalButton";
 import TextInputField from "../../shared/components/TextInputField";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
-import { uploadImageAsync } from "../../shared/uploadImage";
+import { UPLOAD_IMAGE_ERR_SIZE_TO_LARGE, uploadImageAsync } from "../../shared/uploadImage";
 import taskStore, { IFullTask, IMetric } from "../../state/taskStore";
 import DeleteTaskModal from "../task/modals/DeleteTaskModal";
 import CreateMetricModal from "./modals/CreateMetricModal";
@@ -49,6 +49,7 @@ interface IState {
     name: string;
     imageUid: string;
     inputNameError: string;
+    inputImageError: string;
     inputGeneralError: string;
     metrics: {
         uid: string;
@@ -116,6 +117,7 @@ export default class PatchTask extends React.Component<IProps, IState> {
             metrics: task.metrics,
             metricsToBePatched: [],
             inputNameError: null,
+            inputImageError: null,
             inputGeneralError: null,
             image: task.image.thumbnail,
             isDeleteModalVisible: false,
@@ -144,9 +146,14 @@ export default class PatchTask extends React.Component<IProps, IState> {
         if (name.length < 3) {
             this.setState({
                 inputNameError: i18n.t("patchTask.nameToShort"),
+                inputImageError: null,
                 inputGeneralError: null
             });
 
+            return;
+        }
+
+        if (this.state.inputImageError || this.state.inputGeneralError) {
             return;
         }
 
@@ -158,6 +165,7 @@ export default class PatchTask extends React.Component<IProps, IState> {
                 default:
                     this.setState({
                         inputNameError: null,
+                        inputImageError: null,
                         inputGeneralError: i18n.t("patchTask.unexpectedError"),
                         isPatchingTaskModalVisible: false
                     });
@@ -181,6 +189,14 @@ export default class PatchTask extends React.Component<IProps, IState> {
     showGeneralError() {
         if (this.state.inputGeneralError) {
             return <FormValidationMessage>{this.state.inputGeneralError}</FormValidationMessage>;
+        }
+
+        return null;
+    }
+
+    showImageError() {
+        if (this.state.inputImageError) {
+            return <FormValidationMessage>{this.state.inputImageError}</FormValidationMessage>;
         }
 
         return null;
@@ -251,11 +267,9 @@ export default class PatchTask extends React.Component<IProps, IState> {
         }) === true ? false : true;
 
         if (!isPermissionGranted) {
-            // tslint:disable-next-line:no-console
-            console.log("Permission not granted, aborting image picker");
             this.setState({
                 isPreparingImageModalVisible: false,
-                inputGeneralError: "Permission not granted to pick image."
+                inputImageError: i18n.t("patchTask.noCameraPermission")
             });
 
             return;
@@ -273,12 +287,26 @@ export default class PatchTask extends React.Component<IProps, IState> {
                 this.setState({
                     imageUid: imageUid,
                     image: pickerResult.uri,
-                    isPreparingImageModalVisible: false
+                    isPreparingImageModalVisible: false,
+                    inputImageError: null
                 });
             }
         } catch (e) {
-            // tslint:disable-next-line:no-console
-            console.log("Error picking image: ", e);
+            if (e.message === UPLOAD_IMAGE_ERR_SIZE_TO_LARGE) {
+                this.setState({
+                    inputNameError: null,
+                    inputImageError: i18n.t("patchTask.imageToLarge"),
+                    inputGeneralError: null,
+                    isPreparingImageModalVisible: false
+                });
+            } else {
+                this.setState({
+                    inputNameError: null,
+                    inputImageError: i18n.t("patchTask.unknownUploadError"),
+                    inputGeneralError: null,
+                    isPreparingImageModalVisible: false
+                });
+            }
             this.setState({ isPreparingImageModalVisible: false });
         }
     }
@@ -327,6 +355,8 @@ export default class PatchTask extends React.Component<IProps, IState> {
                             />
                         </TouchableOpacity>
                     </View>
+                    {this.showImageError()}
+
                     <TextInputField
                         placeholder={this.state.name}
                         defaultValue={this.state.name}

@@ -1,3 +1,7 @@
 node_modules/
 .expo/
 npm-debug.*
+
+# config files
+app.json
+src/config.ts
