@@ -35,7 +35,6 @@ $ yarn start
 
 ```sh
 $ yarn start-
-d
 ```
 
 #### Build apk file
