@@ -232,6 +232,7 @@ export default class SignUp extends React.Component<IProps, IState> {
                     <TextInputField
                         placeholder={i18n.t("signUp.pwdPlaceholder")}
                         onChangeText={(e) => this.parsePassword(e)}
+                        secureTextEntry={true}
                     />
                     {this.showPasswordError()}
                     {this.showGeneralError()}
