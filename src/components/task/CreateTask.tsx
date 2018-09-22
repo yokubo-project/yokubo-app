@@ -6,7 +6,7 @@ import { NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 import Sentry from "sentry-expo";
 import * as uuid from "uuid";
 
-import * as Config from "../../config";
+import * as Config from "../../../config";
 import Button from "../../shared/components/Button";
 import LoadingIndicatorModal from "../../shared/components/LoadingIndicatorModal";
 import TextInputField from "../../shared/components/TextInputField";

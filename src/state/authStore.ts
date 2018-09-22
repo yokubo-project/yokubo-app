@@ -6,7 +6,7 @@ import { APIClientStatusCodeError } from "network-stapler";
 import APIClient from "../network/APIClient";
 import { AuthAPI } from "../network/AuthAPI";
 
-import * as config from "../config";
+import * as config from "../../config";
 import taskStore from "./taskStore";
 
 export interface ICredentials {

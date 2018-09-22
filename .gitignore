@@ -4,4 +4,4 @@ npm-debug.*
 
 # config files
 app.json
-src/config.ts
+config.ts

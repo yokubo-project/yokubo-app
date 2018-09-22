@@ -3,7 +3,7 @@ import { Linking, ScrollView, StyleSheet, Text, View, ViewStyle } from "react-na
 import { List, ListItem } from "react-native-elements";
 import { NavigationScreenProp, NavigationScreenProps, withNavigation } from "react-navigation";
 
-import * as Config from "../../config";
+import * as Config from "../../../config";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
 import authStore from "../../state/authStore";

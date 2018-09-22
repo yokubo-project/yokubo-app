@@ -1,7 +1,7 @@
 import { AuthAPIClient, ICredentialsHandler } from "auth-stapler";
 // tslint:disable-next-line:no-implicit-dependencies
 import { IAPIClientOptions } from "network-stapler";
-import * as Config from "../config";
+import * as Config from "../../config";
 import authStore, { ICredentials } from "../state/authStore";
 import { AuthAPI } from "./AuthAPI";
 

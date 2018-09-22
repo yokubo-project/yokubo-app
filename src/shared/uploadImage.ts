@@ -1,4 +1,4 @@
-import * as Config from "../config";
+import * as Config from "../../config";
 import authStore from "../state/authStore";
 
 export const UPLOAD_IMAGE_ERR_SIZE_TO_LARGE = "UploadSizeTooLarge";
