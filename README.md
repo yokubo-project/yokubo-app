@@ -1,10 +1,10 @@
 # yokubo-app
 
-Repo of the [Yokubo App](https://play.google.com/store/apps/details?id=org.yokubo.app), a project tracking tool written in React-Native.
+Repository of the [Yokubo App](https://play.google.com/store/apps/details?id=org.yokubo.app), a task tracking tool written in React-Native.
 
 ## About Yokubo
 
-With Yokubo you can track your projects, record the time you spent on them and make notes about certain metrics defined by yourself. The app automatically calculates valuable statistics and gives you insights on your overall performance.
+With Yokubo you can track your tasks, record the time you spent on them and make notes about certain metrics defined by yourself. The app automatically calculates valuable statistics and gives you insights on your overall performance.
 
 ## Installation & Usage
 
@@ -31,7 +31,8 @@ $ yarn start
 #### Production (connects to production backend)
 
 ```sh
-$ yarn start-prod
+$ yarn start-
+d
 ```
 
 #### Build apk file
