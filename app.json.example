@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Yokubo",
-    "description": "A minimalistic project management tool.",
+    "description": "Task tracking done awesome!",
     "icon": "./assets/yokubo_app_logo.png",
     "version": "2.0.2",
     "slug": "yokubo",

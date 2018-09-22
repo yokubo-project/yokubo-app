@@ -31,7 +31,7 @@ i18n
                         noInternetConnection: "No internet connection. Please check your network settings."
                     },
                     home: {
-                        quote: "It's the challenge that makes the greatness.",
+                        quote: "Task tracking done awesome!",
                         alreadyRegistered: "Already a member?",
                         signupButton: "SIGN UP",
                         signinLink: "Sign In"
@@ -236,7 +236,7 @@ i18n
                         noInternetConnection: "Keine Internetverbindung. Bitte prüfe deine Netzwerkeinstellungen."
                     },
                     home: {
-                        quote: "Man wächst mit seinen Aufgaben",
+                        quote: "Task tracking done awesome!",
                         alreadyRegistered: "Bereits registriert?",
                         signupButton: "REGISTRIEREN",
                         signinLink: "Anmelden"
