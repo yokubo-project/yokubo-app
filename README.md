@@ -16,19 +16,22 @@ $ yarn install
 
 #### Configure environment
 
-##### Setup backend connection 
+##### Copy example files 
 
-In the config file of the src directory, enter the development and production URLs of your backend service.
+```sh
+$ cp app.json.example app.json && cp config.sample.ts config.ts
+```
+##### Update secrets and tailor config to your needs 
 
 #### Start expo
 
-#### Development (connects to your dev backend)
+##### Development (connects to your dev backend)
 
 ```sh
 $ yarn start
 ```
 
-#### Production (connects to production backend)
+##### Production (connects to production backend)
 
 ```sh
 $ yarn start-
@@ -38,7 +41,7 @@ d
 #### Build apk file
 
 ```sh
-$ exp build:android
+$ exp build
 ```
 
 ## License
