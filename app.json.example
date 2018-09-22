@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Yokubo",
+    "description": "A minimalistic project management tool.",
+    "icon": "./assets/yokubo_app_logo.png",
+    "version": "2.0.2",
+    "slug": "yokubo",
+    "privacy": "public",
+    "sdkVersion": "27.0.0",
+    "githubUrl": "https://github.com/yokubo-project",
+    "splash": {
+      "image": "./assets/yokubo_logo.png",
+      "backgroundColor": "#fff",
+      "resizeMode": "contain"
+    },
+    "packagerOpts": {
+      "config": "rn-cli.config.js"
+    },
+    "ios": {
+      "bundleIdentifier": "org.yokubo.app",
+      "buildNumber": "2.0.2",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Give Yokubo permission to access your photos so you can select a background image for your task."
+      }
+    },
+    "android": {
+      "package": "org.yokubo.app",
+      "versionCode": 2
+    },
+    "orientation": "portrait",
+    "hooks": {
+      "postPublish": [{
+        "file": "sentry-expo/upload-sourcemaps",
+        "config": {
+          "organization": "yokubo",
+          "project": "yokubo-app",
+          "authToken": "<SECRET>"
+        }
+      }]
+    },
+    "locales": {
+      "de": "./src/shared/system_dialogs/de.json"
+    }
+  }
+}
