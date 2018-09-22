@@ -259,8 +259,8 @@ export default class PatchTask extends React.Component<IProps, IState> {
 
     pickImage = async () => {
         const permissionResults = await Promise.all([
-            await Permissions.askAsync(Permissions.CAMERA_ROLL),
-            await Permissions.askAsync(Permissions.CAMERA)
+            await Permissions.askAsync(Permissions.CAMERA_ROLL)
+            // await Permissions.askAsync(Permissions.CAMERA)
         ]);
         const isPermissionGranted = permissionResults.some(permissionResult => {
             return permissionResult.status !== "granted";
