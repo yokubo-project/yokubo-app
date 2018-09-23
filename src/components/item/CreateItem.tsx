@@ -279,7 +279,7 @@ export default class CreateItem extends React.Component<IProps, IState> {
                 <DatePicker
                     date={this.state.toDate}
                     placeholder={i18n.t("createItem.datePickerEndPlaceholder")}
-                    confirmBtnText={i18n.t("createItem.datePickerCancel")}
+                    confirmBtnText={i18n.t("createItem.datePickerConfirm")}
                     cancelBtnText={i18n.t("createItem.datePickerCancel")}
                     onDateChange={(date) => this.setState({ toDate: date })}
                 />
