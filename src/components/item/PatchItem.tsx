@@ -12,7 +12,7 @@ import TextInputField from "../../shared/components/TextInputField";
 import TextInputFieldWithLabel from "../../shared/components/TextInputFieldWithLabel";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
-import taskStore, { IItem } from "../../state/taskStore";
+import taskStore, { IFullItem } from "../../state/taskStore";
 import DeleteItemModal from "./modals/DeleteItemModal";
 
 const styles = StyleSheet.create({

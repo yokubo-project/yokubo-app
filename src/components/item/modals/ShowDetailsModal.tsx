@@ -9,7 +9,7 @@ import { formatDuration } from "../../../shared/helpers";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
-import taskStore, { IItem } from "../../../state/taskStore";
+import taskStore, { IFullItem } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
     modalContent: {
@@ -42,7 +42,7 @@ interface IState { }
 
 interface IProps {
     isVisible: boolean;
-    item: IItem;
+    item: IFullItem;
     hide(): void;
 }
 

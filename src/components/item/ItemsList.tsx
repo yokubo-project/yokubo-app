@@ -14,7 +14,7 @@ import NavigationButton from "../../shared/components/NavigationButton";
 import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
-import taskStore, { IFullTask, IItem } from "../../state/taskStore";
+import taskStore, { IFullItem, IFullTask } from "../../state/taskStore";
 import ShowDetailsModal from "./modals/ShowDetailsModal";
 import SortItemsModal from "./modals/SortItemsModal";
 
@@ -55,7 +55,7 @@ interface IState {
     sortKey: string;
     sortDirection: string;
     previousItemLength: number;
-    selectedItem: IItem;
+    selectedItem: IFullItem;
     isShowDetailsModalVisible: boolean;
     isSortItemsModalVisible: boolean;
 }
@@ -176,14 +176,14 @@ export default class ItemsList extends React.Component<any, IState> {
         );
     }
 
-    handleOnEditItemClick(item: IItem) {
+    handleOnEditItemClick(item: IFullItem) {
         this.props.navigation.navigate("PatchItem", {
             taskUid: this.state.task.uid,
             item
         });
     }
 
-    showDetailsModal = (item: IItem) => this.setState({
+    showDetailsModal = (item: IFullItem) => this.setState({
         selectedItem: item,
         isShowDetailsModalVisible: true
     })

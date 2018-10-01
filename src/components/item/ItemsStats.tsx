@@ -9,7 +9,8 @@ import NavigationButton from "../../shared/components/NavigationButton";
 import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
-import taskStore, { IFullTask } from "../../state/taskStore";
+import taskStore, { IFullTask, IStats } from "../../state/taskStore";
+import MetricInfoModal from "../task/modals/MetricInfoModal";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -113,94 +114,63 @@ export default class ItemStats extends React.Component<IProps, IState> {
             this.state.task.name;
     }
 
-    renderEntryStatictics(entries: any) {
-        const metrices = [];
-        let timespan: any = null;
-        entries.forEach(entry => {
-            const ms = entry.duration * 1000;
-
-            if (timespan !== null) {
-                timespan.totalValue += ms;
-                timespan.minValue = ms < timespan.minValue ? ms : timespan.minValue;
-                timespan.maxValue = ms > timespan.maxValue ? ms : timespan.maxValue;
-            } else {
-                timespan = {
-                    metricKey: "duration",
-                    metricName: "Duration",
-                    totalValue: ms,
-                    metricUnit: "ms",
-                    minValue: ms,
-                    maxValue: ms
-                };
+    renderStats(stats: IStats[]) {
+        // tslint:disable-next-line:no-unnecessary-local-variable
+        const renderedStats = stats.map(metric => {
+            if (metric.metricKey === "duration") {
+                return (
+                    <View key={metric.metricKey}>
+                        <View style={styles.listElement}>
+                            <Text style={styles.metricTextHeader}>{i18n.t("itemStats.items")}</Text>
+                            <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {metric.totalItems}</Text>
+                        </View>
+                        <View style={styles.listElement}>
+                            <Text style={styles.metricTextHeader}>{metric.metricName}</Text>
+                            <Text style={styles.metricText}>
+                                {i18n.t("itemStats.total")}:&nbsp;
+                            {
+                                    Math.floor(moment.duration(metric.totalValue).asHours()) +
+                                    moment.utc(metric.totalValue).format("[h] mm[m] ss[s]")
+                                }
+                            </Text>
+                            <Text style={styles.metricText}>
+                                {i18n.t("itemStats.average")}:&nbsp;
+                            {
+                                    Math.floor(moment.duration(metric.averageValue).asHours()) +
+                                    moment.utc(metric.averageValue).format("[h] mm[m] ss[s]")
+                                }
+                            </Text>
+                            <Text style={styles.metricText}>
+                                {i18n.t("itemStats.min")}:&nbsp;
+                            {
+                                    Math.floor(moment.duration(metric.minValue).asHours()) +
+                                    moment.utc(metric.minValue).format("[h] mm[m] ss[s]")
+                                }
+                            </Text>
+                            <Text style={styles.metricText}>
+                                {i18n.t("itemStats.max")}:&nbsp;
+                            {
+                                    Math.floor(moment.duration(metric.maxValue).asHours()) +
+                                    moment.utc(metric.maxValue).format("[h] mm[m] ss[s]")
+                                }
+                            </Text>
+                        </View>
+                    </View>
+                );
             }
 
-            if (entry.metricQuantities.length > 0) {
-                entry.metricQuantities.forEach(metric => {
-                    const metricObject = metrices.filter(metricOb => metricOb.metricName === metric.metric.name);
-                    if (metricObject.length > 0) {
-                        metricObject[0].totalValue += parseFloat(metric.quantity);
-                        metricObject[0].minValue =
-                            parseFloat(metric.quantity) < metricObject[0].minValue ? parseFloat(metric.quantity) : metricObject[0].minValue;
-                        metricObject[0].maxValue =
-                            parseFloat(metric.quantity) > metricObject[0].maxValue ? parseFloat(metric.quantity) : metricObject[0].maxValue;
-                    } else {
-                        metrices.push({
-                            metricKey: metric.uid,
-                            metricName: metric.metric.name,
-                            totalValue: parseFloat(metric.quantity),
-                            metricUnit: metric.metric.unit,
-                            minValue: parseFloat(metric.quantity),
-                            maxValue: parseFloat(metric.quantity)
-                        });
-                    }
-                });
-            }
+            return (
+                <View key={metric.metricKey} style={styles.listElement}>
+                    <Text style={styles.metricTextHeader}>{metric.metricName}</Text>
+                    <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {metric.totalValue} {metric.metricUnit}</Text>
+                    <Text style={styles.metricText}>{i18n.t("itemStats.average")}: {metric.averageValue} {metric.metricUnit}</Text>
+                    <Text style={styles.metricText}>{i18n.t("itemStats.min")}: {metric.minValue} {metric.metricUnit}</Text>
+                    <Text style={styles.metricText}>{i18n.t("itemStats.max")}: {metric.maxValue} {metric.metricUnit}</Text>
+                </View>
+            );
         });
 
-        const renderedMetrices = metrices.map(metric => (
-            <View key={metric.metricKey} style={styles.listElement}>
-                <Text style={styles.metricTextHeader}>{metric.metricName}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {metric.totalValue} {metric.metricUnit}</Text>
-                <Text style={styles.metricText}>
-                    {i18n.t("itemStats.average")}: {(metric.totalValue / entries.length).toFixed(2)} {metric.metricUnit}
-                </Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.min")}: {metric.minValue} {metric.metricUnit}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.max")}: {metric.maxValue} {metric.metricUnit}</Text>
-            </View>
-        ));
-
-        renderedMetrices.unshift(
-            <View key={"duration"} style={styles.listElement}>
-                <Text style={styles.metricTextHeader}>{timespan.metricName}</Text>
-                <Text style={styles.metricText}>
-                    {i18n.t("itemStats.total")}:&nbsp;
-                    {Math.floor(moment.duration(timespan.totalValue).asHours()) + moment.utc(timespan.totalValue).format("[h] mm[m] ss[s]")}
-                </Text>
-                <Text style={styles.metricText}>
-                    {i18n.t("itemStats.average")}:&nbsp;
-                    {
-                        Math.floor(moment.duration(
-                            timespan.totalValue / entries.length).asHours()) + moment.utc(timespan.totalValue / entries.length
-                            ).format("[h] mm[m] ss[s]")
-                    }
-                </Text>
-                <Text style={styles.metricText}>
-                    {i18n.t("itemStats.min")}:&nbsp;
-                    {Math.floor(moment.duration(timespan.minValue).asHours()) + moment.utc(timespan.minValue).format("[h] mm[m] ss[s]")}
-                </Text>
-                <Text style={styles.metricText}>
-                    {i18n.t("itemStats.max")}:&nbsp;
-                    {Math.floor(moment.duration(timespan.maxValue).asHours()) + moment.utc(timespan.maxValue).format("[h] mm[m] ss[s]")}
-                </Text>
-            </View>);
-
-        renderedMetrices.unshift(
-            <View key={"count"} style={styles.listElement}>
-                <Text style={styles.metricTextHeader}>{i18n.t("itemStats.items")}</Text>
-                <Text style={styles.metricText}>{i18n.t("itemStats.total")}: {entries.length}</Text>
-            </View>);
-
-        return renderedMetrices;
+        return renderedStats;
     }
 
     render() {
@@ -227,7 +197,7 @@ export default class ItemStats extends React.Component<IProps, IState> {
                         marginTop: 0
                     }}
                 >
-                    {this.renderEntryStatictics(this.state.task.items)}
+                    {this.renderStats(this.state.task.stats)}
                 </List>
             </ScrollView>
         );

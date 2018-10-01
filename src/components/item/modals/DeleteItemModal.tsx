@@ -8,7 +8,7 @@ import Button from "../../../shared/components/Button";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
-import taskStore, { IItem } from "../../../state/taskStore";
+import taskStore, { IFullItem } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
     modalContent: {
@@ -30,7 +30,7 @@ interface IProps {
     navigation: NavigationScreenProp<any, any>;
     isVisible: boolean;
     taskUid: string;
-    item: IItem;
+    item: IFullItem;
     hide(): void;
 }
 

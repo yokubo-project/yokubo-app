@@ -2,16 +2,15 @@
 import { ITypedAPITarget } from "network-stapler";
 
 import {
+    IFullItem,
     IFullTask,
-    IItem,
     IMetric,
     IPatchItem,
     IPatchMetric,
     IPatchTask,
     IPostItem,
     IPostMetric,
-    IPostTask,
-    ITask
+    IPostTask
 } from "../state/taskStore";
 
 // tslint:disable-next-line:variable-name
@@ -43,7 +42,7 @@ export const TaskAPI = {
             }
         };
     },
-    deleteTask(accessToken: string, taskUid: string): ITypedAPITarget<ITask> {
+    deleteTask(accessToken: string, taskUid: string): ITypedAPITarget<IFullTask> {
         return {
             url: `api/v1/tasks/${taskUid}`,
             method: "DELETE",
@@ -51,7 +50,7 @@ export const TaskAPI = {
                 Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
-                return json as ITask;
+                return json as IFullTask;
             }
         };
     },
@@ -86,7 +85,7 @@ export const TaskAPI = {
             }
         };
     },
-    postItem(accessToken: string, taskUid: string, item: IPostItem): ITypedAPITarget<IItem> {
+    postItem(accessToken: string, taskUid: string, item: IPostItem): ITypedAPITarget<IFullItem> {
         return {
             url: `api/v1/tasks/${taskUid}/items`,
             method: "POST",
@@ -97,11 +96,11 @@ export const TaskAPI = {
                 ...item
             },
             parse: (json) => {
-                return json as IItem;
+                return json as IFullItem;
             }
         };
     },
-    deleteItem(accessToken: string, taskUid: string, itemUid: string): ITypedAPITarget<ITask> {
+    deleteItem(accessToken: string, taskUid: string, itemUid: string): ITypedAPITarget<IFullItem> {
         return {
             url: `api/v1/tasks/${taskUid}/items/${itemUid}`,
             method: "DELETE",
@@ -109,7 +108,7 @@ export const TaskAPI = {
                 Authorization: `Bearer ${accessToken}`
             },
             parse: (json) => {
-                return json as ITask;
+                return json as IFullItem;
             }
         };
     },

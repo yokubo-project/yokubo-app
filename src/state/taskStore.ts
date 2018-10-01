@@ -17,17 +17,11 @@ export interface IPatchTask {
     name?: string;
     imageUid?: string;
     metrics?: {
-        uid?: string;
+        uid?: string; // newly added metrics don't have an uid yet
         name: string;
         unit: string;
         action: string;
     }[];
-}
-
-export interface ITask {
-    uid: string;
-    name: string;
-    createdAt: string;
 }
 
 export interface IImage {
@@ -42,7 +36,8 @@ export interface IFullTask {
     createdAt: string;
     image: IImage;
     metrics: IMetric[];
-    items: IItem[];
+    items: IFullItem[];
+    stats: IStats[];
 }
 
 export interface IPostMetric {
@@ -76,14 +71,35 @@ export interface IPatchItem {
     metrics?: string;
 }
 
-export interface IItem {
+export interface IFullItem {
     uid: string;
     name: string;
     desc: string | null;
     period: string[];
-    duration: number;
-    metrics: string;
     createdAt: string;
+    metricQuantities: {
+        uid: string;
+        quantity: number;
+        createdAt: string;
+        metric: {
+            uid: string;
+            name: string;
+            unit: string;
+            createdAt: string;
+        };
+    }[];
+    duration: number;
+}
+
+export interface IStats {
+    metricKey: string;
+    metricName: string;
+    metricUnit: string;
+    totalItems: number;
+    totalValue: number;
+    averageValue: number;
+    minValue: number;
+    maxValue: number;
 }
 
 export type TaskError = "Unknown" | "InvalidTimePeriod";
@@ -188,6 +204,17 @@ class Tasks {
                         task.items = localTask.items;
                     }
                 });
+
+                // async fetch task for stats update
+                const taskTarget = TaskAPI.getTask(authStore.credentials.accessToken, taskUid);
+                APIClient.requestType(taskTarget)
+                    .then(taskResponse => {
+                        const task = this.tasks.filter(t => t.uid === taskUid)[0];
+                        if (task) {
+                            task.stats = taskResponse.stats;
+                        }
+                    });
+
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
@@ -219,6 +246,16 @@ class Tasks {
                     }) : null;
                 });
 
+                // async fetch task for stats update
+                const taskTarget = TaskAPI.getTask(authStore.credentials.accessToken, taskUid);
+                APIClient.requestType(taskTarget)
+                    .then(taskResponse => {
+                        const task = this.tasks.filter(t => t.uid === taskUid)[0];
+                        if (task) {
+                            task.stats = taskResponse.stats;
+                        }
+                    });
+
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {
@@ -247,6 +284,17 @@ class Tasks {
                     // tslint:disable-next-line:no-unused-expression
                     task.items ? task.items = task.items.filter(taskItem => taskItem.uid !== item.uid) : null;
                 });
+
+                // async fetch task for stats update
+                const taskTarget = TaskAPI.getTask(authStore.credentials.accessToken, taskUid);
+                APIClient.requestType(taskTarget)
+                    .then(taskResponse => {
+                        const task = this.tasks.filter(t => t.uid === taskUid)[0];
+                        if (task) {
+                            task.stats = taskResponse.stats;
+                        }
+                    });
+
                 this.error = null;
                 this.isLoading = false;
             }).catch(error => {

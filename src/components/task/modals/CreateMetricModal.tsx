@@ -9,7 +9,7 @@ import TextInputField from "../../../shared/components/TextInputField";
 import i18n from "../../../shared/i18n";
 import { theme } from "../../../shared/styles";
 import authStore from "../../../state/authStore";
-import taskStore, { IItem } from "../../../state/taskStore";
+import taskStore, { IFullItem } from "../../../state/taskStore";
 
 const styles = StyleSheet.create({
     modalContent: {
