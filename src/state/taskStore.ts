@@ -1,4 +1,6 @@
 import { action, observable } from "mobx";
+import * as Moment from "moment";
+import { DateRange } from "moment-range";
 
 // tslint:disable-next-line:no-implicit-dependencies
 import { APIClientStatusCodeError } from "network-stapler";
@@ -38,6 +40,7 @@ export interface IFullTask {
     metrics: IMetric[];
     items: IFullItem[];
     stats: IStats[];
+    chartData: IChartData;
 }
 
 export interface IPostMetric {
@@ -100,6 +103,30 @@ export interface IStats {
     averageValue: number;
     minValue: number;
     maxValue: number;
+}
+
+export interface IChartData {
+    days: {
+        date: Moment.Moment;
+        totalValue: number;
+        metricKey: string;
+        metricName: string;
+        metricUnit: string;
+    }[];
+    weeks: {
+        daterange: DateRange;
+        totalValue: number;
+        metricKey: string;
+        metricName: string;
+        metricUnit: string;
+    }[];
+    months: {
+        daterange: DateRange;
+        totalValue: number;
+        metricKey: string;
+        metricName: string;
+        metricUnit: string;
+    }[];
 }
 
 export type TaskError = "Unknown" | "InvalidTimePeriod";
@@ -205,13 +232,14 @@ class Tasks {
                     }
                 });
 
-                // async fetch task for stats update
+                // async fetch task for stats and chartData update
                 const taskTarget = TaskAPI.getTask(authStore.credentials.accessToken, taskUid);
                 APIClient.requestType(taskTarget)
                     .then(taskResponse => {
                         const task = this.tasks.filter(t => t.uid === taskUid)[0];
                         if (task) {
                             task.stats = taskResponse.stats;
+                            task.chartData = taskResponse.chartData;
                         }
                     });
 
@@ -246,13 +274,14 @@ class Tasks {
                     }) : null;
                 });
 
-                // async fetch task for stats update
+                // async fetch task for stats and chartData update
                 const taskTarget = TaskAPI.getTask(authStore.credentials.accessToken, taskUid);
                 APIClient.requestType(taskTarget)
                     .then(taskResponse => {
                         const task = this.tasks.filter(t => t.uid === taskUid)[0];
                         if (task) {
                             task.stats = taskResponse.stats;
+                            task.chartData = taskResponse.chartData;
                         }
                     });
 
@@ -285,13 +314,14 @@ class Tasks {
                     task.items ? task.items = task.items.filter(taskItem => taskItem.uid !== item.uid) : null;
                 });
 
-                // async fetch task for stats update
+                // async fetch task for stats and chartData update
                 const taskTarget = TaskAPI.getTask(authStore.credentials.accessToken, taskUid);
                 APIClient.requestType(taskTarget)
                     .then(taskResponse => {
                         const task = this.tasks.filter(t => t.uid === taskUid)[0];
                         if (task) {
                             task.stats = taskResponse.stats;
+                            task.chartData = taskResponse.chartData;
                         }
                     });
 

@@ -3,6 +3,7 @@ import React from "react";
 import { createBottomTabNavigator, createStackNavigator } from "react-navigation";
 
 import { theme } from "../../shared/styles";
+import ItemsCharts from "./ItemsCharts";
 import ItemsList from "./ItemsList";
 import ItemsStats from "./ItemsStats";
 
@@ -42,12 +43,31 @@ const ItemsStatsStack = createStackNavigator(
         }
     }
 );
+// tslint:disable-next-line:variable-name
+const ItemsChartsStack = createStackNavigator(
+    {
+        ItemsCharts
+    },
+    {
+        initialRouteName: "ItemsCharts",
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: theme.headerBackgroundColor
+            },
+            headerTintColor: theme.tabBar.headerTintColor,
+            headerTitleStyle: {
+                fontWeight: "bold"
+            }
+        }
+    }
+);
 
 // tslint:disable-next-line:variable-name
 const TabNavigation = createBottomTabNavigator(
     {
         ItemsListStack,
-        ItemsStatsStack
+        ItemsStatsStack,
+        ItemsChartsStack
     },
     {
         navigationOptions: ({ navigation }) => ({
@@ -58,6 +78,8 @@ const TabNavigation = createBottomTabNavigator(
                     iconName = "md-list";
                 } else if (routeName === "ItemsStatsStack") {
                     iconName = "md-stats";
+                } else if (routeName === "ItemsChartsStack") {
+                    iconName = "md-analytics";
                 }
 
                 return <Ionicons name={iconName} size={35} color={tintColor} />;

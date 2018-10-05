@@ -171,6 +171,16 @@ i18n
                         date: "Date",
                         duration: "Duration"
                     },
+                    itemChart: {
+                        durationDays: "Duration of last {{countDays}} days",
+                        durationWeeks: "Duration of last {{countWeeks}} weeks",
+                        durationMonths: "Duration of last {{countMonths}} months",
+                        durationXAxisLabelDays: "date",
+                        durationXAxisLabelWeeks: "calendar week",
+                        durationXAxisLabelMonths: "month",
+                        durationYAxisLabel: "hours",
+                        noDataInfoText: "Not enough data to render graph"
+                    },
                     items: {
                         welcome: "{{taskName}} sounds like an awesome task!",
                         getStarted: " Add your first item to it by clicking on the + sign on the top right corner."
@@ -375,6 +385,16 @@ i18n
                     itemList: {
                         date: "Datum",
                         duration: "Dauer"
+                    },
+                    itemChart: {
+                        durationDays: "Dauer der letzten {{countDays}} Tage",
+                        durationWeeks: "Dauer der letzten {{countWeeks}} Wochen",
+                        durationMonths: "Dauer der letzten {{countMonths}} Monate",
+                        durationXAxisLabelDays: "Datum",
+                        durationXAxisLabelWeeks: "Kalenderwoche",
+                        durationXAxisLabelMonths: "Monat",
+                        durationYAxisLabel: "Stunden",
+                        noDataInfoText: "Es sind nicht genügend Daten vorhanden um den Chart anzuzeigen"
                     },
                     items: {
                         welcome: "{{taskName}} hört sich nach einen tollen Task an!",
