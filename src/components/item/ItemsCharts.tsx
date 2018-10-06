@@ -163,35 +163,24 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
             chartTitle: string;
             yAxisTitle: string;
             decimalPlaces: number;
-            backgroundColors: {
-                daily: string;
-                weekly: string;
-                monthly: string;
-            };
         };
         if (this.state.activeMetric === "duration") {
             chartConfig = {
                 chartTitle: i18n.t("itemChart.duration"),
                 yAxisTitle: i18n.t("itemChart.hours"),
-                decimalPlaces: 2,
-                backgroundColors: theme.chartBackgrounds.duration
+                decimalPlaces: 2
             };
         } else if (this.state.activeMetric === "count") {
             chartConfig = {
                 chartTitle: i18n.t("itemChart.items"),
                 yAxisTitle: i18n.t("itemChart.count"),
-                decimalPlaces: 1,
-                backgroundColors: theme.chartBackgrounds.count
+                decimalPlaces: 1
             };
         } else {
             chartConfig = {
                 chartTitle: stats.days[0].dataset.filter(d => d.metricKey === this.state.activeMetric)[0].metricName,
                 yAxisTitle: stats.days[0].dataset.filter(d => d.metricKey === this.state.activeMetric)[0].metricUnit,
-                decimalPlaces: 2,
-                // tslint:disable-next-line:max-line-length
-                backgroundColors: theme.chartBackgrounds[`metric${stats.days[0].dataset.findIndex(d => d.metricKey === this.state.activeMetric) - 1}`] ?
-                    theme.chartBackgrounds[`metric${stats.days[0].dataset.findIndex(d => d.metricKey === this.state.activeMetric) - 1}`] :
-                    theme.backgroundColor
+                decimalPlaces: 2
             };
         }
 
@@ -205,7 +194,6 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
                 labels={stats.days.slice(0, 6).map(day => moment(day.date).format("DD.MM.")).reverse()}
                 data={dailyData}
                 decimalPlaces={chartConfig.decimalPlaces}
-                backgroundColor={chartConfig.backgroundColors.daily}
             />
         );
 
@@ -219,7 +207,6 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
                 labels={stats.weeks.map(week => moment(week.daterange.start).isoWeek().toString()).reverse()}
                 data={weeklyData}
                 decimalPlaces={chartConfig.decimalPlaces}
-                backgroundColor={chartConfig.backgroundColors.weekly}
             />
         );
 
@@ -233,7 +220,6 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
                 labels={stats.months.map(month => moment(month.daterange.start).format("MM")).reverse()}
                 data={monthlyData}
                 decimalPlaces={chartConfig.decimalPlaces}
-                backgroundColor={chartConfig.backgroundColors.monthly}
             />
         );
 
