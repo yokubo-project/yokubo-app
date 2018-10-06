@@ -108,24 +108,30 @@ export interface IStats {
 export interface IChartData {
     days: {
         date: Moment.Moment;
-        totalValue: number;
-        metricKey: string;
-        metricName: string;
-        metricUnit: string;
+        dataset: {
+            totalValue: number;
+            metricKey: string;
+            metricName: string;
+            metricUnit: string;
+        }[];
     }[];
     weeks: {
         daterange: DateRange;
-        totalValue: number;
-        metricKey: string;
-        metricName: string;
-        metricUnit: string;
+        dataset: {
+            totalValue: number;
+            metricKey: string;
+            metricName: string;
+            metricUnit: string;
+        }[];
     }[];
     months: {
         daterange: DateRange;
-        totalValue: number;
-        metricKey: string;
-        metricName: string;
-        metricUnit: string;
+        dataset: {
+            totalValue: number;
+            metricKey: string;
+            metricName: string;
+            metricUnit: string;
+        }[];
     }[];
 }
 

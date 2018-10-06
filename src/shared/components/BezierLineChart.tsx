@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginLeft: 10,
         marginRight: 10,
-        backgroundColor: theme.headerBackgroundColor,
         borderRadius: 16
     } as ViewStyle,
     chartTitle: {
@@ -49,6 +48,8 @@ interface IProps {
     noDataInfoText: string;
     labels: string[];
     data: number[];
+    backgroundColor?: string;
+    decimalPlaces?: number;
 }
 
 export default class BezierLineChart extends React.Component<IProps, IState> {
@@ -76,8 +77,18 @@ export default class BezierLineChart extends React.Component<IProps, IState> {
     }
 
     render() {
+        const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : theme.headerBackgroundColor;
+
         return (
-            <View style={styles.mainContainer}>
+            <View
+                style={{
+                    backgroundColor,
+                    marginTop: 10,
+                    marginLeft: 10,
+                    marginRight: 10,
+                    borderRadius: 16
+                }}
+            >
                 <Text style={styles.chartTitle}>{this.props.chartTitle}</Text>
                 {this.state.totalValue !== 0 &&
                     <View>
@@ -91,10 +102,10 @@ export default class BezierLineChart extends React.Component<IProps, IState> {
                             width={Dimensions.get("window").width - 20} // from react-native
                             height={220}
                             chartConfig={{
-                                backgroundColor: theme.headerBackgroundColor,
-                                backgroundGradientFrom: theme.headerBackgroundColor,
-                                backgroundGradientTo: theme.headerBackgroundColor,
-                                decimalPlaces: 2, // optional, defaults to 2dp
+                                backgroundColor,
+                                backgroundGradientFrom: backgroundColor,
+                                backgroundGradientTo: backgroundColor,
+                                decimalPlaces: this.props.decimalPlaces ? this.props.decimalPlaces : 2,
                                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 style: { borderRadius: 16 }
                             }}

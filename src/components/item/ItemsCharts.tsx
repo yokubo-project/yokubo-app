@@ -6,11 +6,13 @@ import { Header, List } from "react-native-elements";
 import { HeaderBackButton, NavigationScreenProp, NavigationScreenProps } from "react-navigation";
 
 import BezierLineChart from "../../shared/components/BezierLineChart";
+import ModalButton from "../../shared/components/ModalButton";
 import NavigationButton from "../../shared/components/NavigationButton";
 import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
 import taskStore, { IChartData, IFullItem, IFullTask } from "../../state/taskStore";
+import FilterMetricsModal from "./modals/FilterMetricsModal";
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -55,6 +57,8 @@ const styles = StyleSheet.create({
 
 interface IState {
     task: IFullTask;
+    isFilterMetricsModalVisible: boolean;
+    activeMetric: string;
 }
 
 interface IProps {
@@ -77,7 +81,14 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
             ),
             title: taskName,
             headerRight: (
-                <View>
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                    <ModalButton
+                        navigation={navigation}
+                        getParameter="showFilterMetricsModal"
+                        ioniconName="md-funnel"
+                        ioniconColor="white"
+                        marginRight={5}
+                    />
                     <NavigationButton
                         navigation={navigation}
                         additionalProps={{ task }}
@@ -97,14 +108,17 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
 
         const activeTask = taskStore.getActiveTask();
         this.state = {
-            task: activeTask
+            task: activeTask,
+            isFilterMetricsModalVisible: false,
+            activeMetric: "count"
         };
     }
 
     componentDidMount() {
         this.props.navigation.setParams({
             taskName: this.getHeaderText(),
-            task: this.state.task
+            task: this.state.task,
+            showFilterMetricsModal: this.showFilterMetricsModal
         });
     }
 
@@ -114,42 +128,112 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
             this.state.task.name;
     }
 
+    showFilterMetricsModal = () => this.setState({
+        isFilterMetricsModalVisible: true
+    })
+    hideFilterMetricsModal = () => this.setState({
+        isFilterMetricsModalVisible: false
+    })
+    filterMetrics = (metricKey: string) => {
+        this.setState({
+            activeMetric: metricKey,
+            isFilterMetricsModalVisible: false
+        });
+    }
+
     renderCharts(stats: IChartData) {
         const renderedCharts = [];
+
+        // if metric is duration transform ms to hours, else use raw value
+        const dailyData = this.state.activeMetric === "duration" ?
+            stats.days.slice(0, 6).map(day => day.dataset.filter(
+                d => d.metricKey === this.state.activeMetric)[0].totalValue / (1000 * 60 * 60) // hours
+            ) : stats.days.slice(0, 6).map(day => day.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue);
+        const weeklyData = this.state.activeMetric === "duration" ?
+            stats.weeks.map(week => week.dataset.filter(
+                d => d.metricKey === this.state.activeMetric)[0].totalValue / (1000 * 60 * 60) // hours
+            ) : stats.weeks.map(week => week.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue);
+        const monthlyData = this.state.activeMetric === "duration" ?
+            stats.months.map(month => month.dataset.filter(
+                d => d.metricKey === this.state.activeMetric)[0].totalValue / (1000 * 60 * 60) // hours
+            ) : stats.months.map(month => month.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue);
+
+        // if metric is duration or count perform translation, else use user defined values
+        let chartConfig: {
+            chartTitle: string;
+            yAxisTitle: string;
+            decimalPlaces: number;
+            backgroundColors: {
+                daily: string;
+                weekly: string;
+                monthly: string;
+            };
+        };
+        if (this.state.activeMetric === "duration") {
+            chartConfig = {
+                chartTitle: i18n.t("itemChart.duration"),
+                yAxisTitle: i18n.t("itemChart.hours"),
+                decimalPlaces: 2,
+                backgroundColors: theme.chartBackgrounds.duration
+            };
+        } else if (this.state.activeMetric === "count") {
+            chartConfig = {
+                chartTitle: i18n.t("itemChart.items"),
+                yAxisTitle: i18n.t("itemChart.count"),
+                decimalPlaces: 1,
+                backgroundColors: theme.chartBackgrounds.count
+            };
+        } else {
+            chartConfig = {
+                chartTitle: stats.days[0].dataset.filter(d => d.metricKey === this.state.activeMetric)[0].metricName,
+                yAxisTitle: stats.days[0].dataset.filter(d => d.metricKey === this.state.activeMetric)[0].metricUnit,
+                decimalPlaces: 2,
+                // tslint:disable-next-line:max-line-length
+                backgroundColors: theme.chartBackgrounds[`metric${stats.days[0].dataset.findIndex(d => d.metricKey === this.state.activeMetric) - 1}`] ?
+                    theme.chartBackgrounds[`metric${stats.days[0].dataset.findIndex(d => d.metricKey === this.state.activeMetric) - 1}`] :
+                    theme.backgroundColor
+            };
+        }
 
         renderedCharts.push(
             <BezierLineChart
                 key="durationDays"
-                chartTitle={i18n.t("itemChart.durationDays", { countDays: 7 })}
+                chartTitle={i18n.t("itemChart.days", { metricName: chartConfig.chartTitle, countDays: 7 })}
                 xAxisTitle={i18n.t("itemChart.durationXAxisLabelDays")}
-                yAxisTitle={i18n.t("itemChart.durationYAxisLabel")}
+                yAxisTitle={chartConfig.yAxisTitle}
                 noDataInfoText={i18n.t("itemChart.noDataInfoText")}
                 labels={stats.days.slice(0, 6).map(day => moment(day.date).format("DD.MM.")).reverse()}
-                data={stats.days.slice(0, 6).map(day => day.totalValue / (1000 * 60 * 60)).reverse()} // hours
+                data={dailyData}
+                decimalPlaces={chartConfig.decimalPlaces}
+                backgroundColor={chartConfig.backgroundColors.daily}
             />
         );
 
         renderedCharts.push(
             <BezierLineChart
                 key="durationWeeks"
-                chartTitle={i18n.t("itemChart.durationWeeks", { countWeeks: 12 })}
+                chartTitle={i18n.t("itemChart.weeks", { metricName: chartConfig.chartTitle, countWeeks: 12 })}
                 xAxisTitle={i18n.t("itemChart.durationXAxisLabelWeeks")}
-                yAxisTitle={i18n.t("itemChart.durationYAxisLabel")}
+                yAxisTitle={chartConfig.yAxisTitle}
                 noDataInfoText={i18n.t("itemChart.noDataInfoText")}
                 labels={stats.weeks.map(week => moment(week.daterange.start).isoWeek().toString()).reverse()}
-                data={stats.weeks.map(week => week.totalValue / (1000 * 60 * 60)).reverse()} // hours
+                data={weeklyData}
+                decimalPlaces={chartConfig.decimalPlaces}
+                backgroundColor={chartConfig.backgroundColors.weekly}
             />
         );
 
         renderedCharts.push(
             <BezierLineChart
                 key="durationMonths"
-                chartTitle={i18n.t("itemChart.durationMonths", { countMonths: 12 })}
+                chartTitle={i18n.t("itemChart.months", { metricName: chartConfig.chartTitle, countMonths: 12 })}
                 xAxisTitle={i18n.t("itemChart.durationXAxisLabelMonths")}
-                yAxisTitle={i18n.t("itemChart.durationYAxisLabel")}
+                yAxisTitle={chartConfig.yAxisTitle}
                 noDataInfoText={i18n.t("itemChart.noDataInfoText")}
                 labels={stats.months.map(month => moment(month.daterange.start).format("MM")).reverse()}
-                data={stats.months.map(month => month.totalValue / (1000 * 60 * 60)).reverse()} // hours
+                data={monthlyData}
+                decimalPlaces={chartConfig.decimalPlaces}
+                backgroundColor={chartConfig.backgroundColors.monthly}
             />
         );
 
@@ -157,6 +241,8 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
     }
 
     render() {
+
+        const metrics = this.state.task.metrics;
 
         if (this.state.task.items.length === 0) {
             return (
@@ -182,6 +268,12 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
                 >
                     {this.renderCharts(this.state.task.chartData)}
                 </List>
+                <FilterMetricsModal
+                    isVisible={this.state.isFilterMetricsModalVisible}
+                    hide={() => this.hideFilterMetricsModal()}
+                    metrics={this.state.task.metrics}
+                    filterMetrics={(metricKey) => this.filterMetrics(metricKey)}
+                />
             </ScrollView>
         );
     }

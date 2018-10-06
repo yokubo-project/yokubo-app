@@ -148,6 +148,11 @@ i18n
                         sortByDate: "Date",
                         sortByDuration: "Duration"
                     },
+                    filterMetrics: {
+                        header: "Show charts by:",
+                        count: "Count",
+                        duration: "Duration"
+                    },
                     deleteItem: {
                         deleteButton: "DELETE",
                         deleteHint: "Delete Item {{itemName}}?"
@@ -172,14 +177,17 @@ i18n
                         duration: "Duration"
                     },
                     itemChart: {
-                        durationDays: "Duration of last {{countDays}} days",
-                        durationWeeks: "Duration of last {{countWeeks}} weeks",
-                        durationMonths: "Duration of last {{countMonths}} months",
+                        days: "{{metricName}} of last {{countDays}} days",
+                        weeks: "{{metricName}} of last {{countWeeks}} weeks",
+                        months: "{{metricName}} of last {{countMonths}} months",
                         durationXAxisLabelDays: "date",
                         durationXAxisLabelWeeks: "calendar week",
                         durationXAxisLabelMonths: "month",
-                        durationYAxisLabel: "hours",
-                        noDataInfoText: "Not enough data to render graph"
+                        noDataInfoText: "Not enough data to render graph",
+                        duration: "Duration",
+                        hours: "hours",
+                        items: "Items",
+                        count: "number"
                     },
                     items: {
                         welcome: "{{taskName}} sounds like an awesome task!",
@@ -363,6 +371,11 @@ i18n
                         sortByDate: "Datum",
                         sortByDuration: "Dauer"
                     },
+                    filterMetrics: {
+                        header: "Zeige Charts von:",
+                        count: "Anzahl",
+                        duration: "Dauer"
+                    },
                     deleteItem: {
                         deleteButton: "LÖSCHEN",
                         deleteHint: "Item {{itemName}} löschen?"
@@ -387,14 +400,17 @@ i18n
                         duration: "Dauer"
                     },
                     itemChart: {
-                        durationDays: "Dauer der letzten {{countDays}} Tage",
-                        durationWeeks: "Dauer der letzten {{countWeeks}} Wochen",
-                        durationMonths: "Dauer der letzten {{countMonths}} Monate",
+                        days: "{{metricName}} der letzten {{countDays}} Tage",
+                        weeks: "{{metricName}} der letzten {{countWeeks}} Wochen",
+                        months: "{{metricName}} der letzten {{countMonths}} Monate",
                         durationXAxisLabelDays: "Datum",
                         durationXAxisLabelWeeks: "Kalenderwoche",
                         durationXAxisLabelMonths: "Monat",
-                        durationYAxisLabel: "Stunden",
-                        noDataInfoText: "Es sind nicht genügend Daten vorhanden um den Chart anzuzeigen"
+                        noDataInfoText: "Es sind nicht genügend Daten vorhanden um den Chart anzuzeigen",
+                        duration: "Dauer",
+                        hours: "Stunden",
+                        items: "Items",
+                        count: "Anzahl"
                     },
                     items: {
                         welcome: "{{taskName}} hört sich nach einen tollen Task an!",
