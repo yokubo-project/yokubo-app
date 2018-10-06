@@ -145,18 +145,21 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
         const renderedCharts = [];
 
         // if metric is duration transform ms to hours, else use raw value
-        const dailyData = this.state.activeMetric === "duration" ?
+        const dailyData = (this.state.activeMetric === "duration" ?
             stats.days.slice(0, 6).map(day => day.dataset.filter(
                 d => d.metricKey === this.state.activeMetric)[0].totalValue / (1000 * 60 * 60) // hours
-            ) : stats.days.slice(0, 6).map(day => day.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue);
-        const weeklyData = this.state.activeMetric === "duration" ?
+            ) : stats.days.slice(0, 6).map(day => day.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue)
+        ).reverse();
+        const weeklyData = (this.state.activeMetric === "duration" ?
             stats.weeks.map(week => week.dataset.filter(
                 d => d.metricKey === this.state.activeMetric)[0].totalValue / (1000 * 60 * 60) // hours
-            ) : stats.weeks.map(week => week.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue);
-        const monthlyData = this.state.activeMetric === "duration" ?
+            ) : stats.weeks.map(week => week.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue)
+        ).reverse();
+        const monthlyData = (this.state.activeMetric === "duration" ?
             stats.months.map(month => month.dataset.filter(
                 d => d.metricKey === this.state.activeMetric)[0].totalValue / (1000 * 60 * 60) // hours
-            ) : stats.months.map(month => month.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue);
+            ) : stats.months.map(month => month.dataset.filter(d => d.metricKey === this.state.activeMetric)[0].totalValue)
+        ).reverse();
 
         // if metric is duration or count perform translation, else use user defined values
         let chartConfig: {
