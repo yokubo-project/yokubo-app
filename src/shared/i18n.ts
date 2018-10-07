@@ -189,6 +189,9 @@ i18n
                         items: "Items",
                         count: "number"
                     },
+                    itemContribution: {
+                        quarter: "Quarter"
+                    },
                     items: {
                         welcome: "{{taskName}} sounds like an awesome task!",
                         getStarted: " Add your first item to it by clicking on the + sign on the top right corner."
@@ -411,6 +414,9 @@ i18n
                         hours: "Stunden",
                         items: "Items",
                         count: "Anzahl"
+                    },
+                    itemContribution: {
+                        quarter: "Quartal"
                     },
                     items: {
                         welcome: "{{taskName}} hört sich nach einen tollen Task an!",

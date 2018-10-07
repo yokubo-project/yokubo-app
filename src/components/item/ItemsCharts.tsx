@@ -230,9 +230,6 @@ export default class ItemsCharts extends React.Component<IProps, IState> {
     }
 
     render() {
-
-        const metrics = this.state.task.metrics;
-
         if (this.state.task.items.length === 0) {
             return (
                 <View style={styles.mainContainer}>

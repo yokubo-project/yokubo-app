@@ -41,6 +41,7 @@ export interface IFullTask {
     items: IFullItem[];
     stats: IStats[];
     chartData: IChartData;
+    contributionData: IContributionData;
 }
 
 export interface IPostMetric {
@@ -131,6 +132,16 @@ export interface IChartData {
             metricKey: string;
             metricName: string;
             metricUnit: string;
+        }[];
+    }[];
+}
+
+export interface IContributionData {
+    quarters: {
+        daterange: DateRange;
+        dataset: {
+            date: Moment.Moment;
+            count: number;
         }[];
     }[];
 }
@@ -246,6 +257,7 @@ class Tasks {
                         if (task) {
                             task.stats = taskResponse.stats;
                             task.chartData = taskResponse.chartData;
+                            task.contributionData = taskResponse.contributionData;
                         }
                     });
 
@@ -288,6 +300,7 @@ class Tasks {
                         if (task) {
                             task.stats = taskResponse.stats;
                             task.chartData = taskResponse.chartData;
+                            task.contributionData = taskResponse.contributionData;
                         }
                     });
 
@@ -328,6 +341,7 @@ class Tasks {
                         if (task) {
                             task.stats = taskResponse.stats;
                             task.chartData = taskResponse.chartData;
+                            task.contributionData = taskResponse.contributionData;
                         }
                     });
 
