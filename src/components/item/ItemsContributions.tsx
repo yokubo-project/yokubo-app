@@ -9,6 +9,7 @@ import { HeaderBackButton, NavigationScreenProp, NavigationScreenProps } from "r
 import ContributionChart from "../../shared/components/ContributionChart";
 import ModalButton from "../../shared/components/ModalButton";
 import NavigationButton from "../../shared/components/NavigationButton";
+import Spinner from "../../shared/components/Spinner";
 import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
@@ -98,17 +99,25 @@ export default class ItemsContributions extends React.Component<IProps, IState> 
     constructor(props: IProps) {
         super(props);
 
-        const activeTask = taskStore.getActiveTask();
         this.state = {
-            task: activeTask
+            task: null
         };
     }
 
     componentDidMount() {
-        this.props.navigation.setParams({
-            taskName: this.getHeaderText(),
-            task: this.state.task
-        });
+        setTimeout(
+            () => {
+                const activeTask = taskStore.getActiveTask();
+                this.setState({
+                    task: activeTask
+                });
+                this.props.navigation.setParams({
+                    taskName: this.getHeaderText(),
+                    task: this.state.task
+                });
+            },
+            0
+        );
     }
 
     getHeaderText() {
@@ -145,6 +154,10 @@ export default class ItemsContributions extends React.Component<IProps, IState> 
     }
 
     render() {
+        if (this.state.task === null) {
+            return <Spinner />;
+        }
+
         if (this.state.task.items.length === 0) {
             return (
                 <View style={styles.mainContainer}>

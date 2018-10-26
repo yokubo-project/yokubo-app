@@ -24,29 +24,11 @@ import CreateItem from "./src/components/item/CreateItem";
 import PatchItem from "./src/components/item/PatchItem";
 
 import ItemTabNavigation from "./src/components/item/TabNavigation";
+import Spinner from "./src/shared/components/Spinner";
 import i18n from "./src/shared/i18n";
 
 Sentry.enableInExpoDevelopment = true;
 Sentry.config(Config.SENTRY_ENDPOINT).install();
-
-const styles = StyleSheet.create({
-    spinnerContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        backgroundColor: theme.backgroundColor
-    }
-});
-
-// tslint:disable-next-line:variable-name
-const Spinner = () => {
-    return (
-        <View style={styles.spinnerContainer}>
-            <ActivityIndicator size="large" color={theme.spinnerColor} />
-        </View>
-    );
-};
 
 interface IState {
     connectionStatus: "offline" | "online" | "unknown";

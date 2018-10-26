@@ -11,6 +11,7 @@ import { HeaderBackButton, NavigationScreenProp, NavigationScreenProps } from "r
 import { autorun } from "mobx";
 import ModalButton from "../../shared/components/ModalButton";
 import NavigationButton from "../../shared/components/NavigationButton";
+import Spinner from "../../shared/components/Spinner";
 import { formatDuration } from "../../shared/helpers";
 import i18n from "../../shared/i18n";
 import { theme } from "../../shared/styles";
@@ -104,9 +105,8 @@ export default class ItemsList extends React.Component<any, IState> {
     constructor(props: IProps) {
         super(props);
 
-        const activeTask = taskStore.getActiveTask();
         this.state = {
-            task: activeTask,
+            task: null,
             sortKey: "period",
             sortDirection: "desc",
             previousItemLength: 0,
@@ -118,12 +118,20 @@ export default class ItemsList extends React.Component<any, IState> {
 
     componentDidMount() {
         this.resortEntries();
-
-        this.props.navigation.setParams({
-            taskName: this.getHeaderText(),
-            task: this.state.task,
-            showSortItemsModal: this.showSortItemsModal
-        });
+        setTimeout(
+            () => {
+                const activeTask = taskStore.getActiveTask();
+                this.setState({
+                    task: activeTask
+                });
+                this.props.navigation.setParams({
+                    taskName: this.getHeaderText(),
+                    task: this.state.task,
+                    showSortItemsModal: this.showSortItemsModal
+                });
+            },
+            0
+        );
     }
 
     componentDidUpdate(previousProps: IProps, previousState: IState) {
@@ -143,7 +151,7 @@ export default class ItemsList extends React.Component<any, IState> {
     resortEntries() {
         const task = this.state.task;
 
-        if (this.state.task.items.length > this.state.previousItemLength) {
+        if (this.state.task && this.state.task.items.length > this.state.previousItemLength) {
             task.items = _.orderBy(task.items, this.state.sortKey, this.state.sortDirection);
             this.setState({
                 task,
@@ -205,6 +213,10 @@ export default class ItemsList extends React.Component<any, IState> {
     }
 
     render() {
+        if (this.state.task === null) {
+            return <Spinner />;
+        }
+
         if (this.state.task.items.length === 0) {
             return (
                 <View style={styles.mainContainer}>
