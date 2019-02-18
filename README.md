@@ -49,4 +49,4 @@ $ exp build
 
  ## References
 
-[yokubo-backend](https://github.com/yokubo-app), the corresponding Nodejs backend application.
+[yokubo-backend](https://github.com/yokubo-project/yokubo-backend), the corresponding Nodejs backend application.
